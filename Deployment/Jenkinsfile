@@ -4,20 +4,24 @@ pipeline {
     environment {
         GIT_REPO_URL = 'https://github.com/gitmaster-dms/Spero-DMS.git'  
         GIT_BRANCH = 'main'  
+        TARGET_DIR  = '/var/www/html/Aggregation_test_project/DMS_goa_test'
     }
 
     stages {
-        stage('Clone Repository') {
+        stage('Clone or Pull Repository') {
             steps {
                 script {
-                    if (!fileExists('.git')) {
-                        // If repository is not cloned, clone it
-                        echo "Repository not found. Cloning..."
-                        git url: GIT_REPO_URL, branch: GIT_BRANCH
+                    // Check if the directory already exists
+                    if (!fileExists(TARGET_DIR)) {
+                        // If the directory doesn't exist, clone the repository
+                        echo "Cloning repository to $TARGET_DIR..."
+                        sh "git clone -b ${GIT_BRANCH} ${GIT_REPO_URL} ${TARGET_DIR}"
                     } else {
-                        // If already cloned, perform a pull
-                        echo "Repository already cloned. Pulling latest changes..."
-                        sh 'git pull origin $GIT_BRANCH'
+                        // If the directory exists, perform a pull
+                        echo "Repository already exists. Pulling latest changes..."
+                        dir(TARGET_DIR) {
+                            sh "git pull origin ${GIT_BRANCH}"
+                        }
                     }
                 }
             }
@@ -25,7 +29,7 @@ pipeline {
 
         stage('Check Files') {
             steps {
-                sh 'ls -al'
+                sh "ls -al ${TARGET_DIR}"  // List files in the target directory
             }
         }
 
@@ -35,8 +39,8 @@ pipeline {
                     echo "Checking current workspace directory"
                     #ls -al
                     echo $PWD
-                    chmod +x envsetup.sh
-                    ./envsetup.sh
+                    chmod +x ${TARGET_DIR}/envsetup.sh
+                    ${TARGET_DIR}/envsetup.sh
                 '''
             }
         }
@@ -44,8 +48,8 @@ pipeline {
         stage('Setup Gunicorn Setup') {
             steps {
                 sh '''
-                    chmod +x gunicorn.sh
-                    ./gunicorn.sh
+                    chmod +x ${TARGET_DIR}/gunicorn.sh
+                    ${TARGET_DIR}/gunicorn.sh
                 '''
             }
         }
@@ -53,8 +57,8 @@ pipeline {
         stage('Setup NGINX') {
             steps {
                 sh '''
-                    chmod +x nginx.sh
-                    ./nginx.sh
+                    chmod +x ${TARGET_DIR}/nginx.sh
+                    ${TARGET_DIR}/nginx.sh
                 '''
             }
         }
