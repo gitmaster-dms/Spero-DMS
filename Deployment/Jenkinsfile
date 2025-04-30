@@ -29,7 +29,7 @@ pipeline {
 
         stage('Check Files') {
             steps {
-                sh "ls -al ${TARGET_DIR}"  // List files in the target directory
+                sh "ls -al ${TARGET_DIR}"  
             }
         }
 
@@ -37,10 +37,9 @@ pipeline {
             steps {
                 sh '''
                     echo "Checking current workspace directory"
-                    #ls -al
                     echo $PWD
-                    chmod +x ${TARGET_DIR}/envsetup.sh
-                    ${TARGET_DIR}/envsetup.sh
+                    chmod +x ${TARGET_DIR}/Deployment/envsetup.sh
+                    ${TARGET_DIR}/Deployment/envsetup.sh
                 '''
             }
         }
@@ -48,8 +47,8 @@ pipeline {
         stage('Setup Gunicorn Setup') {
             steps {
                 sh '''
-                    chmod +x ${TARGET_DIR}/gunicorn.sh
-                    ${TARGET_DIR}/gunicorn.sh
+                    chmod +x ${TARGET_DIR}/Deployment/gunicorn.sh
+                    ${TARGET_DIR}/Deployment/gunicorn.sh
                 '''
             }
         }
@@ -58,7 +57,7 @@ pipeline {
             steps {
                 sh '''
                     chmod +x ${TARGET_DIR}/nginx.sh
-                    ${TARGET_DIR}/nginx.sh
+                    ${TARGET_DIR}/Deployment/nginx.sh
                 '''
             }
         }
