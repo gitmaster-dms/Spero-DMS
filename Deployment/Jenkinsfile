@@ -27,6 +27,8 @@ pipeline {
             }
         }
 
+
+
         stage('Check Files') {
             steps {
                 sh "ls -al ${TARGET_DIR}"  
