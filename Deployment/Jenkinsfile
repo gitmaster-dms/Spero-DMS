@@ -11,13 +11,10 @@ pipeline {
         stage('Clone or Pull Repository') {
             steps {
                 script {
-                    // Check if the directory already exists
                     if (!fileExists(TARGET_DIR)) {
-                        // If the directory doesn't exist, clone the repository
                         echo "Cloning repository to $TARGET_DIR..."
                         sh "git clone -b ${GIT_BRANCH} ${GIT_REPO_URL} ${TARGET_DIR}"
                     } else {
-                        // If the directory exists, perform a pull
                         echo "Repository already exists. Pulling latest changes..."
                         dir(TARGET_DIR) {
                             sh "git pull origin ${GIT_BRANCH}"
@@ -26,8 +23,6 @@ pipeline {
                 }
             }
         }
-
-
 
         stage('Check Files') {
             steps {
@@ -58,7 +53,7 @@ pipeline {
         stage('Setup NGINX') {
             steps {
                 sh '''
-                    chmod +x ${TARGET_DIR}/nginx.sh
+                    chmod +x ${TARGET_DIR}/Deployment/nginx.sh
                     ${TARGET_DIR}/Deployment/nginx.sh
                 '''
             }
@@ -69,7 +64,6 @@ pipeline {
         success {
             echo 'Build was successful!'
         }
-
         failure {
             echo 'Build failed. Please check the logs.'
         }

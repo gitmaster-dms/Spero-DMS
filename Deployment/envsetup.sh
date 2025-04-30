@@ -12,4 +12,4 @@ echo "Python vvenv activated"
 echo "Installing current dependancies - pip3 install -r requirnment.txt"
 pip3 install -r requirnment.txt
 
-echo "myenv setup finishes"
+echo "vvenv setup finishes"
