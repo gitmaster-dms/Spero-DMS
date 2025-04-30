@@ -6,7 +6,7 @@ pipeline {
         GIT_BRANCH = 'main'  
         TARGET_DIR  = '/var/www/html/Aggregation_test_project/DMS_goa_test'
     }
-
+ 
     stages {
         stage('Clone or Pull Repository') {
             steps {
