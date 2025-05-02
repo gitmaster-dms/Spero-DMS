@@ -1,12 +1,33 @@
-# React + Vite
+# 🛡️ DMS_client – Disaster Management System Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the **frontend** for the Disaster Management System (**DMS**) built using **Vite + React**. It provides a fast and responsive user interface that connects with the backend powered by Django REST Framework and FastAPI.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🔧 Tech Stack
 
-## Expanding the ESLint configuration
+- ⚡ [Vite](https://vitejs.dev/) – Fast dev server & build tool
+- ⚛️ [React](https://reactjs.org/) – UI component library
+- 🎨 [Material UI](https://mui.com/) – For responsive and clean UI (if used)
+- 🔗 Backend Integration: Django REST API + FastAPI (with WebSocket support)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 📁 Project Structure
+
+Here is the initial folder structure of the **DMS_client**:
+
+```bash
+DMS_client/
+├── public/                       # Static files (index.html, favicon, etc.)
+├── src/                          # Main source folder
+│   ├── assets/                   # Images, icons, fonts, etc.
+│   ├── components/               # Reusable UI components (Buttons, Inputs, etc.)
+│   ├── pages/                    # Main page components (Home, Dashboard, etc.)
+│   ├── services/                 # API calls, network requests, etc.
+│   ├── utils/                    # Helper functions
+│   ├── App.jsx                   # Root component
+│   └── main.jsx                  # Entry point (react-dom render)
+├── index.html                    # Main HTML template
+├── package.json                  # Project dependencies and scripts
+└── vite.config.js                # Vite configuration file
