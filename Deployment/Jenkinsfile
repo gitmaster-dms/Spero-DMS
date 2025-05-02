@@ -4,24 +4,31 @@ pipeline {
     options {
         skipDefaultCheckout(true)
     }
-    
+
     environment {
-        GIT_REPO_URL = 'https://github.com/gitmaster-dms/Spero-DMS.git'  
-        GIT_BRANCH = 'main'  
-        TARGET_DIR  = '/var/www/html/Aggregation_test_project/DMS_goa_test'
+        GIT_REPO_URL = 'https://github.com/gitmaster-dms/Spero-DMS.git'
+        GIT_BRANCH = 'main'
+        TARGET_DIR = '/var/www/html/Aggregation_test_project/DMS_goa_test'
     }
- 
+
     stages {
-        stage('Clone or Pull Repository') {
+        stage('Clone or Reset Repository') {
             steps {
                 script {
-                    if (!fileExists(TARGET_DIR)) {
+                    if (!fileExists("${TARGET_DIR}/.git")) {
                         echo "Cloning repository to $TARGET_DIR..."
                         sh "git clone -b ${GIT_BRANCH} ${GIT_REPO_URL} ${TARGET_DIR}"
                     } else {
-                        echo "Repository already exists. Pulling latest changes..."
+                        echo "Repository already exists. Resetting and pulling latest changes..."
                         dir(TARGET_DIR) {
-                            sh "git pull origin ${GIT_BRANCH}"
+         
+                            sh "git config --global --add safe.directory ${TARGET_DIR}"
+                   
+                            sh '''
+                                git fetch origin ${GIT_BRANCH}
+                                git reset --hard origin/${GIT_BRANCH}
+                                git clean -fd
+                            '''
                         }
                     }
                 }
@@ -30,7 +37,7 @@ pipeline {
 
         stage('Check Files') {
             steps {
-                sh "ls -al ${TARGET_DIR}"  
+                sh "ls -al ${TARGET_DIR}"
             }
         }
 
@@ -45,7 +52,7 @@ pipeline {
             }
         }
 
-        stage('Setup Gunicorn Setup') {
+        stage('Setup Gunicorn') {
             steps {
                 sh '''
                     chmod +x ${TARGET_DIR}/Deployment/gunicorn.sh
