@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'any'  // or your specific node label
+    }
 
     options {
         skipDefaultCheckout(true)
@@ -12,19 +14,26 @@ pipeline {
     }
 
     stages {
-        stage('Clone or Reset Repository') {
+        stage('Prepare Workspace') {
             steps {
                 script {
-                    if (!fileExists("${TARGET_DIR}/.git")) {
-                        echo "Cloning repository to $TARGET_DIR..."
-                        sh "git clone -b ${GIT_BRANCH} ${GIT_REPO_URL} ${TARGET_DIR}"
-                    } else {
-                        echo "Repository already exists. Resetting and pulling latest changes..."
-                        dir(TARGET_DIR) {
-         
-                            sh "git config --global --add safe.directory ${TARGET_DIR}"
-                   
+                    // Make sure the directory exists
+                    sh "mkdir -p ${TARGET_DIR}"
+                }
+            }
+        }
+
+        stage('Clone or Reset Repository') {
+            steps {
+                dir("${TARGET_DIR}") {   // <-- THIS makes all next commands run inside your target folder
+                    script {
+                        if (!fileExists('.git')) {
+                            echo "Cloning repository into ${TARGET_DIR}..."
+                            sh "git clone -b ${GIT_BRANCH} ${GIT_REPO_URL} ."
+                        } else {
+                            echo "Repository already exists. Resetting and pulling latest changes..."
                             sh '''
+                                git config --global --add safe.directory $(pwd)
                                 git fetch origin ${GIT_BRANCH}
                                 git reset --hard origin/${GIT_BRANCH}
                                 git clean -fd
@@ -37,36 +46,42 @@ pipeline {
 
         stage('Check Files') {
             steps {
-                sh "ls -al ${TARGET_DIR}"
+                dir("${TARGET_DIR}") {
+                    sh "ls -al"
+                }
             }
         }
 
         stage('Setup Python Virtual ENV for dependencies') {
             steps {
-                sh '''
-                    echo "Checking current workspace directory"
-                    echo $PWD
-                    chmod +x ${TARGET_DIR}/Deployment/envsetup.sh
-                    ${TARGET_DIR}/Deployment/envsetup.sh
-                '''
+                dir("${TARGET_DIR}") {
+                    sh '''
+                        chmod +x Deployment/envsetup.sh
+                        Deployment/envsetup.sh
+                    '''
+                }
             }
         }
 
         stage('Setup Gunicorn') {
             steps {
-                sh '''
-                    chmod +x ${TARGET_DIR}/Deployment/gunicorn.sh
-                    ${TARGET_DIR}/Deployment/gunicorn.sh
-                '''
+                dir("${TARGET_DIR}") {
+                    sh '''
+                        chmod +x Deployment/gunicorn.sh
+                        Deployment/gunicorn.sh
+                    '''
+                }
             }
         }
 
         stage('Setup NGINX') {
             steps {
-                sh '''
-                    chmod +x ${TARGET_DIR}/Deployment/nginx.sh
-                    ${TARGET_DIR}/Deployment/nginx.sh
-                '''
+                dir("${TARGET_DIR}") {
+                    sh '''
+                        chmod +x Deployment/nginx.sh
+                        Deployment/nginx.sh
+                    '''
+                }
             }
         }
     }
