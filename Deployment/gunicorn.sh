@@ -5,10 +5,9 @@ PJ_BASE_PATH="/var/www/html/Aggregation_test_project/DMS_goa_test/Deployment"
 # Activate virtual environment
 pwd
 echo "current dir"
-cd ..
-cd DMS_goa
-source vvenv/bin/activate
 
+source vvenv/bin/activate
+cd DMS_goa
 # Django operations
 python3 manage.py makemigrations
 python3 manage.py migrate
