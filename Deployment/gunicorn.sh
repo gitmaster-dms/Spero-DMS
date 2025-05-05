@@ -3,11 +3,13 @@
 PJ_BASE_PATH="/var/www/html/Aggregation_test_project/DMS_goa_test/Deployment"
 
 # Activate virtual environment
+echo "Runining gunicorn sh file"
 pwd
 echo "current dir"
 
 source vvenv/bin/activate
 cd DMS_goa
+
 # Django operations
 python3 manage.py makemigrations
 python3 manage.py migrate
