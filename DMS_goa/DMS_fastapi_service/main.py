@@ -74,8 +74,12 @@ async def start_background_task():
     
     
 #============================ MAYANK =========================================================================#
+"""" Note:- *This command should always remain at the end. Any new code must be added above it.* """
 
-# Run FastAPI( "Note:- This code has to be kept at the end, any new code added will be added above this" )
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(socket_app, host="0.0.0.0", port=8000)
+""" Run the FastAPI Project
+1. Navigate to the project directory:
+cd Spero-DMS\DMS_goa\DMS_fastapi_service
+
+2. Run the FastAPI server:
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload """
+
