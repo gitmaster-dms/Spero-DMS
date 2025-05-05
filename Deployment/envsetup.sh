@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e  # <-- stop immediately if any command fails
+# set -e  # <-- stop immediately if any command fails
 
 if [ -d "vvenv" ]; then
     echo "Python virtual environment exists." 
