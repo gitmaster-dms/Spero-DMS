@@ -3,7 +3,7 @@ Description=DMS CICD gunicorn daemon
 Requires=dms_gunicorn.socket
 After=network.target
 [Service]
-User=spero_cad25
+User=jenkins
 Group=www-data
 WorkingDirectory= /var/www/html/Aggregation_test_project/DMS_goa_test
 ExecStart=/var/www/html/Aggregation_test_project/DMS_goa_test/vvenv/bin/gunicorn \

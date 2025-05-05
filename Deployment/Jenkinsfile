@@ -11,25 +11,26 @@ pipeline {
         TARGET_DIR = '/var/www/html/Aggregation_test_project/DMS_goa_test'
     }
 
-    stage('Prepare Workspace') {
-        steps {
-            script {
-                sh '''
-                    if [ ! -d "${TARGET_DIR}" ]; then
-                        echo "Directory does not exist. Creating ${TARGET_DIR}..."
-                        mkdir -p "${TARGET_DIR}"
-                        chmod -R 775 "${TARGET_DIR}"
-                    else
-                        echo "Directory already exists. Skipping creation."
-                    fi
-                '''
+    stages {
+        stage('Prepare Workspace') {
+            steps {
+                script {
+                    sh '''
+                        if [ ! -d "${TARGET_DIR}" ]; then
+                            echo "Directory does not exist. Creating ${TARGET_DIR}..."
+                            mkdir -p "${TARGET_DIR}"
+                            chmod -R 775 "${TARGET_DIR}"
+                        else
+                            echo "Directory already exists. Skipping creation."
+                        fi
+                    '''
                 }
             }
         }
 
         stage('Clone or Reset Repository') {
             steps {
-                dir("${TARGET_DIR}") {   // <-- THIS makes all next commands run inside your target folder
+                dir("${TARGET_DIR}") {
                     script {
                         if (!fileExists('.git')) {
                             echo "Cloning repository into ${TARGET_DIR}..."
@@ -88,7 +89,7 @@ pipeline {
                 }
             }
         }
-    }
+    } 
 
     post {
         success {
@@ -98,3 +99,4 @@ pipeline {
             echo 'Build failed. Please check the logs.'
         }
     }
+}
