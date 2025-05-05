@@ -1,6 +1,16 @@
 #!/bin/bash
 
 PJ_BASE_PATH="/var/www/html/Aggregation_test_project/DMS_goa_test/Deployment"
+# USER="spero_it"
+# PASS="Spero@python"
+# IP="192.168.1.109"
+
+# echo "Connecting to remote server and executing commands..."
+
+# sshpass -p "$PASS" ssh -o StrictHostKeyChecking=no ${USER}@${IP} << 'ENDSSH'
+# set -e
+
+# cd /var/www/html/Aggregation_test_project/DMS_goa_test/Deployment/DMS_goa
 
 # Activate virtual environment
 echo "Runining gunicorn sh file"
