@@ -25,9 +25,9 @@ cd DMS_goa
 
 # Django operations
 echo "python3 manage.py makemigrations"
-python3 manage.py makemigrations
-python3 manage.py migrate
-python3 manage.py collectstatic --noinput
+python manage.py makemigrations
+python manage.py migrate
+python manage.py collectstatic --noinput
 
 echo "Migrations and static files collected."
 
