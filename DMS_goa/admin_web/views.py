@@ -144,3 +144,75 @@ class DMS_Employee_delete_api(APIView):
         return Response({"message": "Employee soft deleted successfully."}, status=status.HTTP_200_OK)
 
  
+class DMS_state_get_api(APIView):
+    def get(self,request):
+        snippet = DMS_State.objects.filter(state_is_deleted=False)
+        serializers = DMS_State_Serializer(snippet,many=True)
+        return Response(serializers.data,status=status.HTTP_200_OK)
+
+class DMS_state_idwise_get_api(APIView):
+    def get(self,request,state_id):
+        snippet = DMS_State.objects.filter(state_id=state_id,state_is_deleted=False)
+        serializers = DMS_State_Serializer(snippet,many=True)
+        return Response(serializers.data,status=status.HTTP_200_OK)
+    
+class DMS_district_get_api(APIView):
+    def get(self,request):
+        snippet = DMS_District.objects.filter(dis_is_deleted=False)
+        serializers = DMS_District_Serializer(snippet,many=True)
+        return Response(serializers.data,status=status.HTTP_200_OK)
+
+class DMS_district_idwise_get_api(APIView):
+    def get(self,request,dis_id):
+        snippet = DMS_District.objects.filter(dis_id=dis_id,dis_is_deleted=False)
+        serializers = DMS_District_Serializer(snippet,many=True)
+        return Response(serializers.data,status=status.HTTP_200_OK)
+
+class DMS_Tahsil_get_api(APIView):
+    def get(self,request):
+        snippet = DMS_Tahsil.objects.filter(tah_is_deleted=False)
+        serializers = DMS_Tahsil_Serializer(snippet,many=True)
+        return Response(serializers.data,status=status.HTTP_200_OK)   
+
+
+class DMS_Tahsil_idwise_get_api(APIView):
+    def get(self,request,tah_id):
+        snippet = DMS_Tahsil.objects.filter(tah_id=tah_id,tah_is_deleted=False)
+        serializers = DMS_Tahsil_Serializer(snippet,many=True)
+        return Response(serializers.data,status=status.HTTP_200_OK)
+    
+class DMS_City_get_api(APIView):
+    def get(self,request):
+        snippet = DMS_City.objects.filter(cit_is_deleted=False)
+        serializers = DMS_City_Serializer(snippet,many=True)
+        return Response(serializers.data,status=status.HTTP_200_OK)
+
+class DMS_City_idwise_get_api(APIView):
+    def get(self,request,cit_id):
+        snippet = DMS_City.objects.filter(cit_id=cit_id,cit_is_deleted=False)
+        serializers = DMS_City_Serializer(snippet,many=True)
+        return Response(serializers.data,status=status.HTTP_200_OK)
+
+class DMS_Group_get_api(APIView):
+    def get(self,request):
+        snippet = DMS_Group.objects.filter(grp_is_deleted=False)
+        serializers = DMS_Group_Serializer(snippet,many=True)
+        return Response(serializers.data,status=status.HTTP_200_OK)
+    
+class DMS_Group_idwise_get_api(APIView):
+    def get(self,request,grp_id):
+        snippet = DMS_Group.objects.filter(grp_id=grp_id,grp_is_deleted=False)
+        serializers = DMS_Group_Serializer(snippet,many=True)
+        return Response(serializers.data,status=status.HTTP_200_OK)
+    
+class DMS_Department_get_api(APIView):
+    def get(self,request):
+        snippet = DMS_Department.objects.filter(dep_is_deleted=False)
+        serializers = DMS_Department_Serializer(snippet,many=True)
+        return Response(serializers.data,status=status.HTTP_200_OK)
+    
+class DMS_Department_idwise_get_api(APIView):
+    def get(self,request,dep_id):
+        snippet = DMS_Department.objects.filter(dep_id=dep_id,dep_is_deleted=False)
+        serializers = DMS_Department_Serializer(snippet,many=True)
+        return Response(serializers.data,status=status.HTTP_200_OK)
