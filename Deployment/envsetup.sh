@@ -13,8 +13,9 @@ echo "Current Directory: $PWD"
 source vvenv/bin/activate
 
 echo "Python vvenv activated"
-echo "Installing current dependencies - pip install -r requirements.txt"
+echo "Installing current dependencies - pip install -r requirnment.txt"
 pip install --upgrade pip setuptools wheel   # Always upgrade pip first
-pip install -r requirements.txt
+
+pip install -r requirnment.txt
 
 echo "vvenv setup finished"
