@@ -20,7 +20,7 @@ if [ -f "/etc/systemd/system/dms_gunicorn.socket" ]; then
     echo "Gunicorn Socket already present"
 else
     echo "Copying Gunicorn Socket file..."
-    sudo cp -rf "$PJ_BASE_PATH/dms_gunicorn.socket" /etc/systemd/system/
+    sudo cp -rf "$PJ_BASE_PATH/gunicorn_proxy/dms_gunicorn.socket" /etc/systemd/system/
     echo "Gunicorn Socket copied successfully."
 fi
 
@@ -29,7 +29,7 @@ if [ -f "/etc/systemd/system/dms_gunicorn.service" ]; then
     echo "Gunicorn Service already present"
 else
     echo "Copying Gunicorn Service file..."
-    sudo cp -rf "$PJ_BASE_PATH/dms_gunicorn.service" /etc/systemd/system/
+    sudo cp -rf "$PJ_BASE_PATH/gunicorn_proxy/dms_gunicorn.service" /etc/systemd/system/
     echo "Gunicorn Service copied successfully."
 fi
 
