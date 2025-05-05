@@ -49,3 +49,4 @@ uvicorn
 watchfiles
 websockets
 wsproto
+gunicorn
