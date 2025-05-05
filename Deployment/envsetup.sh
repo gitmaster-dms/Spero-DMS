@@ -9,8 +9,8 @@ echo $PWD
 (
     source vvenv/bin/activate
     echo "Python vvenv activated"
-    echo "Installing current dependencies - pip install -r requirnment.txt"
-    pip install -r requirnment.txt
+    # echo "Installing current dependencies - pip install -r requirnment.txt"
+    # pip install -r requirnment.txt
 )
 
 echo "vvenv setup finishes"
