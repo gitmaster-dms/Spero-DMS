@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=jenkins
 Group=www-data
-WorkingDirectory= /var/www/html/Aggregation_test_project/DMS_goa_test
+WorkingDirectory=/var/www/html/Aggregation_test_project/DMS_goa_test
 ExecStart=/var/www/html/Aggregation_test_project/DMS_goa_test/vvenv/bin/gunicorn \
         --error-logfile /var/www/html/Aggregation_test_project/DMS_goa_test/Deployment/logs/error.log \
         --access-logfile /var/www/html/Aggregation_test_project/DMS_goa_test/Deployment/logs/access.log \
