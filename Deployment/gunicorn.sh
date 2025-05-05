@@ -17,7 +17,20 @@ echo "Runining gunicorn sh file"
 pwd
 echo "current dir"
 
-source vvenv/bin/activate
+# source vvenv/bin/activate
+
+if [ -d "vvenv" ]; then
+    echo "Python virtual environment exists." 
+    source vvenv/bin/activate
+else
+    python3 -m venv vvenv
+    echo "Current Directory: $PWD"
+    pip install -r requirnment.txt
+fi
+
+echo "pip freeze"
+
+pip freeze
 cd DMS_goa
 
 # Django operations
