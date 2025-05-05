@@ -19,6 +19,7 @@ echo "current dir"
 
 # source vvenv/bin/activate
 
+
 if [ -d "vvenv" ]; then
     echo "Python virtual environment exists." 
     source vvenv/bin/activate
