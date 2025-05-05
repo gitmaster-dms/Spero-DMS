@@ -18,5 +18,7 @@ echo "Current Directory: $PWD"
 pip install --upgrade pip setuptools wheel   # Always upgrade pip first
 echo "Current Directory: $PWD"
 pip install -r requirnment.txt
+pip freeze
+echo "pip freeze in envsetup"
 
 echo "vvenv setup finished"
