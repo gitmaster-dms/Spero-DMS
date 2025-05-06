@@ -49,3 +49,7 @@ uvicorn
 watchfiles
 websockets
 wsproto
+djangorestframework
+psycopg2
+djangorestframework-simplejwt
+gunicorn
