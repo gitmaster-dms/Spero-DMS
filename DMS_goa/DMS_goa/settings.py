@@ -78,16 +78,18 @@ WSGI_APPLICATION = 'DMS_goa.wsgi.application'
 DATABASES = {
        'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'DMS',
-        'USER': 'postgres',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',
-        'PORT': '5432',  # Default PostgreSQL port
+        'NAME': 'DMS_goa_2025',
+        'USER': 'hhc123@sperohealthcare.in',
+        'PASSWORD': 'Spero@123', 
+        'HOST': '192.168.1.116',
+        'PORT': '5432', 
         'OPTIONS': {
             'options': '-c timezone=Asia/Kolkata',
         },
     }
 }
+
+
 
 
 # Password validation
