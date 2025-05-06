@@ -4,7 +4,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-
 class DMS_department_post_api(APIView):
     def post(self,request):
         serializers=DMS_department_serializer(data=request.data)
