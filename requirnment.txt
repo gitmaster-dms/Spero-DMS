@@ -42,8 +42,6 @@ sniffio
 sqlparse
 starlette
 typer
-typing-inspection
-typing_extensions
 tzdata
 ujson
 urllib3
