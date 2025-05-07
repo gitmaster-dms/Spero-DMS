@@ -15,7 +15,7 @@ if [ -d "vvenv" ]; then
 else
     python3 -m venv vvenv
     echo "Current Directory: $PWD"
-    pip install -r requirnment.txt
+    # pip install -r requirnment.txt
 fi
 
 echo "pip freeze in gunicorn.sh"
