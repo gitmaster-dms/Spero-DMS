@@ -54,3 +54,4 @@ djangorestframework
 psycopg2
 djangorestframework-simplejwt
 gunicorn
+django-cors-headers
