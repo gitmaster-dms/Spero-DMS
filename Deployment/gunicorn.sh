@@ -57,6 +57,6 @@ echo "Current Directory: $PWD"
 sudo systemctl daemon-reload
 sudo systemctl restart dms_gunicorn
 sudo systemctl enable dms_gunicorn
-
+ 
 # Check Gunicorn status
 sudo systemctl status dms_gunicorn
