@@ -33,5 +33,10 @@ urlpatterns = [
     path('Department_get/',DMS_Department_get_api.as_view(), name='Department_get'),
     path('Department_get_idwise/<int:dep_id>/',DMS_Department_idwise_get_api.as_view(), name='Department_get_idwise'),
     
+    
+#=============================== Mayank =========================================================
+
+    path('combined/', views.CombinedAPIView.as_view(), name='combined-api'),
+    
 
 ]
