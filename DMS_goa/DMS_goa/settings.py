@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'DMS_goa.wsgi.application'
 DATABASES = {
        'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'DMS_goa_2025',
+        'NAME': 'DMS_GOA_DB_2025',
         'USER': 'hhc123@sperohealthcare.in',
         'PASSWORD': 'Spero@123', 
         'HOST': '192.168.1.116',
