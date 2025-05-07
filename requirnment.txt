@@ -6,6 +6,7 @@ certifi
 charset-normalizer
 click
 colorama
+confluent-kafka
 Django
 dnspython
 email_validator
