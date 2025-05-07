@@ -52,7 +52,7 @@ fi
 # Show user and current directory
 echo "Current User: $USER"
 echo "Current Directory: $PWD"
-
+ 
 # Reload systemd and restart Gunicorn
 sudo systemctl daemon-reload
 sudo systemctl restart dms_gunicorn
