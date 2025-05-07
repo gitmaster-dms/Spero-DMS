@@ -83,3 +83,12 @@ cd Spero-DMS\DMS_goa\DMS_fastapi_service
 2. Run the FastAPI server:
 uvicorn main:app --host 0.0.0.0 --port 8000 --reload """
 
+
+
+# ------------------------------------------------------------------------------------------------------------#
+
+from fastapi import FastAPI
+from websocket_router import router as websocket_router
+
+app = FastAPI()
+app.include_router(websocket_router)

@@ -1,3 +1,4 @@
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from .models import *
 
@@ -68,3 +69,17 @@ class permission_sub_Serializer(serializers.ModelSerializer):
 
         
 
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['group'] = user.grp_id  # Add role to JWT payload
+        return token
+    
+
+class UserLoginSerializer(serializers.ModelSerializer):
+    emp_username = serializers.CharField(required=False, allow_blank=True)
+    password = serializers.CharField(style={'input_type': 'password'})
+    class Meta:
+        model = DMS_Employee
+        fields = ['emp_username', 'password']

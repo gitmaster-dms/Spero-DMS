@@ -3,6 +3,21 @@ from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.shortcuts import render
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+# from .permissions import IsAdmin, IsManager, IsERO
+from rest_framework_simplejwt.tokens import RefreshToken
+from .models import *
+from .serializers import *
+from rest_framework import status
+from admin_web.renders import UserRenderer
+from django.contrib.auth import authenticate
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 class DMS_department_post_api(APIView):
     def post(self,request):
@@ -215,3 +230,89 @@ class DMS_Department_idwise_get_api(APIView):
         snippet = DMS_Department.objects.filter(dep_id=dep_id,dep_is_deleted=False)
         serializers = DMS_Department_Serializer(snippet,many=True)
         return Response(serializers.data,status=status.HTTP_200_OK)
+
+
+
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+    group = str(user.grp_id)
+    print("group---", group)
+    permissions_data = []
+    # if group:
+    #         incs= DMS_Group.objects.get(grp_id=group)
+    #         pers = DMS_Permission.objects.filter(grp_id=group)
+    #         group = incs.grp_name
+    #         for permission in pers:
+    #             permission_info = {
+    #                 'modules_submodule': permission.mod_submod_per,
+    #                 'permission_status': permission.per_is_deleted,
+    #                 # 'source_id': permission.source.source_pk_id,
+    #                 # 'source_name': permission.source.source,  
+    #                 'group_id': permission.grp_id.grp_id,
+    #                 'group_name': permission.grp_id.grp_name,  
+    # }   
+    #             permissions_data.append(permission_info)
+    # else:
+    #     group = None
+            
+    return {
+        "refresh" : str(refresh),
+        "access" : str(refresh.access_token),
+        # "permissions": permissions_data,
+        "colleague": {
+                'id': user.emp_id,
+                'emp_name': user.emp_name,
+                'email': user.emp_email,
+                'phone_no': user.emp_contact_no,
+                'clg_group': group,
+            },
+        "user_group" :group,
+    } 
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
+class UserLoginView(APIView):
+    renderer_classes = [UserRenderer]
+    def post(self, request, format=None):
+        serializer = UserLoginSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            emp_username = serializer.data.get('emp_username')
+            password = serializer.data.get('password')
+            print("=========", emp_username, password)
+            user = authenticate(emp_username=emp_username, password=password)
+            print("user--", user)
+            if user is not None:
+                emp = DMS_Employee.objects.get(emp_username=user.emp_username)
+                print(emp.emp_is_deleted)
+                print(emp.emp_is_login)
+                if emp.emp_is_deleted != False:
+                    print("1")
+                    print("User is not allowed")
+                    return Response({'msg':'Login access denied. Please check your permissions or reach out to support for help.'},status=status.HTTP_401_UNAUTHORIZED)
+                if emp.emp_is_login is False: 
+                    # emp.emp_is_login = True
+                    # emp.save()
+                    print("user ")
+                    token = get_tokens_for_user(user)
+                    return Response({'token':token,'msg':'Logged in Successfully'},status=status.HTTP_200_OK)
+                else:
+                    return Response({'msg':'User Already Logged In. Please check.'},status=status.HTTP_200_OK)
+            else:
+                return Response({'errors':{'non_field_errors':['UserId or Password is not valid']}},status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]  # Only logged-in users can log out
+
+    def post(self, request):
+        try:
+            refresh_token = request.data.get("refresh_token")
+            if refresh_token:
+                token = RefreshToken(refresh_token)
+                token.blacklist()  # Blacklist the token
+                return Response({"message": "Logged out successfully"}, status=200)
+            return Response({"error": "Refresh token is required"}, status=400)
+        except Exception as e:
+            return Response({"error": "Invalid token"}, status=400)

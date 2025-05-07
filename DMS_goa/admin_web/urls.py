@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from rest_framework_simplejwt.views import TokenRefreshView
 from .views import *
 
 urlpatterns = [
@@ -37,6 +38,9 @@ urlpatterns = [
 #=============================== Mayank =========================================================
 
     path('combined/', views.CombinedAPIView.as_view(), name='combined-api'),
-    
 
+    # path('login/', CustomTokenObtainPairView.as_view(), name='loin'),
+    path('login/', UserLoginView.as_view(), name='loin'),
+    path('login/refresh/', TokenRefreshView.as_view(), name='login_refresh'),
+    path('logout/', LogoutView.as_view(), name='logout'),
 ]
