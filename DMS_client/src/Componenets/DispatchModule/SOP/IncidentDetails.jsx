@@ -8,6 +8,7 @@ import {
   Box,
   Stack,
 } from '@mui/material';
+import CommentsPanel from './CommentsPanel';
 
 function IncidentDetails({ darkMode }) {
   const labelColor = darkMode ? '#5FECC8' : '#1976d2';
@@ -23,7 +24,7 @@ function IncidentDetails({ darkMode }) {
 
   return (
     <>
-      <Typography variant="h6" mb={2}  color={labelColor} sx={{ fontFamily }}>
+      <Typography variant="h6"   color={labelColor} sx={{ fontFamily }}>
         Incident Details
       </Typography>
 
@@ -54,6 +55,11 @@ function IncidentDetails({ darkMode }) {
               <Typography  variant="subtitle2" sx={{ color: labelColor, fontWeight: 500, fontFamily }}>Incident Type</Typography>
               <Typography variant="subtitle2" sx={{ fontFamily }}>Flood</Typography>
             </Box>
+            
+            <Box sx={boxStyle} >
+              <Typography  variant="subtitle2" sx={{ color: labelColor, fontWeight: 500, fontFamily }}>Alert Type</Typography>
+              <Typography  variant="subtitle2"sx={{ fontFamily }}>Coast Guard</Typography>
+            </Box>
           </Grid>
 
           {/* Middle Column */}
@@ -67,19 +73,47 @@ function IncidentDetails({ darkMode }) {
               <Typography variant="subtitle2" sx={{ color: labelColor, fontWeight: 500, fontFamily }}>Response Procedure</Typography>
               <Typography variant="subtitle2" sx={{ fontFamily }}>Mass intimation to public, Media, Boat, Fisheries</Typography>
             </Box>
-            <Box>
+            {/* <Box>
               <Typography  variant="subtitle2" sx={{ color: labelColor, fontWeight: 500, fontFamily }}>Incident Description</Typography>
               <Typography  variant="subtitle2" sx={{ fontFamily }}>Flood near Sea</Typography>
+            </Box> */}
+            <Box>
+              <Typography variant="subtitle2" sx={{ color: labelColor, fontWeight: 500, fontFamily }}>Responder Scope</Typography>
+              <Stack spacing={1} mt={1}>
+                <Box display="flex" flexWrap="wrap" gap={1}>
+                  <FormControlLabel
+                    control={<Checkbox defaultChecked sx={{ color: labelColor }} />}
+                    label={<Typography variant="subtitle2" sx={{ fontFamily }}>Police</Typography>}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox sx={{ color: labelColor }} />}
+                    label={<Typography variant="subtitle2" sx={{ fontFamily }}>Fire</Typography>}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox sx={{ color: labelColor }} />}
+                    label={<Typography variant="subtitle2"  sx={{ fontFamily }}>Marine</Typography>}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox sx={{ color: labelColor }} />}
+                    label={<Typography variant="subtitle2" sx={{ fontFamily }}>Fisheries</Typography>}
+                  />
+                </Box>
+                {/* <Box textAlign="right">
+                  <Button variant="contained" color="info" size="small">
+                    Notify
+                  </Button>
+                </Box> */}
+              </Stack>
             </Box>
           </Grid>
 
           {/* Right Column */}
-          <Grid item xs={12} md={4} pl={{ md: 2 }}>
-            <Box sx={boxStyle}>
+          <Grid item xs={12} md={5} pl={{ md: 2 }}>
+            {/* <Box sx={boxStyle}>
               <Typography  variant="subtitle2" sx={{ color: labelColor, fontWeight: 500, fontFamily }}>Alert Type</Typography>
               <Typography  variant="subtitle2"sx={{ fontFamily }}>Coast Guard</Typography>
-            </Box>
-            <Box>
+            </Box> */}
+            {/* <Box>
               <Typography variant="subtitle2" sx={{ color: labelColor, fontWeight: 500, fontFamily }}>Responder Scope</Typography>
               <Stack spacing={1} mt={1}>
                 <Box display="flex" flexWrap="wrap" gap={1}>
@@ -106,7 +140,8 @@ function IncidentDetails({ darkMode }) {
                   </Button>
                 </Box>
               </Stack>
-            </Box>
+            </Box> */}
+            <CommentsPanel darkMode={darkMode}  />
           </Grid>
         </Grid>
       </Paper>
