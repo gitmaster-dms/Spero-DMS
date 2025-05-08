@@ -60,32 +60,58 @@ const StyledCardContent = styled("td")({
   alignItems: "center",
 });
 
+// const tasks = [
+//   {
+//     id: 1,
+//     taskName: "221367345861",
+//     description: "22136734",
+//     initiatedBy: "Flood",
+//     // duration: "1:30:00",
+//     status: "High",
+//     // mode: "Manual",
+//     date: "6/05/2025",
+//     time: "14:03:27",
+//     action: "Get Data",
+//   },
+//   {
+//     id: 2,
+//     taskName: "221367345861",
+//     description: "221367345861",
+//     initiatedBy: "Cyclone",
+//     // duration: "1:30:00",
+//     initiatedBy: "Medium",
+//     mode: "Manual",
+//     date: "6/05/2025",
+//     time: "14:03:27",
+//     action: "Dispatch",
+//   },
+// ];
 const tasks = [
   {
     id: 1,
-    taskName: "Flood",
-    description: "Unknown",
-    initiatedBy: "User",
-    duration: "1:30:00",
-    status: "Completed",
-    mode: "Manual",
-    date: "6/05/2025",
-    time: "14:03:27",
-    action: "Get Data",
+    alertId: "A123",
+    disasterId: "D456",
+    disasterType: "Earthquake",
+    date: "2025-05-08",
+    time: "14:30",
+    priority: "High",
+    initiatedBy: "John Doe",
+    status: "In Progress",
   },
   {
     id: 2,
-    taskName: "Flood",
-    description: "Unknown",
-    initiatedBy: "System",
-    duration: "1:30:00",
-    status: "Pending",
-    mode: "Manual",
-    date: "6/05/2025",
-    time: "14:03:27",
-    action: "Dispatch",
+    alertId: "A124",
+    disasterId: "D457",
+    disasterType: "Flood",
+    date: "2025-05-09",
+    time: "09:00",
+    priority: "Low",
+    initiatedBy: "Jane Smith",
+    status: "Completed",
   },
+  // Add more tasks as needed
 ];
+
 
 function SopTask({ darkMode }) {
   const textColor = darkMode ? "#ffffff" : "#000000";
@@ -375,177 +401,106 @@ function SopTask({ darkMode }) {
           </Grid>
         </Grid> */}
 
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TableContainer>
-              <Table>
-                <TableBody>
-                  {/* Header */}
-                  <EnquiryCard>
-                    {[
-                      "Alert Id",
-                      "Disaster Id",
-                      "Disaster Type",
+<Grid container spacing={2}>
+  <Grid item xs={12}>
+    <TableContainer>
+      <Table>
+        <TableBody>
+          {/* Header */}
+          <EnquiryCard sx={{ display: "flex", flexDirection: "row" }}>
+            {[
+              "Alert Id",
+              "Disaster Id",
+              "Disaster Type",
+              "Date & Time",
+              "Priority",
+              "Initiated By",
+              "Add",
+              "View",
+            ].map((label, idx) => (
+              <StyledCardContent
+                key={idx}
+                sx={{
+                  flex: 1,
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Typography variant="subtitle2" fontWeight={500}>
+                  {label}
+                </Typography>
+              </StyledCardContent>
+            ))}
+          </EnquiryCard>
 
-                      "Date & Time",
-                      "Priority",
-                      "Intiated By",
-                      "View",
-                    ].map((label, idx) => (
-                      <StyledCardContent
-                        key={idx}
-                        style={{
-                          flex: 1,
-                          display: "flex",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <Typography variant="subtitle2" fontWeight={500}>
-                          {label}
-                        </Typography>
-                      </StyledCardContent>
-                    ))}
-                  </EnquiryCard>
+          {/* Rows */}
+          {tasks.length === 0 ? (
+            <Box p={2}>
+              <Typography align="center" color="textSecondary">
+                No tasks available.
+              </Typography>
+            </Box>
+          ) : (
+            tasks.map((item) => (
+              <EnquiryCardBody
+                key={item.id}
+                status={item.status}
+                sx={{ display: "flex", flexDirection: "row" }}
+              >
+                <StyledCardContent sx={{ flex: 1, justifyContent: "center", display: "flex" }}>
+                  <Typography variant="subtitle2">{item.alertId}</Typography>
+                </StyledCardContent>
+                <StyledCardContent sx={{ flex: 1, justifyContent: "center", display: "flex" }}>
+                  <Typography variant="subtitle2">{item.disasterId}</Typography>
+                </StyledCardContent>
+                <StyledCardContent sx={{ flex: 1, justifyContent: "center", display: "flex" }}>
+                  <Typography variant="subtitle2">{item.disasterType}</Typography>
+                </StyledCardContent>
+                <StyledCardContent sx={{ flex: 1, justifyContent: "center", display: "flex" }}>
+                  <Typography variant="subtitle2">
+                    {item.date} {item.time}
+                  </Typography>
+                </StyledCardContent>
+                <StyledCardContent sx={{ flex: 1, justifyContent: "center", display: "flex" }}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{
+                      color: item.priority === "High" ? "#f44336" : "#00e676",
+                    }}
+                  >
+                    {item.priority}
+                  </Typography>
+                </StyledCardContent>
+                <StyledCardContent sx={{ flex: 1, justifyContent: "center", display: "flex" }}>
+                  <Typography variant="subtitle2">{item.initiatedBy}</Typography>
+                </StyledCardContent>
+                <StyledCardContent sx={{ flex: 1, justifyContent: "center", display: "flex" }}>
+                  <AddCircleOutline
+                    sx={{
+                      color: "#00f0c0",
+                      cursor: "pointer",
+                      fontSize: 28,
+                    }}
+                  />
+                </StyledCardContent>
+                <StyledCardContent sx={{ flex: 1, justifyContent: "center", display: "flex" }}>
+                  <Visibility
+                    sx={{
+                      color: "#00f0c0",
+                      cursor: "pointer",
+                      fontSize: 28,
+                    }}
+                  />
+                </StyledCardContent>
+              </EnquiryCardBody>
+            ))
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  </Grid>
+</Grid>
 
-                  {/* Rows */}
-                  {tasks.length === 0 ? (
-                    <Box p={2}>
-                      <Typography align="center" color="textSecondary">
-                        No tasks available.
-                      </Typography>
-                    </Box>
-                  ) : (
-                    tasks.map((item) => (
-                      <EnquiryCardBody key={item.id} status={item.status}>
-                        <StyledCardContent
-                          style={{
-                            flex: 1,
-                            display: "flex",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Typography variant="subtitle2">
-                            {item.taskName}
-                          </Typography>
-                        </StyledCardContent>
-                        <StyledCardContent
-                          style={{
-                            flex: 1,
-                            display: "flex",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Typography variant="subtitle2">
-                            {item.description}
-                          </Typography>
-                        </StyledCardContent>
-                        <StyledCardContent
-                          style={{
-                            flex: 1,
-                            display: "flex",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Typography variant="subtitle2">
-                            {item.initiatedBy}
-                          </Typography>
-                        </StyledCardContent>
-                        <StyledCardContent
-                          style={{
-                            flex: 1,
-                            display: "flex",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Typography variant="subtitle2">
-                            {item.duration}
-                          </Typography>
-                        </StyledCardContent>
-                        <StyledCardContent
-                          style={{
-                            flex: 1,
-                            display: "flex",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Typography variant="subtitle2">
-                            {item.date + " " + item.time}
-                          </Typography>
-                        </StyledCardContent>
-                        <StyledCardContent
-                          style={{
-                            flex: 1,
-                            display: "flex",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Typography
-                            sx={{
-                              color:
-                                item.status === "Completed"
-                                  ? "#00e676"
-                                  : "#f44336",
-                            }}
-                            variant="subtitle2"
-                          >
-                            {item.status}
-                          </Typography>
-                        </StyledCardContent>
-                      
-                        {/* <StyledCardContent
-                          style={{
-                            flex: 1,
-                            display: "flex",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Button
-                            size="small"
-                            variant="contained"
-                            color="primary"
-                            sx={{ minWidth: 100 }} // Set consistent width
-                          >
-                            {item.action}
-                          </Button>
-                        </StyledCardContent> */}
-                        <StyledCardContent
-                          style={{
-                            flex: 1,
-                            display: "flex",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <AddCircleOutline
-                            sx={{
-                              color: "#00f0c0",
-                              cursor: "pointer",
-                              fontSize: 28,
-                            }}
-                          />
-                        </StyledCardContent>
-                        <StyledCardContent
-                          style={{
-                            flex: 1,
-                            display: "flex",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Visibility
-                            sx={{
-                              color: "#00f0c0",
-                              cursor: "pointer",
-                              fontSize: 28,
-                            }}
-                          />
-                        </StyledCardContent>
-                      </EnquiryCardBody>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Grid>
-        </Grid>
       </Paper>
     </>
   );
