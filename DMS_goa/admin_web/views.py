@@ -264,7 +264,7 @@ def get_tokens_for_user(user):
                 'emp_name': user.emp_name,
                 'email': user.emp_email,
                 'phone_no': user.emp_contact_no,
-                'clg_group': group,
+                'user_group': group,
             },
         "user_group" :group,
     } 

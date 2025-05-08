@@ -37,7 +37,7 @@ urlpatterns = [
     
 #=============================== Mayank =========================================================
 
-    path('combined/', views.CombinedAPIView.as_view(), name='combined-api'),
+    # path('combined/', CombinedAPIView.as_view(), name='combined-api'),
 
     # path('login/', CustomTokenObtainPairView.as_view(), name='loin'),
     path('login/', UserLoginView.as_view(), name='loin'),
