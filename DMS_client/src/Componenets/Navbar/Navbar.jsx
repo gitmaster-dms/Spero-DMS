@@ -37,6 +37,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
         color: darkMode ? "#E5F3F5" : "#000",
         boxShadow: "none",
         transition: "all 0.5s ease-in-out",
+        height:'60px'
       }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
