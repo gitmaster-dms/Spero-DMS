@@ -3,9 +3,13 @@ import { Grid, Box } from "@mui/material";
 import SopTask from "../SOP/SopTask";
 import CommentsPanel from "../SOP/CommentsPanel";
 import IncidentDetails from "../SOP/IncidentDetails";
-// import Footer from "..";
+import { useLocation } from 'react-router-dom';
 
 function Sop({ darkMode, setDarkMode }) {
+  const location = useLocation();
+  const flag = location.state?.flag;
+
+  console.log(flag,'flag');
   return (
     <>
       <Box

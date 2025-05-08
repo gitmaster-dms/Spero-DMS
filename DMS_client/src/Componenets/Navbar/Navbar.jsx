@@ -37,7 +37,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
         color: darkMode ? "#E5F3F5" : "#000",
         boxShadow: "none",
         transition: "all 0.5s ease-in-out",
-        height:'60px'
+        height: "60px",
       }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -53,9 +53,6 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
               : "linear-gradient(90deg, #1C3B52 0%, #2EB9A3 100%)",
             border: "2px solid grey",
             borderColor: darkMode ? "#5BB9B4" : "#1C3B52",
-            // boxShadow: darkMode
-            //   ? "0 0 10px #2EB9A3"
-            //   : "0 0 4px rgba(0,0,0,0.1)",
             gap: 1,
           }}
         >
@@ -108,6 +105,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
             {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
           </IconButton>
 
+          {/* Mobile Menu */}
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton onClick={handleOpenNavMenu}>
               <MenuIcon sx={{ color: darkMode ? "#fff" : "#000" }} />
@@ -125,6 +123,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
             </Menu>
           </Box>
 
+          {/* User Menu */}
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
               <Avatar

@@ -167,7 +167,7 @@ const AlertPanel = ({ darkMode }) => {
                                             </StyledCardContent>
                                             <StyledCardContent style={{ flex: 1 }}>
                                                 <Button
-                                                    onClick={() => navigate('/Sop')}  
+                                                    onClick={() => navigate('/Sop', { state: { flag: 1 } })}
                                                     style={{
                                                         width: '70%',
                                                         textAlign: 'left',
