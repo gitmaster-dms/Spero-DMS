@@ -11,7 +11,7 @@ function CommentsPanel({ darkMode }) {
     padding: 2,
     marginTop: 7,
     borderRadius: 3,
-    height: '450px', // You can adjust height as needed
+    height: 'auto', // You can adjust height as needed
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',

@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { Search, Visibility, AddCircleOutline } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
+
 const EnquiryCard = styled("div")(() => ({
   display: "flex",
   alignItems: "center",
@@ -20,7 +21,9 @@ const EnquiryCard = styled("div")(() => ({
   borderRadius: "8px 10px 0 0",
   padding: "6px 12px",
   color: "black",
+  height: '40px'
 }));
+
 const EnquiryCardBody = styled("tr")(({ theme, status }) => ({
   display: "flex",
   alignItems: "center",
@@ -30,25 +33,24 @@ const EnquiryCardBody = styled("tr")(({ theme, status }) => ({
   marginTop: "0.5em",
   borderRadius: "8px",
   padding: "10px 12px",
-  border: `1px solid ${
-    status === "Completed"
-      ? "#00e676"
-      : status === "Pending"
-      ? "#f44336"
-      : "#ccc"
-  }`,
+  // border: `1px solid ${status === "Completed"
+  //     ? "#00e676"
+  //     : status === "Pending"
+  //       ? "#f44336"
+  //       : "#ccc"
+  //   }`,
   transition: "all 0.3s ease",
   cursor: "pointer",
 
   "&:hover": {
-    boxShadow: `0 0 8px ${
-      status === "Completed"
-        ? "#00e67699"
-        : status === "Pending"
+    boxShadow: `0 0 8px ${status === "Completed"
+      ? "#00e67699"
+      : status === "Pending"
         ? "#f4433699"
         : "#88888855"
-    }`,
+      }`,
   },
+  height: '45px'
 }));
 
 const StyledCardContent = styled("td")({
@@ -81,42 +83,6 @@ const tasks = [
     date: "6/05/2025",
     time: "14:03:27",
     action: "Dispatch",
-  },
-  {
-    id: 3,
-    taskName: "Flood",
-    description: "Unknown",
-    initiatedBy: "User",
-    duration: "1:30:00",
-    status: "Completed",
-    mode: "Automatic",
-    date: "6/05/2025",
-    time: "14:03:27",
-    action: "Create Log",
-  },
-  {
-    id: 3,
-    taskName: "Flood",
-    description: "Unknown",
-    initiatedBy: "User",
-    duration: "1:30:00",
-    status: "Completed",
-    mode: "Automatic",
-    date: "6/05/2025",
-    time: "14:03:27",
-    action: "Create Log",
-  },
-  {
-    id: 3,
-    taskName: "Flood",
-    description: "Unknown",
-    initiatedBy: "User",
-    duration: "1:30:00",
-    status: "Completed",
-    mode: "Automatic",
-    date: "6/05/2025",
-    time: "14:03:27",
-    action: "Create Log",
   },
 ];
 
@@ -192,9 +158,11 @@ function SopTask({ darkMode }) {
                       "Comments",
                       "View",
                     ].map((label, idx) => (
-                      <StyledCardContent key={idx} style={{  flex: 1,
+                      <StyledCardContent key={idx} style={{
+                        flex: 1,
                         display: "flex",
-                        justifyContent: "center",}}>
+                        justifyContent: "center",
+                      }}>
                         <Typography variant="subtitle2" fontWeight={500}>{label}</Typography>
                       </StyledCardContent>
                     ))}
@@ -210,7 +178,7 @@ function SopTask({ darkMode }) {
                   ) : (
                     tasks.map((item) => (
                       <EnquiryCardBody key={item.id} status={item.status}>
-                       <StyledCardContent
+                        <StyledCardContent
                           style={{
                             flex: 1,
                             display: "flex",
@@ -278,7 +246,7 @@ function SopTask({ darkMode }) {
                                 item.status === "Completed"
                                   ? "#00e676"
                                   : "#f44336",
-                            
+
                             }}
                             variant="subtitle2"
                           >

@@ -1,19 +1,67 @@
+import React, { useState } from 'react';
 import { Box, Typography, TextField, Button, FormControl, InputLabel, OutlinedInput, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import loginBg from '../../assets/Bg_login1.png';
 import Spero from '../../assets/spero1.png';
 import { useNavigate } from 'react-router-dom';
 
+
 function Login({ setIsLoggedIn }) {
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const navigate = useNavigate();
+    const [emp_username, setEmp_Username] = useState('');
+    const [password, setPassword] = useState('');
+    const [loginError, setLoginError] = useState('');
+    const [loading, setLoading] = useState(false); 
 
 
-    const handleLogin = () => {
-      
-        navigate('/alert-panel');
+
+    // const handleLogin = () => {
+
+    //     navigate('/alert-panel');
+    // };
+
+    const handleLogin = async () => {
+        if (!emp_username || !password) {
+          setLoginError('Please enter both User ID and Password.');
+          return;
+        }
+    
+        try {
+          setLoading(true);
+          setLoginError('');
+    
+          const response = await fetch('http://127.0.0.1:8000/admin_web/login/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ emp_username, password }),
+          });
+    
+          const data = await response.json();
+          console.log('Login response:', data);
+          if (data.msg) {
+            setLoginError(data.msg);
+            return;
+          }
+             if (data.data?.token) {
+                localStorage.setItem('token', data.data.token);
+                navigate('/alert-panel');
+              }
+              
+           else {
+            setLoginError('Unexpected response from server.');
+          }
+        } catch (err) {
+          setLoginError('Failed to login. Please try again.');
+          console.error('Login error:', err);
+        } finally {
+          setLoading(false);
+        }
     };
+
 
     return (
         <Box sx={{ height: '100vh', width: '100%', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: isSmallScreen ? 'column' : 'row' }}>
@@ -78,12 +126,16 @@ function Login({ setIsLoggedIn }) {
                                 User Name
                             </Typography>
                             <TextField
+                             value={emp_username}
+                             onChange={(e) => setEmp_Username(e.target.value)}
                                 fullWidth
                                 variant="outlined"
                                 placeholder="Enter Name"
                                 InputLabelProps={{ shrink: false }}
                                 sx={{
-                                    color: 'black',
+                                    '& .MuiInputBase-input': {
+                                        color: 'black', 
+                                      },
                                     borderRadius: '12px',
                                     '& fieldset': {
                                         borderRadius: '8px', // applies to the outlined border
@@ -97,20 +149,22 @@ function Login({ setIsLoggedIn }) {
                             />
                         </Box>
 
-
-
                         <Box sx={{ width: '100%', mb: 2 }}>
                             <Typography sx={{ color: 'white', mb: 0.5, fontWeight: 500, fontSize: '12px' }}>
                                 Password
                             </Typography>
                             <TextField
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
                                 fullWidth
                                 variant="outlined"
                                 placeholder="Enter Password"
                                 type="password"
                                 InputLabelProps={{ shrink: false }}
                                 sx={{
-                                    color: '#AEAEAE',
+                                    '& .MuiInputBase-input': {
+                                        color: 'black', 
+                                      },
                                     borderRadius: '12px',
                                     '& fieldset': {
                                         borderRadius: '8px', // applies to the outlined border
@@ -126,6 +180,15 @@ function Login({ setIsLoggedIn }) {
                         </Box>
 
 
+                         {/* Display error message if any */}
+                         {loginError && (
+                            <Box sx={{ mt: 1, mb: 1, width: '100%', backgroundColor: 'rgba(255, 0, 0, 0.1)', 
+                                      padding: '8px', borderRadius: '4px', border: '1px solid rgba(255, 0, 0, 0.3)' }}>
+                                <Typography sx={{ fontSize: '0.8rem', textAlign: 'center', color: 'white' }}>
+                                    {loginError}
+                                </Typography>
+                            </Box>
+                        )}
 
                         {/* Login Button */}
                         <Button
@@ -158,13 +221,7 @@ function Login({ setIsLoggedIn }) {
                             }}
                         />
                     </Box>
-
-
-
                 </Box>
-
-
-
             </Box>
         </Box>
     );
