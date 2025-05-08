@@ -52,11 +52,11 @@ fi
 # Show user and current directory
 echo "Current User: $USER"
 echo "Current Directory: $PWD"
-
+ 
 # Reload systemd and restart Gunicorn
 sudo systemctl daemon-reload
 sudo systemctl restart dms_gunicorn
 sudo systemctl enable dms_gunicorn
-
+ 
 # Check Gunicorn status
 sudo systemctl status dms_gunicorn
