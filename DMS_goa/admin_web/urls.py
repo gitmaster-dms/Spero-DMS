@@ -4,6 +4,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from .views import *
 
 urlpatterns = [
+    #===================================Kirti==================================================
     path('department_post/',DMS_department_post_api.as_view(),name='department_post'),
     path('department_put/<int:dep_id>/',DMS_department_put_api.as_view(),name='department_put'),
     path('department_delete/<int:dep_id>/',DMS_department_delete_api.as_view(),name='department_delete'),
@@ -15,7 +16,10 @@ urlpatterns = [
     path('employee_post/',DMS_Employee_post_api.as_view(),name='employee_post'),
     path('employee_put/<int:emp_id>/',DMS_Employee_put_api.as_view(),name='employee_put'),
     path('employee_delete/<int:emp_id>/',DMS_Employee_delete_api.as_view(),name='employee_delete'),
-
+    #===================================Kirti==================================================
+    
+    
+    #===================================Mohin==================================================
     path('state_get/',DMS_state_get_api.as_view(), name='state_get'),
     path('state_get_idwise/<int:state_id>/',DMS_state_idwise_get_api.as_view(), name='state_get_idwise'),
     
@@ -33,7 +37,7 @@ urlpatterns = [
     
     path('Department_get/',DMS_Department_get_api.as_view(), name='Department_get'),
     path('Department_get_idwise/<int:dep_id>/',DMS_Department_idwise_get_api.as_view(), name='Department_get_idwise'),
-    
+    #===================================Mohin==================================================
     
 #=============================== Mayank =========================================================
 

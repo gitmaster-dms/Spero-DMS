@@ -316,3 +316,45 @@ class LogoutView(APIView):
             return Response({"error": "Refresh token is required"}, status=400)
         except Exception as e:
             return Response({"error": "Invalid token"}, status=400)
+        
+        
+class CombinedAPIView(APIView):
+    # renderer_classes = [UserRenderer]
+    # permission_classes = [IsAuthenticated]
+    def get(self, request, format=None):
+        permission_modules = DMS_Module.objects.filter()
+        modules_serializer = Mmoduleserializer(permission_modules, many=True)
+
+        permission_objects = DMS_SubModule.objects.filter()
+        permission_serializer = permission_sub_Serializer(permission_objects, many=True)
+
+        
+        grouped_modules = {}
+        for module_data in modules_serializer.data:
+            r_m_id = module_data["mod_group_id"]
+            if r_m_id not in grouped_modules:
+                grouped_modules[r_m_id] = {
+                    "department_id": module_data["department_id"],
+                    "department_name": module_data["department_name"],
+                    "group_id": r_m_id,
+                    "group_name": module_data["grp_name"],
+                    "modules": []
+                }
+            grouped_modules[r_m_id]["modules"].append({
+                "module_id": module_data["mod_id"],
+                "name": module_data["mod_name"],
+                "submodules": []
+            })
+
+        
+        for submodule_data in permission_serializer.data:
+            module_id = submodule_data["mod_id"]
+            for group_data in grouped_modules.values():
+                for module in group_data["modules"]:
+                    if module["module_id"] == module_id:
+                        module["submodules"].append(submodule_data)
+
+        final_data = list(grouped_modules.values())
+
+        return Response(final_data)
+
