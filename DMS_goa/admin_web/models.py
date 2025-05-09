@@ -60,7 +60,6 @@ class DMS_Department(models.Model):
 class DMS_Group(models.Model):
     grp_id = models.AutoField(primary_key=True)
     grp_code = models.CharField(max_length=100)
-    dep_id = models.ForeignKey(DMS_Department, on_delete=models.CASCADE)
     permission_status = models.IntegerField(null=True, blank=True)
     grp_name = models.CharField(max_length=255)
     grp_is_deleted = models.BooleanField(default=False)
@@ -202,6 +201,8 @@ class DMS_Employee(AbstractBaseUser):
     emp_added_date = models.DateTimeField(auto_now_add=True,null=True)
     emp_modified_by = models.CharField(max_length=255, null=True, blank=True)
     emp_modified_date = models.DateTimeField(auto_now=True,null=True, blank=True)
+    emp_plain_password=models.CharField(max_length=255,null=True,blank=True)
+
 
     username = None
     email = None
@@ -248,3 +249,29 @@ class DMS_WebLogin(models.Model):
     log_added_by = models.CharField(max_length=255, null=True, blank=True)
     log_modified_by = models.CharField(max_length=255, null=True, blank=True)
 
+
+
+
+class DMS_Disaster_Type(models.Model):
+    disaster_id = models.AutoField(primary_key=True)
+    disaster_name = models.CharField(max_length=255)
+    disaster_rng_high = models.IntegerField(null=True, blank=True)
+    disaster_rng_medium = models.IntegerField(null=True, blank=True)
+    disaster_rng_low = models.IntegerField(null=True, blank=True)
+    disaster_is_deleted = models.BooleanField(default=False)
+    disaster_added_date = models.DateTimeField(auto_now=True,null=True, blank=True)
+    disaster_added_by = models.CharField(max_length=255, null=True, blank=True)
+    disaster_modified_by = models.CharField(max_length=255, null=True, blank=True)
+    disaster_modified_date = models.DateTimeField(null=True, blank=True)
+
+
+
+class DMS_Role(models.Model):
+    role_id = models.AutoField(primary_key=True)
+    dep_id = models.ForeignKey(DMS_Department, on_delete=models.CASCADE)
+    grp_id = models.ForeignKey(DMS_Group, on_delete=models.CASCADE)
+    role_is_deleted = models.BooleanField(default=False)
+    role_added_by = models.CharField(max_length=255, null=True, blank=True)
+    role_added_date = models.DateTimeField(auto_now=True)
+    role_modified_by = models.CharField(max_length=255, null=True, blank=True)
+    role_modified_date = models.DateTimeField(null=True, blank=True)
