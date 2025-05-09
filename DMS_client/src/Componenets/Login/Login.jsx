@@ -74,7 +74,6 @@ function Login({ setIsLoggedIn }) {
                     left: 0,
                     height: '100%',
                     width: '100%',
-
                     backgroundImage: `url(${loginBg})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
