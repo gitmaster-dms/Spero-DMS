@@ -16,6 +16,8 @@ from .serializers import *
 from rest_framework import status
 from admin_web.renders import UserRenderer
 from django.contrib.auth import authenticate
+from captcha.models import CaptchaStore
+from captcha.helpers import captcha_image_url
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -159,30 +161,35 @@ class DMS_Employee_delete_api(APIView):
 
  
 class DMS_state_get_api(APIView):
+    
     def get(self,request):
         snippet = DMS_State.objects.filter(state_is_deleted=False)
         serializers = DMS_State_Serializer(snippet,many=True)
         return Response(serializers.data,status=status.HTTP_200_OK)
 
 class DMS_state_idwise_get_api(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request,state_id):
         snippet = DMS_State.objects.filter(state_id=state_id,state_is_deleted=False)
         serializers = DMS_State_Serializer(snippet,many=True)
         return Response(serializers.data,status=status.HTTP_200_OK)
     
 class DMS_district_get_api(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request):
         snippet = DMS_District.objects.filter(dis_is_deleted=False)
         serializers = DMS_District_Serializer(snippet,many=True)
         return Response(serializers.data,status=status.HTTP_200_OK)
 
 class DMS_district_idwise_get_api(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request,dis_id):
         snippet = DMS_District.objects.filter(dis_id=dis_id,dis_is_deleted=False)
         serializers = DMS_District_Serializer(snippet,many=True)
         return Response(serializers.data,status=status.HTTP_200_OK)
 
 class DMS_Tahsil_get_api(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request):
         snippet = DMS_Tahsil.objects.filter(tah_is_deleted=False)
         serializers = DMS_Tahsil_Serializer(snippet,many=True)
@@ -190,46 +197,68 @@ class DMS_Tahsil_get_api(APIView):
 
 
 class DMS_Tahsil_idwise_get_api(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request,tah_id):
         snippet = DMS_Tahsil.objects.filter(tah_id=tah_id,tah_is_deleted=False)
         serializers = DMS_Tahsil_Serializer(snippet,many=True)
         return Response(serializers.data,status=status.HTTP_200_OK)
     
 class DMS_City_get_api(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request):
         snippet = DMS_City.objects.filter(cit_is_deleted=False)
         serializers = DMS_City_Serializer(snippet,many=True)
         return Response(serializers.data,status=status.HTTP_200_OK)
 
 class DMS_City_idwise_get_api(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request,cit_id):
         snippet = DMS_City.objects.filter(cit_id=cit_id,cit_is_deleted=False)
         serializers = DMS_City_Serializer(snippet,many=True)
         return Response(serializers.data,status=status.HTTP_200_OK)
 
 class DMS_Group_get_api(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request):
         snippet = DMS_Group.objects.filter(grp_is_deleted=False)
         serializers = DMS_Group_Serializer(snippet,many=True)
         return Response(serializers.data,status=status.HTTP_200_OK)
     
 class DMS_Group_idwise_get_api(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request,grp_id):
         snippet = DMS_Group.objects.filter(grp_id=grp_id,grp_is_deleted=False)
         serializers = DMS_Group_Serializer(snippet,many=True)
         return Response(serializers.data,status=status.HTTP_200_OK)
     
 class DMS_Department_get_api(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request):
         snippet = DMS_Department.objects.filter(dep_is_deleted=False)
         serializers = DMS_Department_Serializer(snippet,many=True)
         return Response(serializers.data,status=status.HTTP_200_OK)
     
 class DMS_Department_idwise_get_api(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request,dep_id):
         snippet = DMS_Department.objects.filter(dep_id=dep_id,dep_is_deleted=False)
         serializers = DMS_Department_Serializer(snippet,many=True)
         return Response(serializers.data,status=status.HTTP_200_OK)
+
+
+
+# class CaptchaTokenObtainPairView(TokenObtainPairView):
+#     serializer_class = CaptchaTokenObtainPairSerializer
+
+
+class CaptchaAPIView(APIView):
+    def get(self, request):
+        new_captcha = CaptchaStore.generate_key()
+        image_url = captcha_image_url(new_captcha)
+        return Response({
+            'captcha_key': new_captcha,
+            'captcha_image_url': image_url,
+        })
 
 
 
@@ -270,12 +299,14 @@ def get_tokens_for_user(user):
     } 
 
 
-class CustomTokenObtainPairView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
-
 class UserLoginView(APIView):
     renderer_classes = [UserRenderer]
     def post(self, request, format=None):
+        # Validate using the CAPTCHA + credential serializer
+        serializer1 = CaptchaTokenObtainPairSerializer(data=request.data)
+        serializer1.is_valid(raise_exception=True)
+
+
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             emp_username = serializer.data.get('emp_username')
@@ -285,16 +316,11 @@ class UserLoginView(APIView):
             print("user--", user)
             if user is not None:
                 emp = DMS_Employee.objects.get(emp_username=user.emp_username)
-                print(emp.emp_is_deleted)
-                print(emp.emp_is_login)
                 if emp.emp_is_deleted != False:
-                    print("1")
-                    print("User is not allowed")
                     return Response({'msg':'Login access denied. Please check your permissions or reach out to support for help.'},status=status.HTTP_401_UNAUTHORIZED)
                 if emp.emp_is_login is False: 
                     # emp.emp_is_login = True
                     # emp.save()
-                    print("user ")
                     token = get_tokens_for_user(user)
                     return Response({'token':token,'msg':'Logged in Successfully'},status=status.HTTP_200_OK)
                 else:
@@ -357,4 +383,5 @@ class CombinedAPIView(APIView):
         final_data = list(grouped_modules.values())
 
         return Response(final_data)
+
 
