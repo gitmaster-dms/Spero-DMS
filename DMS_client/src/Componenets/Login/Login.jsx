@@ -83,7 +83,9 @@ function Login({ setIsLoggedIn }) {
                                 placeholder="Enter Name"
                                 InputLabelProps={{ shrink: false }}
                                 sx={{
-                                    color: 'black',
+                                    '& .MuiInputBase-input': {
+                                        color: 'black', 
+                                      },
                                     borderRadius: '12px',
                                     '& fieldset': {
                                         borderRadius: '8px', // applies to the outlined border
@@ -110,7 +112,9 @@ function Login({ setIsLoggedIn }) {
                                 type="password"
                                 InputLabelProps={{ shrink: false }}
                                 sx={{
-                                    color: '#AEAEAE',
+                                    '& .MuiInputBase-input': {
+                                        color: 'black', 
+                                      },
                                     borderRadius: '12px',
                                     '& fieldset': {
                                         borderRadius: '8px', // applies to the outlined border
