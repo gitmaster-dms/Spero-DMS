@@ -10,7 +10,10 @@ import {
 } from "@mui/material";
 import CommentsPanel from "./CommentsPanel";
 
-function IncidentDetails({ darkMode, flag, selectedIncident }) {
+function IncidentDetails({ darkMode, flag, setFlag, selectedIncident }) {
+  console.log("Selected Incident:", selectedIncident);
+  console.log("Flag:", flag);
+
   const labelColor = darkMode ? "#5FECC8" : "#1976d2";
   const textColor = darkMode ? "#ffffff" : "#000000";
   const borderColor = darkMode ? "#7F7F7F" : "#ccc";
@@ -59,8 +62,8 @@ function IncidentDetails({ darkMode, flag, selectedIncident }) {
                   Alert ID
                 </Typography>
                 <Typography variant="subtitle2" sx={{ fontFamily }}>
-  {selectedIncident?.alertId || 'N/A'}
-</Typography>
+                  {selectedIncident?.alertId || "N/A"}
+                </Typography>
               </Box>
 
               <Box sx={boxStyle}>
@@ -73,7 +76,7 @@ function IncidentDetails({ darkMode, flag, selectedIncident }) {
                   Disaster Id
                 </Typography>
                 <Typography variant="subtitle2" sx={{ fontFamily }}>
-                {selectedIncident?.disasterId || 'N/A'}
+                  {selectedIncident?.disasterId || "N/A"}
                 </Typography>
               </Box>
 
@@ -85,7 +88,7 @@ function IncidentDetails({ darkMode, flag, selectedIncident }) {
                   Alert Type
                 </Typography>
                 <Typography variant="subtitle2" sx={{ fontFamily }}>
-                {selectedIncident?.disasterType || 'N/A'}
+                  {selectedIncident?.disasterType || "N/A"}
                 </Typography>
               </Box>
             </Grid>
@@ -162,7 +165,7 @@ function IncidentDetails({ darkMode, flag, selectedIncident }) {
 
             {/* Right Column */}
             <Grid item xs={12} md={5} pl={{ md: 2 }}>
-              <CommentsPanel darkMode={darkMode} />
+              <CommentsPanel darkMode={darkMode} flag={flag} />
             </Grid>
           </Grid>
         ) : (
@@ -185,7 +188,7 @@ function IncidentDetails({ darkMode, flag, selectedIncident }) {
                   Incident ID
                 </Typography>
                 <Typography variant="subtitle2" sx={{ fontFamily }}>
-                {selectedIncident?.IncidentId || 'N/A'}
+                  {selectedIncident?.IncidentId || "N/A"}
                 </Typography>
               </Box>
 
@@ -199,7 +202,7 @@ function IncidentDetails({ darkMode, flag, selectedIncident }) {
                   Incident Type
                 </Typography>
                 <Typography variant="subtitle2" sx={{ fontFamily }}>
-                {selectedIncident?.IncidentId || 'N/A'}
+                  {selectedIncident?.disasterType || "N/A"}
                 </Typography>
               </Box>
 
@@ -211,7 +214,7 @@ function IncidentDetails({ darkMode, flag, selectedIncident }) {
                   Alert Type
                 </Typography>
                 <Typography variant="subtitle2" sx={{ fontFamily }}>
-                {selectedIncident?.IncidentId || 'N/A'}
+                  {selectedIncident?.disasterType || "N/A"}
                 </Typography>
               </Box>
             </Grid>
@@ -288,7 +291,7 @@ function IncidentDetails({ darkMode, flag, selectedIncident }) {
 
             {/* Right Column */}
             <Grid item xs={12} md={5} pl={{ md: 2 }}>
-              <CommentsPanel darkMode={darkMode} />
+              <CommentsPanel darkMode={darkMode} flag={flag} />
             </Grid>
           </Grid>
         )}
