@@ -355,33 +355,30 @@ class CombinedAPIView(APIView):
         permission_serializer = permission_sub_Serializer(permission_objects, many=True)
 
         
-        grouped_modules = {}
+        combined_data = []
         for module_data in modules_serializer.data:
-            r_m_id = module_data["mod_group_id"]
-            if r_m_id not in grouped_modules:
-                grouped_modules[r_m_id] = {
-                    "department_id": module_data["department_id"],
-                    "department_name": module_data["department_name"],
-                    "group_id": r_m_id,
-                    "group_name": module_data["grp_name"],
-                    "modules": []
-                }
-            grouped_modules[r_m_id]["modules"].append({
-                "module_id": module_data["mod_id"],
-                "name": module_data["mod_name"],
-                "submodules": []
-            })
+            module_id = module_data["mod_id"]
+            module_name = module_data["mod_name"]
+            group_id = module_data["mod_group_id"]
+            group_name = module_data["grp_name"]
+            
 
-        
-        for submodule_data in permission_serializer.data:
-            module_id = submodule_data["mod_id"]
-            for group_data in grouped_modules.values():
-                for module in group_data["modules"]:
-                    if module["module_id"] == module_id:
-                        module["submodules"].append(submodule_data)
+            submodules = [submodule for submodule in permission_serializer.data if submodule["mod_id"] == module_id]
 
-        final_data = list(grouped_modules.values())
+            formatted_data = {
+                "group_id": group_id,
+                "group_name": group_name,
+                "module_id": module_id,
+                "name": module_name,
+                "submodules": submodules
+            }
+
+            combined_data.append(formatted_data)
+
+        final_data = combined_data
 
         return Response(final_data)
 
 
+    
+    

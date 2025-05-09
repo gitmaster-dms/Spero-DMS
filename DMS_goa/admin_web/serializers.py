@@ -79,13 +79,13 @@ class DMS_Department_Serializer(serializers.ModelSerializer):
 # ============= Permission Module Serializer ============================
 
 class Mmoduleserializer(serializers.ModelSerializer):
-     grp_name = serializers.CharField(source='mod_group_id.grp_name', allow_null=True)
-     department_id = serializers.CharField(source='mod_group_id.dep_id.dep_id', allow_null=True)
-     department_name = serializers.CharField(source='mod_group_id.dep_id.dep_name', allow_null=True)
+    #  grp_name = serializers.CharField(source='mod_group_id.grp_name', allow_null=True)
+    #  department_id = serializers.CharField(source='mod_group_id.dep_id.dep_id', allow_null=True)
+    #  department_name = serializers.CharField(source='mod_group_id.dep_id.dep_name', allow_null=True)
 
      class Meta:
           model = DMS_Module
-          fields = ['mod_id', 'mod_name', 'mod_group_id','grp_name', 'department_id', 'department_name']
+          fields = ['mod_id', 'mod_name', 'mod_group_id', 'grp_name']
 
 
 class permission_sub_Serializer(serializers.ModelSerializer):
