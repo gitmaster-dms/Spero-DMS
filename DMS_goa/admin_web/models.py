@@ -201,7 +201,6 @@ class DMS_Employee(AbstractBaseUser):
     emp_added_date = models.DateTimeField(auto_now_add=True,null=True)
     emp_modified_by = models.CharField(max_length=255, null=True, blank=True)
     emp_modified_date = models.DateTimeField(auto_now=True,null=True, blank=True)
-    emp_plain_password=models.CharField(max_length=255,null=True,blank=True)
 
 
     username = None
