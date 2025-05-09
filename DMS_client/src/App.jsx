@@ -26,11 +26,11 @@ function App() {
   // Define paths where layout components (Sidebar, Navbar, Footer) should be hidden
   const authRoutes = ["/login", "/Login"];
   const isAuthRoute = authRoutes.includes(location.pathname);
-  
+
   // Define paths where only sidebar should be hidden
   const hideSidebarRoutes = ["/alert-panel", "/Sop"];
   const shouldHideSidebar = hideSidebarRoutes.includes(location.pathname);
-  
+
   const toggleDarkMode = () => {
     setDarkMode((prev) => !prev);
   };
@@ -38,7 +38,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      
+
       <div style={{
         display: "flex",
         minHeight: "100vh",
@@ -47,17 +47,19 @@ function App() {
       }}>
         <div style={{ flex: 1 }}>
           {/* Only render Sidebar, Navbar, and Footer if not on auth routes */}
-          {!isAuthRoute && !shouldHideSidebar && <Sidebar darkMode={darkMode} />}
+          {/* {!isAuthRoute && !shouldHideSidebar && <Sidebar darkMode={darkMode} />} */}
+          {!isAuthRoute && <Sidebar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />}
           {!isAuthRoute && <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />}
-          
-          <Routes>
-            {/* Redirect root to login */}
-            <Route path="/" element={<Navigate to="/Login" replace />} />
-            <Route path="/Login" element={<Login darkMode={darkMode} setDarkMode={setDarkMode} />} />
-            <Route path="/Sop" element={<Sop darkMode={darkMode} setDarkMode={setDarkMode} />} />
-            <Route path="/alert-panel" element={<AlertPanel darkMode={darkMode} setDarkMode={setDarkMode} />} />
-          </Routes>
-          
+
+          <div style={{marginLeft:'70px'}}>
+            <Routes>
+              <Route path="/" element={<Navigate to="/Login" replace />} />
+              <Route path="/Login" element={<Login darkMode={darkMode} setDarkMode={setDarkMode} />} />
+              <Route path="/Sop" element={<Sop darkMode={darkMode} setDarkMode={setDarkMode} />} />
+              <Route path="/alert-panel" element={<AlertPanel darkMode={darkMode} setDarkMode={setDarkMode} />} />
+            </Routes>
+          </div>
+
           {!isAuthRoute && <Footer darkMode={darkMode} setDarkMode={setDarkMode} />}
         </div>
       </div>

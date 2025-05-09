@@ -5,6 +5,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/system';
 import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const EnquiryCard = styled('div')({
     display: 'flex',
@@ -15,6 +16,7 @@ const EnquiryCard = styled('div')({
     color: 'black',
     borderRadius: '8px 10px 0 0',
     fontWeight: '600',
+    height: '35px'
 });
 
 const EnquiryCardBody = styled('div')({
@@ -24,7 +26,8 @@ const EnquiryCardBody = styled('div')({
     justifyContent: 'space-between',
     marginTop: '0.5em',
     borderRadius: '8px',
-    position: 'relative'
+    position: 'relative',
+    height: '40px'
 });
 
 const StyledCardContent = styled(CardContent)({
@@ -79,6 +82,7 @@ const alertData = [
 
 const AlertPanel = ({ darkMode }) => {
     const [selected, setSelected] = useState([]);
+    const navigate = useNavigate();
 
     const handleCheckboxChange = (id) => {
         setSelected((prevSelected) =>
@@ -97,7 +101,7 @@ const AlertPanel = ({ darkMode }) => {
                             <TableHead>
                                 <TableRow>
                                     <EnquiryCard>
-                                        <StyledCardContent style={{ flex: 0.2 }} />
+                                        {/* <StyledCardContent style={{ flex: 0.2 }} /> */}
                                         <StyledCardContent style={{ flex: 0.3, borderRight: "1px solid black" }}>
                                             <Typography variant="subtitle2">Sr. No</Typography>
                                         </StyledCardContent>
@@ -113,12 +117,12 @@ const AlertPanel = ({ darkMode }) => {
                                         <StyledCardContent style={{ flex: 1, borderRight: "1px solid black" }}>
                                             <Typography variant="subtitle2">Alert Type</Typography>
                                         </StyledCardContent>
-                                        <StyledCardContent style={{ flex: 1, borderRight: "1px solid black" }}>
+                                        <StyledCardContent style={{ flex: 1, marginTop: '15px' }}>
                                             <Typography variant="subtitle2">Trigger</Typography>
                                         </StyledCardContent>
-                                        <StyledCardContent style={{ flex: 0.8, borderRight: "1px solid black" }}>
+                                        {/* <StyledCardContent style={{ flex: 0.8, borderRight: "1px solid black" }}>
                                             <Typography variant="subtitle2">Status</Typography>
-                                        </StyledCardContent>
+                                        </StyledCardContent> */}
                                     </EnquiryCard>
                                 </TableRow>
                             </TableHead>
@@ -134,7 +138,7 @@ const AlertPanel = ({ darkMode }) => {
                                                 color: darkMode ? "white" : "black",
                                             }}
                                         >
-                                            <StyledCardContent style={{ flex: 0.2 }}>
+                                            {/* <StyledCardContent style={{ flex: 0.2 }}>
                                                 <Checkbox
                                                     checked={selected.includes(item.id)}
                                                     onChange={() => handleCheckboxChange(item.id)}
@@ -145,7 +149,7 @@ const AlertPanel = ({ darkMode }) => {
                                                         },
                                                     }}
                                                 />
-                                            </StyledCardContent>
+                                            </StyledCardContent> */}
                                             <StyledCardContent style={{ flex: 0.3 }}>
                                                 <Typography variant="subtitle2">{index + 1}</Typography>
                                             </StyledCardContent>
@@ -163,23 +167,27 @@ const AlertPanel = ({ darkMode }) => {
                                             </StyledCardContent>
                                             <StyledCardContent style={{ flex: 1 }}>
                                                 <Button
+                                                    onClick={() => navigate('/Sop', { state: { flag: 1 } })}
                                                     style={{
-                                                        width: '100%',
+                                                        width: '70%',
                                                         textAlign: 'left',
                                                         backgroundColor: item.trigger === 'Triggered' ? '#00BFA6' : '#FF4C4C',
                                                         color: 'black',
                                                         borderRadius: '10px',
+                                                        marginTop: '15px',
                                                     }}
                                                 >
                                                     <Typography variant="subtitle2"
                                                         style={{
                                                             color: darkMode ? "white" : "black",
+                                                            fontSize: '11px',
                                                         }}>
                                                         {item.trigger.charAt(0).toUpperCase() + item.trigger.slice(1).toLowerCase()}
                                                     </Typography>
                                                 </Button>
                                             </StyledCardContent>
-                                            <StyledCardContent style={{ flex: 0.8, position: 'relative', display: 'flex', justifyContent: 'center' }}>
+
+                                            {/* <StyledCardContent style={{ flex: 0.8, position: 'relative', display: 'flex', justifyContent: 'center' }}>
                                                 <Box position="relative" display="inline-flex">
                                                     <CircularProgress
                                                         variant="determinate"
@@ -209,7 +217,7 @@ const AlertPanel = ({ darkMode }) => {
                                                         </Typography>
                                                     </Box>
                                                 </Box>
-                                            </StyledCardContent>
+                                            </StyledCardContent> */}
                                         </EnquiryCardBody>
                                     );
                                 })}
@@ -217,7 +225,7 @@ const AlertPanel = ({ darkMode }) => {
                         </Table>
                     </TableContainer>
 
-                    <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+                    {/* <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center',height:'30px' }}>
                         <Button
                             variant="contained"
                             color="primary"
@@ -227,7 +235,7 @@ const AlertPanel = ({ darkMode }) => {
                         >
                             View All
                         </Button>
-                    </Box>
+                    </Box> */}
                 </Grid>
 
                 <Grid item xs={12} md={4}>
