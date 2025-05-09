@@ -1,3 +1,4 @@
+// src/App.js
 import { useState, useMemo } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
@@ -10,9 +11,9 @@ import Sidebar from "./Componenets/DispatchModule/Sidebar/Sidebar";
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // <-- Login state
   const location = useLocation();
 
-  // Create the theme based on dark mode state
   const theme = useMemo(
     () =>
       createTheme({
@@ -23,44 +24,37 @@ function App() {
     [darkMode]
   );
 
-  // Define paths where layout components (Sidebar, Navbar, Footer) should be hidden
-  const authRoutes = ["/login", "/Login"];
+  const authRoutes = ["/Login"];
   const isAuthRoute = authRoutes.includes(location.pathname);
 
-  // Define paths where only sidebar should be hidden
   const hideSidebarRoutes = ["/alert-panel", "/Sop"];
   const shouldHideSidebar = hideSidebarRoutes.includes(location.pathname);
-
-  const toggleDarkMode = () => {
-    setDarkMode((prev) => !prev);
-  };
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-
-      <div style={{
-        display: "flex",
-        minHeight: "100vh",
-        backgroundColor: darkMode ? "#0a1929" : "#f5f5f5",
-        transition: "background-color 0.5s ease-in-out, color 0.5s ease-in-out",
-      }}>
+      <div
+        style={{
+          display: "flex",
+          minHeight: "100vh",
+          backgroundColor: darkMode ? "#0a1929" : "#f5f5f5",
+          transition: "background-color 0.5s ease-in-out",
+        }}
+      >
         <div style={{ flex: 1 }}>
-          {/* Only render Sidebar, Navbar, and Footer if not on auth routes */}
-          {/* {!isAuthRoute && !shouldHideSidebar && <Sidebar darkMode={darkMode} />} */}
-          {!isAuthRoute && <Sidebar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />}
-          {!isAuthRoute && <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />}
+          {!isAuthRoute && <Sidebar darkMode={darkMode} toggleDarkMode={() => setDarkMode(prev => !prev)} />}
+          {!isAuthRoute && <Navbar darkMode={darkMode} toggleDarkMode={() => setDarkMode(prev => !prev)} />}
 
-          <div style={{marginLeft:'70px'}}>
+          <div style={{ marginLeft: '70px' }}>
             <Routes>
               <Route path="/" element={<Navigate to="/Login" replace />} />
-              <Route path="/Login" element={<Login darkMode={darkMode} setDarkMode={setDarkMode} />} />
-              <Route path="/Sop" element={<Sop darkMode={darkMode} setDarkMode={setDarkMode} />} />
-              <Route path="/alert-panel" element={<AlertPanel darkMode={darkMode} setDarkMode={setDarkMode} />} />
+              <Route path="/Login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+              <Route path="/Sop" element={<Sop darkMode={darkMode} />} />
+              <Route path="/alert-panel" element={<AlertPanel darkMode={darkMode} />} />
             </Routes>
           </div>
 
-          {!isAuthRoute && <Footer darkMode={darkMode} setDarkMode={setDarkMode} />}
+          {!isAuthRoute && <Footer darkMode={darkMode} />}
         </div>
       </div>
     </ThemeProvider>
