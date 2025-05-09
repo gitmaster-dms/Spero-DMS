@@ -7208,3 +7208,4 @@ vvenv/Scripts/pip3.exe
 vvenv/Scripts/python.exe
 vvenv/Scripts/pythonw.exe
 vvenv/Scripts/sqlformat.exe
+*.pyc
