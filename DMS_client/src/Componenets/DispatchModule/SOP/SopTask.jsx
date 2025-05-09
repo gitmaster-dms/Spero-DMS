@@ -57,10 +57,32 @@ const StyledCardContent = styled("td")({
   alignItems: "center",
 });
 
+const Alert=[
+  "Alert Id",
+  "Disaster Id",
+  "Alert Type",
+  "Date & Time",
+  "Priority",
+  "Initiated By",
+  "Add",
+  "View",
+]
+
+const Dispatch=[
+  "Alert ID",
+  "Disaster ID",
+  "Date & Time",
+  "Disaster Type",
+  "Priority",
+  "Status",
+  "Mode",
+  "Initiated By",
+  "View",
+]
+
 function SopTask({ darkMode, flag, setFlag, setSelectedIncident }) {
   useLocation(); // This line does nothing
   const location = useLocation(); // This is the correct usage
- 
 
   const handleBack = () => {
     setFlag(0);
@@ -88,30 +110,30 @@ function SopTask({ darkMode, flag, setFlag, setSelectedIncident }) {
             }}
           />
         )}
-       {flag === 1 ? (
-        <Typography
-          variant="h6"
-          sx={{
-            color: textColor,
-            fontSize: "20px",
-            fontWeight: 500,
-            lineHeight: "32px",
-          }}
-        >
-          Task
-        </Typography>
-       ) : (
-        <Typography
-        variant="h6"
-        sx={{
-          color: textColor,
-          fontSize: "20px",
-          fontWeight: 500,
-          lineHeight: "32px",
-        }}
-      >
-        Dispatch SOP
-      </Typography>
+        {flag === 1 ? (
+          <Typography
+            variant="h6"
+            sx={{
+              color: textColor,
+              fontSize: "20px",
+              fontWeight: 500,
+              lineHeight: "32px",
+            }}
+          >
+            Task
+          </Typography>
+        ) : (
+          <Typography
+            variant="h6"
+            sx={{
+              color: textColor,
+              fontSize: "20px",
+              fontWeight: 500,
+              lineHeight: "32px",
+            }}
+          >
+            Dispatch SOP
+          </Typography>
         )}
         <TextField
           variant="outlined"
@@ -152,16 +174,7 @@ function SopTask({ darkMode, flag, setFlag, setSelectedIncident }) {
               <Table>
                 <TableBody>
                   <EnquiryCard sx={{ display: "flex", flexDirection: "row" }}>
-                    {[
-                      "Alert Id",
-                      "Disaster Id",
-                      "Alert Type",
-                      "Date & Time",
-                      "Priority",
-                      "Initiated By",
-                      "Add",
-                      "View",
-                    ].map((label, idx) => (
+                    {Alert.map((label, idx) => (
                       <StyledCardContent
                         key={idx}
                         sx={{
@@ -261,107 +274,96 @@ function SopTask({ darkMode, flag, setFlag, setSelectedIncident }) {
         </Grid>
       ) : (
         <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <TableContainer>
-            <Table>
-              <TableBody>
-                {/* Header Row */}
-                <EnquiryCard>
-                  {[
-                    "Alert ID",
-                    "Disaster ID",
-                    "Date & Time",
-                    "Disaster Type",
-                    "Priority",
-                    "Status",
-                    "Mode",
-                    "Initiated By",
-                    "View",
-                  ].map((label, idx) => (
-                    <StyledCardContent
-                      key={idx}
-                      style={{
-                        flex: 1,
-                        display: "flex",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Typography variant="subtitle2" fontWeight={500}>
-                        {label}
+          <Grid item xs={12}>
+            <TableContainer>
+              <Table>
+                <TableBody>
+                  {/* Header Row */}
+                  <EnquiryCard>
+                    {Dispatch.map((label, idx) => (
+                      <StyledCardContent
+                        key={idx}
+                        style={{
+                          flex: 1,
+                          display: "flex",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Typography variant="subtitle2" fontWeight={500}>
+                          {label}
+                        </Typography>
+                      </StyledCardContent>
+                    ))}
+                  </EnquiryCard>
+
+                  {/* Body Rows */}
+                  {tasks.length === 0 ? (
+                    <Box p={2}>
+                      <Typography align="center" color="textSecondary">
+                        No tasks available.
                       </Typography>
-                    </StyledCardContent>
-                  ))}
-                </EnquiryCard>
-      
-                {/* Body Rows */}
-                {tasks.length === 0 ? (
-                  <Box p={2}>
-                    <Typography align="center" color="textSecondary">
-                      No tasks available.
-                    </Typography>
-                  </Box>
-                ) : (
-                  tasks.map((item) => (
-                    <EnquiryCardBody key={item.id} status={item.status}>
-                      {[
-                        item.alertId,
-                        item.disasterId,
-                        `${item.date} ${item.time}`,
-                        item.disasterType,
-                        item.priority,
-                        item.status,
-                        item.mode,
-                        item.initiatedBy,
-                        "View", // Placeholder for icon
-                      ].map((val, idx) => (
-                        <StyledCardContent
-                          key={idx}
-                          style={{
-                            flex: 1,
-                            display: "flex",
-                            justifyContent: "center",
-                          }}
-                        >
-                          {idx === 8 ? (
-                            <Visibility
-                              onClick={() => {
-                                setSelectedIncident(item);
-                                setFlag(0);
-                              }}
-                              sx={{
-                                color: "#00f0c0",
-                                cursor: "pointer",
-                                fontSize: 28,
-                              }}
-                            />
-                          ) : (
-                            <Typography
-                              variant="subtitle2"
-                              sx={
-                                idx === 5
-                                  ? {
-                                      color:
-                                        item.status === "Completed"
-                                          ? "#00e676"
-                                          : "#f44336",
-                                    }
-                                  : {}
-                              }
-                            >
-                              {val}
-                            </Typography>
-                          )}
-                        </StyledCardContent>
-                      ))}
-                    </EnquiryCardBody>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                    </Box>
+                  ) : (
+                    tasks.map((item) => (
+                      <EnquiryCardBody key={item.id} status={item.status}>
+                        {[
+                          item.alertId,
+                          item.disasterId,
+                          `${item.date} ${item.time}`,
+                          item.disasterType,
+                          item.priority,
+                          item.status,
+                          item.mode,
+                          item.initiatedBy,
+                          "View", // Placeholder for icon
+                        ].map((val, idx) => (
+                          <StyledCardContent
+                            key={idx}
+                            style={{
+                              flex: 1,
+                              display: "flex",
+                              justifyContent: "center",
+                            }}
+                          >
+                            {idx === 8 ? (
+                              <Visibility
+                                onClick={() => {
+                                  setSelectedIncident(item);
+                                  setFlag(0);
+                                }}
+                                sx={{
+                                  color: "#00f0c0",
+                                  cursor: "pointer",
+                                  fontSize: 28,
+                                }}
+                              />
+                            ) : (
+                              <Typography
+                                variant="subtitle2"
+                                sx={
+                                  idx === 5
+                                    ? {
+                                        color:
+                                          item.status === "Completed"
+                                            ? "#00e676"
+                                            : "#f44336",
+                                      }
+                                    : {}
+                                }
+                              >
+                                {val}
+                              </Typography>
+                            )}
+                          </StyledCardContent>
+                        ))}
+                      </EnquiryCardBody>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
         </Grid>
-      </Grid>
-      
       )}
     </Paper>
   );

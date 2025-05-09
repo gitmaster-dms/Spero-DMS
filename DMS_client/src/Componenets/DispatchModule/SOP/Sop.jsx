@@ -6,7 +6,8 @@ import { useState } from "react";
 
 function Sop({ darkMode, setDarkMode }) {
   const location = useLocation();
-  const [flag, setFlag] = useState(location.state?.flag || 0);
+  const flagFromState = location?.state?.flag ?? 0;
+  const [flag, setFlag] = useState(flagFromState);
   const [selectedIncident, setSelectedIncident] = useState(null);
 
   return (
@@ -16,8 +17,7 @@ function Sop({ darkMode, setDarkMode }) {
         py: { xs: 2, sm: 3 },
         backgroundColor: darkMode ? "#0a1929" : "#f5f5f5",
         minHeight: "100vh",
-        transition:
-          "background-color 0.5s ease-in-out, color 0.5s ease-in-out",
+        transition: "background-color 0.5s ease-in-out, color 0.5s ease-in-out",
       }}
     >
       <Grid container spacing={2}>
