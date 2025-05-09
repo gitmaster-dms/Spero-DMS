@@ -6,12 +6,11 @@ function CommentsPanel({ darkMode }) {
 
   const textColor = darkMode ? '#ffffff' : '#000000';
   const bgColor = darkMode ? '#0a1929' : '#ffffff';
-
   const paperStyle = {
-    padding: 2,
-    marginTop: 7,
+    padding: 1,
+    marginTop: 0.5, // reduced from 6
     borderRadius: 3,
-    height: '450px', // You can adjust height as needed
+    maxHeight: 250, // 👈 restrict height
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -40,27 +39,27 @@ function CommentsPanel({ darkMode }) {
   };
 
   return (
-    <Paper elevation={3} sx={paperStyle}>
+    <Paper elevation={1} sx={paperStyle}>
       <Box>
         <Typography variant="h6" mb={2}  color="#5FECC8">
           Comments
         </Typography>
 
         <TextField
-          multiline
-          rows={6}
-          fullWidth
-          variant="outlined"
-          placeholder={placeholderVisible ? 'Write your comments here...' : ''}
-          onFocus={() => setPlaceholderVisible(false)}
-          onBlur={(e) => {
-            if (e.target.value.trim() === '') {
-              setPlaceholderVisible(true);
-            }
-          }}
-          sx={commentFieldStyle}
-          aria-label="Comment text area"
-        />
+  multiline
+  rows={3} // 👈 reduced from 6
+  fullWidth
+  variant="outlined"
+  placeholder={placeholderVisible ? 'Write your comments here...' : ''}
+  onFocus={() => setPlaceholderVisible(false)}
+  onBlur={(e) => {
+    if (e.target.value.trim() === '') {
+      setPlaceholderVisible(true);
+    }
+  }}
+  sx={commentFieldStyle}
+  aria-label="Comment text area"
+/>
       </Box>
 
       <Stack direction="row" justifyContent="flex-end">
