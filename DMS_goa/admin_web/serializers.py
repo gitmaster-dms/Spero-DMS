@@ -1,6 +1,7 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password, check_password
+from captcha.models import CaptchaStore
 from .models import *
 
 class DMS_department_serializer(serializers.ModelSerializer):
@@ -94,6 +95,25 @@ class permission_sub_Serializer(serializers.ModelSerializer):
 
 
 
+
+class CaptchaTokenObtainPairSerializer(TokenObtainPairSerializer):
+    captcha_key = serializers.CharField(write_only=True)
+    captcha_value = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        key = attrs.pop('captcha_key', '')
+        value = attrs.pop('captcha_value', '')
+
+        # Validate CAPTCHA
+        try:
+            captcha = CaptchaStore.objects.get(hashkey=key)
+            if captcha.response != value.lower():
+                raise serializers.ValidationError("Invalid CAPTCHA.")
+            captcha.delete()  # optional: one-time use
+        except CaptchaStore.DoesNotExist:
+            raise serializers.ValidationError("Invalid CAPTCHA key.")
+
+        return super().validate(attrs)
         
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
