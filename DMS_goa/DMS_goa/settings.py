@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'admin_web',
     'rest_framework',
     "corsheaders",
+    "captcha",
 ]
 
 MIDDLEWARE = [

@@ -39,12 +39,20 @@ urlpatterns = [
     path('Department_get_idwise/<int:dep_id>/',DMS_Department_idwise_get_api.as_view(), name='Department_get_idwise'),
     #===================================Mohin==================================================
     
-#=============================== Mayank =========================================================
 
-    # path('combined/', CombinedAPIView.as_view(), name='combined-api'),
 
+    #=============================== Mayank =========================================================
+    path('combined/', CombinedAPIView.as_view(), name='combined-api'),
+    #=============================== Mayank =========================================================
+
+
+
+    #=============================== Nikita =========================================================
     # path('login/', CustomTokenObtainPairView.as_view(), name='loin'),
-    path('login/', UserLoginView.as_view(), name='loin'),
+    # path('api/token/', CaptchaTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/captcha/', CaptchaAPIView.as_view(), name='get_captcha'),
+    path('login/', UserLoginView.as_view(), name='login'),
     path('login/refresh/', TokenRefreshView.as_view(), name='login_refresh'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    #=============================== Nikita =========================================================
 ]
