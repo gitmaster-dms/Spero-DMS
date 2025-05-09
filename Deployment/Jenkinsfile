@@ -8,7 +8,7 @@ pipeline {
     environment {
         GIT_REPO_URL = 'https://github.com/gitmaster-dms/Spero-DMS.git'
         GIT_BRANCH = 'main'
-        TARGET_DIR = '/var/www/html/Aggregation_test_project/DMS_goa_test'
+        TARGET_DIR = '/var/www/html/DMS_goa'
     } 
 
     stages {
