@@ -7209,3 +7209,5 @@ vvenv/Scripts/python.exe
 vvenv/Scripts/pythonw.exe
 vvenv/Scripts/sqlformat.exe
 *.pyc
+/DMS_goa/admin_web/__pycache__
+/DMS_goa/admin_web/migrations
