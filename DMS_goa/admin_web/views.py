@@ -420,7 +420,7 @@ class DMS_Sop_get_api(APIView):
         serializers = SopSerializer(snippet,many=True)
         return Response(serializers.data,status=status.HTTP_200_OK)
     
-class DMS_Employee_post_api(APIView):
+class DMS_Sop_post_api(APIView):
     def post(self,request):
         serializers=SopSerializer(data=request.data)
         if serializers.is_valid():
