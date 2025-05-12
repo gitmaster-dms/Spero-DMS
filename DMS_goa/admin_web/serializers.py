@@ -20,7 +20,7 @@ class DMS_Employee_serializer(serializers.ModelSerializer):
     
     class Meta:
         model  = DMS_Employee
-        fields = ['emp_id', 'emp_username', 'grp_id', 'emp_name', 'emp_email', 'emp_contact_no', 'emp_dob', 'emp_doj', 'emp_is_login', 'state_id', 'dist_id', 'tahsil_id', 'city_id', 'emp_is_deleted', 'emp_added_by', 'emp_modified_by', 'password','password2']
+        fields = ['emp_id', 'emp_username', 'grp_id', 'emp_name', 'emp_email', 'emp_contact_no', 'emp_dob', 'emp_doj', 'emp_is_login', 'state_id', 'dist_id', 'tahsil_id', 'city_id', 'emp_is_deleted', 'emp_added_by', 'emp_modified_by', 'password','password2' ]
 
         extra_kwargs = {
             'password':{'write_only':True}
@@ -44,6 +44,7 @@ class DMS_Employee_serializer(serializers.ModelSerializer):
         user.set_password(password)  # hashes and sets it correctly
         user.save()
         return user
+
 
 class DMS_District_Serializer(serializers.ModelSerializer):
     class Meta:
@@ -130,3 +131,20 @@ class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = DMS_Employee
         fields = ['emp_username', 'password']
+
+
+
+class ChangePasswordGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DMS_Employee
+        fields = [ 'emp_id','emp_username','password']
+
+class ChangePasswordputSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DMS_Employee
+        fields = ['password']
+
+class SopSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DMS_SOP
+        fields = '__all__'

@@ -382,3 +382,89 @@ class CombinedAPIView(APIView):
 
     
     
+class DMS_Group_put_api(APIView):
+    def get(self, request, grp_id):
+        snippet = DMS_Group.objects.filter(grp_id=grp_id,grp_is_deleted=False)
+        serializers = DMS_Group_serializer(snippet, many=True)
+        return Response(serializers.data)
+
+
+class DMS_ChangePassword_put_api(APIView):
+    def get(self, request, emp_id):
+        snippet = DMS_Employee.objects.filter(emp_id=emp_id,emp_is_deleted=False)
+        serializers = ChangePasswordGetSerializer(snippet, many=True)
+        return Response(serializers.data)
+
+    def put(self, request, emp_id):
+        try:
+            instance = DMS_Employee.objects.get(emp_id=emp_id)
+        except DMS_Employee.DoesNotExist:
+            return Response({"error": "Group not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = ChangePasswordputSerializer(instance, data=request.data, partial=True)  # partial=True allows partial updates
+
+
+        plain_password = request.data['password']
+        hashed_password = make_password(plain_password)
+        print("++++++++", hashed_password, plain_password)
+        request.data['password'] = hashed_password
+        request.data['password2'] = hashed_password
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class DMS_Sop_get_api(APIView):
+    def get(self,request):
+        snippet = DMS_Sop.objects.all()
+        serializers = SopSerializer(snippet,many=True)
+        return Response(serializers.data,status=status.HTTP_200_OK)
+    
+class DMS_Employee_post_api(APIView):
+    def post(self,request):
+        serializers=SopSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data,status=status.HTTP_201_CREATED)
+        return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
+
+class DMS_Sop_put_api(APIView):
+    def get(self, request, sop_id):
+        snippet = DMS_Sop.objects.filter(sop_id=sop_id)
+        serializers = SopSerializer(snippet, many=True)
+        return Response(serializers.data)
+
+    def put(self, request, sop_id):
+        try:
+            instance = DMS_Sop.objects.get(sop_id=sop_id)
+        except DMS_Sop.DoesNotExist:
+            return Response({"error": "Sop not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = SopSerializer(instance, data=request.data, partial=True)  # partial=True allows partial updates
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+ 
+class DMS_Sop_delete_api(APIView):
+    def get(self, request, sop_id):
+        try:
+            instance = DMS_Sop.objects.get(sop_id=sop_id, sop_is_deleted=False)
+        except DMS_Sop.DoesNotExist:
+            return Response({"error": "Sop not found or already deleted."}, status=status.HTTP_404_NOT_FOUND)
+        serializer = SopSerializer(instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, sop_id):
+        try:
+            instance = DMS_Sop.objects.get(sop_id=sop_id, sop_is_deleted=False)
+        except DMS_Sop.DoesNotExist:
+            return Response({"error": "Sop not found or already deleted."}, status=status.HTTP_404_NOT_FOUND)
+
+        instance.sop_is_deleted = True
+        instance.save()
+        return Response({"message": "Sop soft deleted successfully."}, status=status.HTTP_200_OK)
+
+ 
+ 

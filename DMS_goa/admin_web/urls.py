@@ -16,6 +16,13 @@ urlpatterns = [
     path('employee_post/',DMS_Employee_post_api.as_view(),name='employee_post'),
     path('employee_put/<int:emp_id>/',DMS_Employee_put_api.as_view(),name='employee_put'),
     path('employee_delete/<int:emp_id>/',DMS_Employee_delete_api.as_view(),name='employee_delete'),
+
+    path('employee_changepasswordput/<int:emp_id>/',DMS_ChangePassword_put_api.as_view(),name='employee_put'),
+
+    path('sop_get',DMS_Sop_get_api.as_view(),name='sop_get'),
+    path('sop_post',DMS_Employee_post_api(),name='sop_post'),
+    path('sop_put/<int:sop_id>/',DMS_Sop_put_api(),'sop_put'),
+    path('sop_delete/<int:sop_id>/',DMS_Sop_delete_api(),'sop_delete'),
     #===================================Kirti==================================================
     
     
