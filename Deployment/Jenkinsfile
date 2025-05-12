@@ -48,7 +48,7 @@ pipeline {
                                     git config --global --add safe.directory $(pwd)
                                     git fetch origin ${GIT_BRANCH}
                                     git reset --hard origin/${GIT_BRANCH}
-                                    git clean -fd
+                                    git clean -fd -e vvenv/  # <-- Add -e vvenv/ here to exclude it
                                 ''',
                                 returnStatus: true
                             )
@@ -60,6 +60,7 @@ pipeline {
                 }
             }
         }
+
 
         stage('Check Files') {
             steps {
