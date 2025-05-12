@@ -20,9 +20,9 @@ urlpatterns = [
     path('employee_changepasswordput/<int:emp_id>/',DMS_ChangePassword_put_api.as_view(),name='employee_put'),
 
     path('sop_get',DMS_Sop_get_api.as_view(),name='sop_get'),
-    path('sop_post',DMS_Sop_post_api(),name='sop_post'),
-    path('sop_put/<int:sop_id>/',DMS_Sop_put_api(),'sop_put'),
-    path('sop_delete/<int:sop_id>/',DMS_Sop_delete_api(),'sop_delete'),
+    path('sop_post',DMS_Sop_post_api.as_view(),name='sop_post'),
+    path('sop_put/<int:sop_id>/',DMS_Sop_put_api.as_view(),name='sop_put'),
+    path('sop_delete/<int:sop_id>/',DMS_Sop_delete_api.as_view(),name='sop_delete'),
     #===================================Kirti==================================================
     
     
