@@ -1,6 +1,6 @@
 [Unit]
 Description=DMS CICD gunicorn daemon
-Requires=dms_gunicorn.socket
+Requires=dms_gunicorn_django.socket
 After=network.target
 
 [Service]
