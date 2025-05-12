@@ -416,7 +416,7 @@ class DMS_ChangePassword_put_api(APIView):
 
 class DMS_Sop_get_api(APIView):
     def get(self,request):
-        snippet = DMS_Sop.objects.all()
+        snippet = DMS_SOP.objects.all()
         serializers = SopSerializer(snippet,many=True)
         return Response(serializers.data,status=status.HTTP_200_OK)
     
@@ -430,14 +430,14 @@ class DMS_Employee_post_api(APIView):
 
 class DMS_Sop_put_api(APIView):
     def get(self, request, sop_id):
-        snippet = DMS_Sop.objects.filter(sop_id=sop_id)
+        snippet = DMS_SOP.objects.filter(sop_id=sop_id)
         serializers = SopSerializer(snippet, many=True)
         return Response(serializers.data)
 
     def put(self, request, sop_id):
         try:
-            instance = DMS_Sop.objects.get(sop_id=sop_id)
-        except DMS_Sop.DoesNotExist:
+            instance = DMS_SOP.objects.get(sop_id=sop_id)
+        except DMS_SOP.DoesNotExist:
             return Response({"error": "Sop not found."}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = SopSerializer(instance, data=request.data, partial=True)  # partial=True allows partial updates
@@ -450,16 +450,16 @@ class DMS_Sop_put_api(APIView):
 class DMS_Sop_delete_api(APIView):
     def get(self, request, sop_id):
         try:
-            instance = DMS_Sop.objects.get(sop_id=sop_id, sop_is_deleted=False)
-        except DMS_Sop.DoesNotExist:
+            instance = DMS_SOP.objects.get(sop_id=sop_id, sop_is_deleted=False)
+        except DMS_SOP.DoesNotExist:
             return Response({"error": "Sop not found or already deleted."}, status=status.HTTP_404_NOT_FOUND)
         serializer = SopSerializer(instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, sop_id):
         try:
-            instance = DMS_Sop.objects.get(sop_id=sop_id, sop_is_deleted=False)
-        except DMS_Sop.DoesNotExist:
+            instance = DMS_SOP.objects.get(sop_id=sop_id, sop_is_deleted=False)
+        except DMS_SOP.DoesNotExist:
             return Response({"error": "Sop not found or already deleted."}, status=status.HTTP_404_NOT_FOUND)
 
         instance.sop_is_deleted = True
