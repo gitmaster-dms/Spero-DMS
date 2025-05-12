@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PJ_BASE_PATH="/var/www/html/Aggregation_test_project/DMS_goa_test/Deployment"
+PJ_BASE_PATH="/var/www/html/DMS_goa/Deployment"
 # Activate virtual environment
 echo "Runining gunicorn sh file"
 pwd
