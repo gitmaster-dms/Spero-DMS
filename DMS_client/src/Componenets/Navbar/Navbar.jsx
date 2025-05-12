@@ -12,13 +12,19 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 const pages = [];
 const settings = ["Profile", "Logout"];
 
+
 const Navbar = ({ darkMode, toggleDarkMode }) => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const navigate = useNavigate();
+  
 
   const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
   const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
@@ -26,6 +32,50 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
     setAnchorElNav(null);
     setAnchorElUser(null);
   };
+
+
+  const logout = async () => {
+    const token = localStorage.getItem('token');  // Get token from localStorage as used in Login.jsx
+    
+    if (!token) {
+      console.error('No token found');
+      window.location.href = '/login';
+      return;
+    }
+  
+    try {
+      const response = await fetch('http://127.0.0.1:8000/admin_web/logout/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`  // Add token as Bearer in Authorization header
+        },
+        // No need to send refresh token in body as we're using the token in header
+      });
+  
+      if (response.ok) {
+        // Clear token and redirect to login
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      } else {
+        console.error('Logout failed:', await response.text());
+        // Still redirect to login even if server logout fails
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      }
+    } catch (error) {
+      console.error('Error during logout:', error);
+      // Still clear token and redirect on error
+      localStorage.removeItem('token');
+      window.location.href = '/login';
+    }
+  };
+  
+
+  
+  
+  
+
 
   return (
     <AppBar
@@ -115,11 +165,20 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
               open={Boolean(anchorElNav)}
               onClose={handleCloseMenu}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseMenu}>
-                  <Typography>{page}</Typography>
+              {settings.map((setting) => (
+                <MenuItem
+                  key={setting}
+                  onClick={() => {
+                    handleCloseMenu();
+                    if (setting === "Logout") {
+                      logout();
+                    }
+                  }}
+                >
+                  <Typography>{setting}</Typography>
                 </MenuItem>
               ))}
+
             </Menu>
           </Box>
 
@@ -138,11 +197,20 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
             open={Boolean(anchorElUser)}
             onClose={handleCloseMenu}
           >
-            {settings.map((setting) => (
-              <MenuItem key={setting} onClick={handleCloseMenu}>
-                <Typography>{setting}</Typography>
-              </MenuItem>
-            ))}
+           {settings.map((setting) => (
+  <MenuItem
+    key={setting}
+    onClick={() => {
+      handleCloseMenu();
+      if (setting === "Logout") {
+        logout();
+      }
+    }}
+  >
+    <Typography>{setting}</Typography>
+  </MenuItem>
+))}
+
           </Menu>
         </Box>
       </Toolbar>

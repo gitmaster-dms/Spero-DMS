@@ -24,7 +24,8 @@ function App() {
     [darkMode]
   );
 
-  const authRoutes = ["/Login"];
+  const authRoutes = ["/login", "/Login"];
+
   const isAuthRoute = authRoutes.includes(location.pathname);
 
   const hideSidebarRoutes = ["/alert-panel", "/Sop"];

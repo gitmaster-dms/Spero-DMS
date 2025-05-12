@@ -117,7 +117,7 @@ class DMS_Permission(models.Model):
 # Custom User Manager
 class DMS_Employee_Manager(BaseUserManager):
 
-    def create_user(self, emp_username, grp_id, emp_name, emp_email, emp_contact_no, emp_dob, emp_doj, emp_is_login, state_id, dist_id, tahsil_id, city_id, emp_is_deleted, emp_added_by, emp_modified_by, password=None, password2=None):
+    def create_user(self, emp_username, grp_id, emp_name, emp_email, emp_contact_no, emp_dob, emp_doj, emp_is_login, state_id, dist_id, tahsil_id, city_id, emp_is_deleted, emp_added_by, emp_modified_by,password=None, password2=None):
 
         """
         Creates and saves a User with the given email, name, tc and password.
@@ -147,7 +147,7 @@ class DMS_Employee_Manager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, emp_username, grp_id, emp_name, emp_email, emp_contact_no, emp_dob, emp_doj, emp_is_login, state_id, dist_id, tahsil_id, city_id, emp_is_deleted, emp_added_by, emp_modified_by, password=None):
+    def create_superuser(self, emp_username, grp_id, emp_name, emp_email, emp_contact_no, emp_dob, emp_doj, emp_is_login, state_id, dist_id, tahsil_id, city_id, emp_is_deleted, emp_added_by, emp_modified_by, password=None,):
 
         """Creates and saves a superuser with the given email, name, tc and password."""
         user = self.create_user(
@@ -201,7 +201,7 @@ class DMS_Employee(AbstractBaseUser):
     emp_added_date = models.DateTimeField(auto_now_add=True,null=True)
     emp_modified_by = models.CharField(max_length=255, null=True, blank=True)
     emp_modified_date = models.DateTimeField(auto_now=True,null=True, blank=True)
-
+ 
 
     username = None
     email = None
@@ -274,3 +274,13 @@ class DMS_Role(models.Model):
     role_added_date = models.DateTimeField(auto_now=True)
     role_modified_by = models.CharField(max_length=255, null=True, blank=True)
     role_modified_date = models.DateTimeField(null=True, blank=True)
+
+class DMS_SOP(models.Model):
+    sop_id=models.AutoField(primary_key=True)
+    sop_description=models.TextField(null=True,blank=True)
+    disaster_id=models.ForeignKey(DMS_Disaster_Type,on_delete=models.CASCADE)
+    sop_is_deleted = models.BooleanField(default=False)
+    sop_added_by=models.CharField(max_length=255,null=True,blank=True)
+    sop_added_date = models.DateTimeField(auto_now=True)
+    sop_modified_by = models.CharField(max_length=255, null=True, blank=True)
+    sop_modified_date = models.DateTimeField(null=True, blank=True)
