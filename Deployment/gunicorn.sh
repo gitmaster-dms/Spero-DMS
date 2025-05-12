@@ -24,9 +24,9 @@ pip freeze
 cd DMS_goa
 
 # Django operations
-echo "python3 manage.py makemigrations"
-python manage.py makemigrations
-python manage.py migrate
+# echo "python3 manage.py makemigrations"
+# python manage.py makemigrations
+# python manage.py migrate
 python manage.py collectstatic --noinput
 
 echo "Migrations and static files collected."

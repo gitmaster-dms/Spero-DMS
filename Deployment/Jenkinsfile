@@ -34,15 +34,27 @@ pipeline {
                     script {
                         if (!fileExists('.git')) {
                             echo "Cloning repository into ${TARGET_DIR}..."
-                            sh "git clone -b ${GIT_BRANCH} ${GIT_REPO_URL} ."
+                            def cloneStatus = sh(
+                                script: "git clone -b ${GIT_BRANCH} ${GIT_REPO_URL} .",
+                                returnStatus: true
+                            )
+                            if (cloneStatus != 0) {
+                                error("Git clone failed! Exiting pipeline.")
+                            }
                         } else {
                             echo "Repository already exists. Resetting and pulling latest changes..."
-                            sh '''
-                                git config --global --add safe.directory $(pwd)
-                                git fetch origin ${GIT_BRANCH}
-                                git reset --hard origin/${GIT_BRANCH}
-                                git clean -fd
-                            '''
+                            def resetStatus = sh(
+                                script: '''
+                                    git config --global --add safe.directory $(pwd)
+                                    git fetch origin ${GIT_BRANCH}
+                                    git reset --hard origin/${GIT_BRANCH}
+                                    git clean -fd
+                                ''',
+                                returnStatus: true
+                            )
+                            if (resetStatus != 0) {
+                                error("Git reset/pull failed! Exiting pipeline.")
+                            }
                         }
                     }
                 }
