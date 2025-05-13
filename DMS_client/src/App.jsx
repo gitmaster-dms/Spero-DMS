@@ -8,6 +8,9 @@ import Login from "./Componenets/Login/Login";
 import Footer from "./Componenets/Footer/Footer";
 import AlertPanel from "./Componenets/DispatchModule/AlertPanel/AlertPanel";
 import Sidebar from "./Componenets/DispatchModule/Sidebar/Sidebar";
+import Add_department from "./Componenets/SuperAdmin/System/Department/Add_department";
+import Add_group from "./Componenets/SuperAdmin/System/Groups/Add_group";
+
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
@@ -24,7 +27,7 @@ function App() {
     [darkMode]
   );
 
-  const authRoutes = ["/login", "/Login"];
+  const authRoutes = ["/login"];
 
   const isAuthRoute = authRoutes.includes(location.pathname);
 
@@ -48,10 +51,13 @@ function App() {
 
           <div style={{ marginLeft: '70px' }}>
             <Routes>
-              <Route path="/" element={<Navigate to="/Login" replace />} />
-              <Route path="/Login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+              <Route path="/" element={<Navigate to="/login" replace />} />
+              <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
               <Route path="/Sop" element={<Sop darkMode={darkMode} />} />
               <Route path="/alert-panel" element={<AlertPanel darkMode={darkMode} />} />
+              <Route path="/add-department" element={<Add_department darkMode={darkMode} />} />
+              <Route path="/add-group" element={<Add_group darkMode={darkMode} />} />
+
             </Routes>
           </div>
 
