@@ -15,7 +15,6 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-
 const pages = [];
 const settings = ["Profile", "Logout"];
 
