@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -14,6 +14,14 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogActions from "@mui/material/DialogActions";
+import CallIcon from "@mui/icons-material/Call";
+import EmailIcon from "@mui/icons-material/Email";
+import EditIcon from "@mui/icons-material/Edit";
+
 
 
 const pages = [];
@@ -24,7 +32,24 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
-  
+  const [openProfileDialog, setOpenProfileDialog] = useState(false);
+  const user = JSON.parse(localStorage.getItem('user'));
+  const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
+
+
+
+  const empName = user?.emp_name || "";
+  const nameParts = empName.trim().split(" ");
+  const initials = nameParts.length >= 2
+    ? nameParts[0][0].toUpperCase() + nameParts[nameParts.length - 1][0].toUpperCase()
+    : empName[0]?.toUpperCase() || "";
+
+  const email = user?.email || '';
+  const phoneNo = user?.phone_no || '';
+  // console.log("User from localStorage:", user);
+
+
+
 
   const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
   const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
@@ -36,13 +61,13 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
 
   const logout = async () => {
     const token = localStorage.getItem('token');  // Get token from localStorage as used in Login.jsx
-    
+
     if (!token) {
       console.error('No token found');
       window.location.href = '/login';
       return;
     }
-  
+
     try {
       const response = await fetch('http://127.0.0.1:8000/admin_web/logout/', {
         method: 'POST',
@@ -52,7 +77,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
         },
         // No need to send refresh token in body as we're using the token in header
       });
-  
+
       if (response.ok) {
         // Clear token and redirect to login
         localStorage.removeItem('token');
@@ -70,11 +95,6 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
       window.location.href = '/login';
     }
   };
-  
-
-  
-  
-  
 
 
   return (
@@ -171,8 +191,11 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
                   onClick={() => {
                     handleCloseMenu();
                     if (setting === "Logout") {
-                      logout();
+                      setLogoutConfirmOpen(true);
+                    } else if (setting === "Profile") {
+                      setOpenProfileDialog(true);
                     }
+
                   }}
                 >
                   <Typography>{setting}</Typography>
@@ -184,12 +207,12 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
 
           {/* User Menu */}
           <Tooltip title="Open settings">
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }} >
               <Avatar
                 alt="User Avatar"
-                src="/static/images/avatar/1.jpg"
+                // src="/static/images/avatar/1.jpg"
                 sx={{ bgcolor: '#5FECC8', color: 'white' }}
-              />
+              >{initials}</Avatar>
             </IconButton>
           </Tooltip>
           <Menu
@@ -197,21 +220,89 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
             open={Boolean(anchorElUser)}
             onClose={handleCloseMenu}
           >
-           {settings.map((setting) => (
-  <MenuItem
-    key={setting}
-    onClick={() => {
-      handleCloseMenu();
-      if (setting === "Logout") {
-        logout();
-      }
-    }}
-  >
-    <Typography>{setting}</Typography>
-  </MenuItem>
-))}
+            {settings.map((setting) => (
+              <MenuItem
+                key={setting}
+                onClick={() => {
+                  handleCloseMenu();
+                  if (setting === "Logout") {
+                    setLogoutConfirmOpen(true);
+                  } else if (setting === "Profile") {
+                    setOpenProfileDialog(true);
+                  }
+
+                }}
+              >
+                <Typography>{setting}</Typography>
+              </MenuItem>
+            ))}
 
           </Menu>
+          <Dialog
+            open={openProfileDialog}
+            onClose={() => setOpenProfileDialog(false)}
+            PaperProps={{
+              sx: {
+                position: "absolute",
+                top: 70,
+                right: 20,
+                m: 0,
+                width: 300,
+                borderRadius: 2,
+              },
+            }}
+          >
+            <DialogTitle>
+              <Box display="flex" alignItems="center" gap={2}>
+                <Avatar sx={{ bgcolor: "#5FECC8", width: 56, height: 56 }}>
+                  {initials}
+                </Avatar>
+
+                <Box>
+                  <Typography variant="h6" display="inline">
+                    {empName}
+                  </Typography>
+                </Box>
+
+              </Box>
+            </DialogTitle>
+
+            <DialogContent dividers>
+              <Box display="flex" alignItems="center" gap={1} mb={2}>
+                <CallIcon color="primary" />
+                <Typography>{phoneNo}</Typography>
+              </Box>
+              <Box display="flex" alignItems="center" gap={1}>
+                <EmailIcon color="primary" />
+                <Typography>{email}</Typography>
+              </Box>
+            </DialogContent>
+
+
+            <DialogActions>
+              <Button onClick={() => setOpenProfileDialog(false)} variant="outlined">Close</Button>
+            </DialogActions>
+          </Dialog>
+
+          <Dialog
+            open={logoutConfirmOpen}
+            onClose={() => setLogoutConfirmOpen(false)}
+          >
+            <DialogTitle>Confirm Logout</DialogTitle>
+            <DialogContent>
+              <Typography>Are you sure you want to logout?</Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setLogoutConfirmOpen(false)} variant="outlined">
+                Cancel
+              </Button>
+              <Button onClick={logout} color="error" variant="contained">
+                Logout
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+
         </Box>
       </Toolbar>
     </AppBar>
