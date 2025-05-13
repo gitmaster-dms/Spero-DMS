@@ -70,7 +70,7 @@ const rows = [
       <Grid container spacing={2}>
         <Grid item xs={12} md={7}>
           <Paper elevation={3} sx={{ padding: 2, borderRadius: 3, backgroundColor: bgColor, mt: 3 }}>
-            <h1>Paper 1 (8 columns)</h1>
+            <h4>Tabel for user Data</h4>
                <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
