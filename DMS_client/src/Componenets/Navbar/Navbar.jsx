@@ -23,7 +23,6 @@ import EmailIcon from "@mui/icons-material/Email";
 import EditIcon from "@mui/icons-material/Edit";
 
 
-
 const pages = [];
 const settings = ["Profile", "Logout"];
 

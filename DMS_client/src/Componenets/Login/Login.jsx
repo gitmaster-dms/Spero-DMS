@@ -7,6 +7,11 @@ import { useNavigate } from 'react-router-dom';
 import CachedIcon from '@mui/icons-material/Cached';
 
 function Login() {
+
+
+    const port = import.meta.env.VITE_APP_API_KEY;
+    console.log(port,'port');
+    
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const navigate = useNavigate();
@@ -35,7 +40,7 @@ function Login() {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
-            const response = await fetch('http://127.0.0.1:8000/admin_web/login/captcha/', {
+            const response = await fetch(`${port}/admin_web/login/captcha/`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -53,7 +58,7 @@ function Login() {
                 // Make sure the URL is properly formatted with the base URL
                 const fullImageUrl = data.captcha_image_url.startsWith('http')
                     ? data.captcha_image_url
-                    : `http://127.0.0.1:8000/${data.captcha_image_url}`;
+                    : `${port}${data.captcha_image_url}`;
                 setCaptchaImageUrl(fullImageUrl);
                 console.log('Captcha image URL:', fullImageUrl);
                 // Reset captcha value when new captcha is fetched
@@ -113,7 +118,7 @@ function Login() {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-            const response = await fetch('http://127.0.0.1:8000/admin_web/login/', {
+            const response = await fetch(`${port}/admin_web/login/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

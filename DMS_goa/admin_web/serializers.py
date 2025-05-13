@@ -75,6 +75,11 @@ class DMS_Department_Serializer(serializers.ModelSerializer):
     class Meta:
         model = DMS_Department
         fields = '__all__'
+        
+class DMS_Disaster_Type_Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = DMS_Disaster_Type
+        fields = '__all__'
               
 
 # ============= Permission Module Serializer ============================
@@ -131,7 +136,6 @@ class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = DMS_Employee
         fields = ['emp_username', 'password']
-
 
 
 class ChangePasswordGetSerializer(serializers.ModelSerializer):
