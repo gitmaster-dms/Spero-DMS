@@ -8,6 +8,7 @@ import Login from "./Componenets/Login/Login";
 import Footer from "./Componenets/Footer/Footer";
 import AlertPanel from "./Componenets/DispatchModule/AlertPanel/AlertPanel";
 import Sidebar from "./Componenets/DispatchModule/Sidebar/Sidebar";
+import Departmentsidebar from "./Componenets/SuperAdmin/Sidebar/Departmentsidebar";
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
@@ -43,15 +44,33 @@ function App() {
         }}
       >
         <div style={{ flex: 1 }}>
-          {!isAuthRoute && <Sidebar darkMode={darkMode} toggleDarkMode={() => setDarkMode(prev => !prev)} />}
-          {!isAuthRoute && <Navbar darkMode={darkMode} toggleDarkMode={() => setDarkMode(prev => !prev)} />}
+          {!isAuthRoute && (
+            <Sidebar
+              darkMode={darkMode}
+              toggleDarkMode={() => setDarkMode((prev) => !prev)}
+            />
+          )}
+          {!isAuthRoute && (
+            <Navbar
+              darkMode={darkMode}
+              toggleDarkMode={() => setDarkMode((prev) => !prev)}
+            />
+          )}
+          {/* {!isAuthRoute && <Departmentsidebar darkMode={darkMode} toggleDarkMode={() => setDarkMode(prev => !prev)} />} */}
 
-          <div style={{ marginLeft: '70px' }}>
+          <div style={{ marginLeft: "70px" }}>
             <Routes>
               <Route path="/" element={<Navigate to="/Login" replace />} />
-              <Route path="/Login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+              <Route
+                path="/Login"
+                element={<Login setIsLoggedIn={setIsLoggedIn} />}
+              />
               <Route path="/Sop" element={<Sop darkMode={darkMode} />} />
-              <Route path="/alert-panel" element={<AlertPanel darkMode={darkMode} />} />
+              <Route
+                path="/alert-panel"
+                element={<AlertPanel darkMode={darkMode} />}
+              />
+              {/* <Route path="/Departmentsidebar" element={<Departmentsidebar darkMode={darkMode} />} /> */}
             </Routes>
           </div>
 
