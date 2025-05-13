@@ -7,6 +7,11 @@ import { useNavigate } from 'react-router-dom';
 import CachedIcon from '@mui/icons-material/Cached';
 
 function Login() {
+
+
+    const port = import.meta.env.VITE_APP_API_KEY;
+    console.log(port,'port');
+    
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const navigate = useNavigate();
@@ -35,7 +40,7 @@ function Login() {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
-            const response = await fetch('http://127.0.0.1:8000/admin_web/login/captcha/', {
+            const response = await fetch(`${port}/admin_web/login/captcha/`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -53,7 +58,7 @@ function Login() {
                 // Make sure the URL is properly formatted with the base URL
                 const fullImageUrl = data.captcha_image_url.startsWith('http')
                     ? data.captcha_image_url
-                    : `http://127.0.0.1:8000${data.captcha_image_url}`;
+                    : `${port}${data.captcha_image_url}`;
                 setCaptchaImageUrl(fullImageUrl);
                 console.log('Captcha image URL:', fullImageUrl);
                 // Reset captcha value when new captcha is fetched
@@ -85,35 +90,35 @@ function Login() {
         setUsernameError('');
         setPasswordError('');
         setCaptchaTextError('');
-    
+
         let hasError = false;
-    
+
         if (!emp_username) {
             setUsernameError('Please enter User ID');
             hasError = true;
         }
-    
+
         if (!password) {
             setPasswordError('Please enter Password');
             hasError = true;
         }
-    
+
         if (captchaError || (!captchaValue && captchaKey)) {
             setCaptchaTextError('Please enter valid captcha text');
             hasError = true;
         }
-    
+
         if (hasError) {
             return;
         }
-    
+
         try {
             setLoading(true);
-    
+
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000);
-    
-            const response = await fetch('http://127.0.0.1:8000/admin_web/login/', {
+
+            const response = await fetch(`${port}/admin_web/login/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -126,12 +131,12 @@ function Login() {
                 }),
                 signal: controller.signal,
             });
-    
+
             clearTimeout(timeoutId);
-    
+
             const data = await response.json();
             console.log('Login response:', data);
-    
+
             if (!response.ok) {
                 // Handle DRF-style errors first
                 if (data.errors?.non_field_errors?.[0]?.toLowerCase().includes('captcha')) {
@@ -147,18 +152,18 @@ function Login() {
                 }
                 return;
             }
-    
+
             // Handle successful login
             if (data.token) {
                 localStorage.setItem('token', data.token);
                 navigate('/alert-panel');
                 return;
             }
-             else {
+            else {
                 console.error('Login response did not contain token');
                 setPasswordError('Login failed. Please try again.');
             }
-    
+
         } catch (err) {
             console.error('Login error:', err);
             if (err.name === 'AbortError') {
@@ -172,8 +177,8 @@ function Login() {
             setLoading(false);
         }
     };
-    
-    
+
+
 
     return (
         <Box sx={{ height: '100vh', width: '100%', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: isSmallScreen ? 'column' : 'row' }}>
@@ -395,15 +400,15 @@ function Login() {
 
                             {/* Captcha Error */}
                             {captchaTextError && (
-    <Typography sx={{
-        color: '#ff1744',
-        fontSize: '0.75rem',
-        mt: 0.5,
-        ml: 0.5
-    }}>
-        {captchaTextError}
-    </Typography>
-)}
+                                <Typography sx={{
+                                    color: '#ff1744',
+                                    fontSize: '0.75rem',
+                                    mt: 0.5,
+                                    ml: 0.5
+                                }}>
+                                    {captchaTextError}
+                                </Typography>
+                            )}
 
                         </Box>
 
