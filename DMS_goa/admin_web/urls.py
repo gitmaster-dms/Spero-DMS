@@ -44,6 +44,11 @@ urlpatterns = [
     
     path('Department_get/',DMS_Department_get_api.as_view(), name='Department_get'),
     path('Department_get_idwise/<int:dep_id>/',DMS_Department_idwise_get_api.as_view(), name='Department_get_idwise'),
+    
+    path('DMS_Disaster_Type_Get/',DMS_Disaster_Type_Get_API.as_view(), name='DMS_Disaster_Type_Get'),
+    path('DMS_Disaster_Type_Get_Idwise/<int:disaster_id>/',DMS_Disaster_Type_Idwise_Get_API.as_view(), name='DMS_Disaster_Type_Get_Idwise'),
+    
+    
     #===================================Mohin==================================================
     
 

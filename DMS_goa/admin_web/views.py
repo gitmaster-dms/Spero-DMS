@@ -467,4 +467,14 @@ class DMS_Sop_delete_api(APIView):
         return Response({"message": "Sop soft deleted successfully."}, status=status.HTTP_200_OK)
 
  
- 
+class DMS_Disaster_Type_Get_API(APIView):
+    def get(self,request):
+        snippet = DMS_Disaster_Type.objects.filter(disaster_is_deleted=False)
+        serializers = DMS_Disaster_Type_Serializer(snippet,many=True)
+        return Response(serializers.data,status=status.HTTP_200_OK)
+
+class DMS_Disaster_Type_Idwise_Get_API(APIView):
+    def get(self,request,disaster_id):
+        snippet = DMS_Disaster_Type.objects.filter(disaster_is_deleted=False,disaster_id=disaster_id)
+        serializers = DMS_Disaster_Type_Serializer(snippet,many=True)
+        return Response(serializers.data,status=status.HTTP_200_OK)
