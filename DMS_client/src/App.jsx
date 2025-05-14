@@ -15,11 +15,14 @@ import EmployeReg from "./Componenets/SuperAdmin/System/Employee_reg/Employee_re
 // import Add_department from "./Componenets/SuperAdmin/System/Department/Add_department";
 // import Add_group from "./Componenets/SuperAdmin/System/Groups/Add_group";
 
-
 function App() {
   const [darkMode, setDarkMode] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // <-- Login state
   const location = useLocation();
+  const userGroup = localStorage.getItem("user_group");
+  
+
+  console.log(userGroup, "userGroup");
 
   const theme = useMemo(
     () =>
@@ -50,19 +53,28 @@ function App() {
         }}
       >
         <div style={{ flex: 1 }}>
-          {/* {!isAuthRoute && (
-            <Sidebar
-              darkMode={darkMode}
-              toggleDarkMode={() => setDarkMode((prev) => !prev)}
-            />
-          )} */}
           {!isAuthRoute && (
-            <Navbar
-              darkMode={darkMode}
-              toggleDarkMode={() => setDarkMode((prev) => !prev)}
-            />
+            <>
+              <Navbar
+                darkMode={darkMode}
+                toggleDarkMode={() => setDarkMode((prev) => !prev)}
+              />
+
+              {/* {userGroup === "1" && (
+                <Sidebar
+                  darkMode={darkMode}
+                  toggleDarkMode={() => setDarkMode((prev) => !prev)}
+                />
+              )} */}
+
+              {/* {userGroup === "2" && ( */}
+                <Departmentsidebar
+                  darkMode={darkMode}
+                  toggleDarkMode={() => setDarkMode((prev) => !prev)}
+                />
+              {/* )} */}
+            </>
           )}
-          {!isAuthRoute && <Departmentsidebar darkMode={darkMode} toggleDarkMode={() => setDarkMode(prev => !prev)} />}
 
           <div style={{ marginLeft: "70px" }}>
             <Routes>
@@ -76,21 +88,18 @@ function App() {
                 path="/alert-panel"
                 element={<AlertPanel darkMode={darkMode} />}
               />
-              <Route path="/Departmentsidebar" element={<Departmentsidebar darkMode={darkMode} />} />
-              <Route path="/" element={<Navigate to="/login" replace />} />
-              <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
-              <Route path="/Sop" element={<Sop darkMode={darkMode} />} />
-              <Route path="/alert-panel" element={<AlertPanel darkMode={darkMode} />} />
-              {/* <Route path="/add-department" element={<Add_department darkMode={darkMode} />} />
-              <Route path="/add-group" element={<Add_group darkMode={darkMode} />} /> */}
-
-
-            
-  <Route path="/department" element={<AddDepartment />} />
-  <Route path="/group" element={<Add_group />} />
-  <Route path="/employee" element={<EmployeReg/>} />
-
-
+              <Route
+                path="/department"
+                element={<AddDepartment darkMode={darkMode} />}
+              />
+              <Route
+                path="/group"
+                element={<Add_group darkMode={darkMode} />}
+              />
+              <Route
+                path="/employee"
+                element={<EmployeReg darkMode={darkMode} />}
+              />
             </Routes>
           </div>
 

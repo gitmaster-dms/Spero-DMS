@@ -137,7 +137,7 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
             width: 35,
             height: 35,
             borderRadius: "50%",
-            // backgroundColor: "#5FECC8",
+            backgroundColor: "#5FECC8",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -146,26 +146,36 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
         >
           <ArrowBackIcon sx={{ color: "#000000" }} />
         </Box>
-        <Box>
-          <Typography
-            variant="h6"
-            sx={{ color: labelColor, fontWeight: 600, fontFamily }}
-          >
-            Add Employee
-          </Typography>
-          <TextField
-            placeholder="Search your location"
-            variant="outlined"
-            fullWidth
-            sx={{
-              mt: 1,
-              input: { color: textColor },
-              label: { color: textColor },
-              "& .MuiOutlinedInput-root": {
-                backgroundColor: darkMode ? "#ffffff29" : "#f4f4f4",
-              },
-            }}
-          />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            gap: 1.5,
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            {/* <AccountCircleIcon sx={{ color: labelColor }} /> */}
+            <Typography
+              variant="h6"
+              sx={{ color: labelColor, fontWeight: 600, fontFamily }}
+            >
+              Add Employee
+            </Typography>
+            <TextField
+              placeholder="Search your location"
+              variant="outlined"
+              fullWidth
+              sx={{
+                input: { color: textColor },
+                label: { color: textColor },
+                "& .MuiOutlinedInput-root": {
+                  backgroundColor: darkMode ? "#ffffff29" : "#f4f4f4",
+                  borderRadius: "30px",
+                },
+              }}
+            />
+          </Box>{" "}
         </Box>
       </Box>
 
@@ -187,45 +197,47 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                     <EnquiryCard
                       sx={{
                         backgroundColor: "#5FECC8",
-                        color: "#FFFFFF",
+                        color: "#000",
                         display: "flex",
                         width: "100%",
+                        borderRadius: 2,
+                        p: 3,
                       }}
                     >
                       <StyledCardContent
-                        style={{ flex: 0.3, borderRight: "1px solid black" }}
+                        sx={{ flex: 0.3, borderRight: "1px solid black" }}
                       >
                         <Typography variant="subtitle2">Sr. No</Typography>
                       </StyledCardContent>
                       <StyledCardContent
-                        style={{ flex: 1.2, borderRight: "1px solid black" }}
+                        sx={{ flex: 1.3, borderRight: "1px solid black" }}
                       >
                         <Typography variant="subtitle2">
                           Department Name
                         </Typography>
                       </StyledCardContent>
                       <StyledCardContent
-                        style={{ flex: 1.2, borderRight: "1px solid black" }}
+                        sx={{ flex: 1.2, borderRight: "1px solid black" }}
                       >
                         <Typography variant="subtitle2">Disaster ID</Typography>
                       </StyledCardContent>
                       <StyledCardContent
-                        style={{ flex: 1, borderRight: "1px solid black" }}
+                        sx={{ flex: 1, borderRight: "1px solid black" }}
                       >
                         <Typography variant="subtitle2">State</Typography>
                       </StyledCardContent>
                       <StyledCardContent
-                        style={{ flex: 1, borderRight: "1px solid black" }}
+                        sx={{ flex: 1, borderRight: "1px solid black" }}
                       >
                         <Typography variant="subtitle2">District</Typography>
                       </StyledCardContent>
                       <StyledCardContent
-                        style={{ flex: 1, borderRight: "1px solid black" }}
+                        sx={{ flex: 1, borderRight: "1px solid black" }}
                       >
                         <Typography variant="subtitle2">Tehsil</Typography>
                       </StyledCardContent>
                       <StyledCardContent
-                        style={{
+                        sx={{
                           flex: 1,
                           textAlign: "center",
                           borderRight: "1px solid black",
@@ -234,7 +246,7 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                         <Typography variant="subtitle2">City</Typography>
                       </StyledCardContent>
                       <StyledCardContent
-                        style={{ flex: 0.8, textAlign: "center" }}
+                        sx={{ flex: 0.8, textAlign: "center" }}
                       >
                         <Typography variant="subtitle2">Actions</Typography>
                       </StyledCardContent>
@@ -251,38 +263,36 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                         p: 2,
                         borderRadius: 2,
                         color: textColor,
-                        transition: "all 0.3s ease-in-out",
+                        display: "flex",
+                        width: "100%",
+                        mb: 1,
                       }}
                     >
-                      <StyledCardContent style={{ flex: 0.3 }}>
+                      <StyledCardContent sx={{ flex: 0.3 }}>
                         <Typography variant="subtitle2">{index + 1}</Typography>
                       </StyledCardContent>
-                      <StyledCardContent style={{ flex: 2.5 }}>
+                      <StyledCardContent sx={{ flex: 1.5 }}>
                         <Typography variant="subtitle2">
                           Mock Details
                         </Typography>
                       </StyledCardContent>
-                      <StyledCardContent style={{ flex: 1.4 }}>
-                        <Typography variant="subtitle   2">
-                          +1222222222
-                        </Typography>
+                      <StyledCardContent sx={{ flex: 1.1 }}>
+                        <Typography variant="subtitle2">+1222222</Typography>
                       </StyledCardContent>
-                      <StyledCardContent style={{ flex: 1 }}>
-                        <Typography variant="subtitle2">
-                          Maharashtra{" "}
-                        </Typography>
+                      <StyledCardContent sx={{ flex: 1 }}>
+                        <Typography variant="subtitle2">Maharashtra</Typography>
                       </StyledCardContent>
-                      <StyledCardContent style={{ flex: 1 }}>
+                      <StyledCardContent sx={{ flex:0.8 }}>
                         <Typography variant="subtitle2">Pune</Typography>
                       </StyledCardContent>
-                      <StyledCardContent style={{ flex: 1 }}>
+                      <StyledCardContent sx={{ flex: 1.3 }}>
                         <Typography variant="subtitle2">Talegaon</Typography>
                       </StyledCardContent>
-                      <StyledCardContent style={{ flex: 1 }}>
-                        <Typography variant="subtitle2">lohgaon</Typography>
+                      <StyledCardContent sx={{ flex: 1.3}}>
+                        <Typography variant="subtitle2">Lohgaon</Typography>
                       </StyledCardContent>
                       <StyledCardContent
-                        style={{ flex: 0.8, textAlign: "center" }}
+                        sx={{ flex: 0.8, textAlign: "center" }}
                       >
                         <IconButton onClick={handleOpen}>
                           <VisibilityIcon sx={{ color: labelColor }} />
@@ -317,7 +327,7 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
           >
             <Typography
               sx={{
-                color: "#5FECC8",
+                color: "#fff",
                 fontWeight: 600,
                 fontSize: 18,
                 mb: 2,
@@ -332,7 +342,7 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                 <TextField
                   fullWidth
                   label="Department Name"
-                  variant="filled"
+                  variant="outlined"
                   sx={{
                     backgroundColor: "#FFFFFF29",
                     input: { color: textColor, height: "0.7em" },
@@ -347,7 +357,7 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                   fullWidth
                   select
                   label="Disaster ID"
-                  variant="filled"
+                  variant="outlined"
                   sx={{
                     backgroundColor: "#FFFFFF29",
                     input: { color: textColor, height: "0.7em" },
@@ -364,7 +374,7 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                 <TextField
                   fullWidth
                   label="State"
-                  variant="filled"
+                  variant="outlined"
                   sx={{
                     backgroundColor: "#FFFFFF29",
                     input: { color: textColor, height: "0.7em" },
@@ -378,7 +388,7 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                 <TextField
                   fullWidth
                   label="District"
-                  variant="filled"
+                  variant="outlined"
                   sx={{
                     backgroundColor: "#FFFFFF29",
                     input: { color: textColor, height: "0.7em" },
@@ -392,7 +402,7 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                 <TextField
                   fullWidth
                   label="Tehsil"
-                  variant="filled"
+                  variant="outlined"
                   sx={{
                     backgroundColor: "#FFFFFF29",
                     input: { color: textColor, height: "0.7em" },
@@ -406,7 +416,7 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                 <TextField
                   fullWidth
                   label="City"
-                  variant="filled"
+                  variant="outlined"
                   sx={{
                     backgroundColor: "#FFFFFF29",
                     input: { color: textColor, height: "0.7em" },

@@ -1,4 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+
+
+import React, { useState } from "react";
 import {
   Drawer,
   List,
@@ -6,171 +8,136 @@ import {
   ListItemIcon,
   ListItemText,
   Box,
-  Paper,
-  useMediaQuery,
   Grid,
-  ClickAwayListener,
+  Typography,
+  Collapse,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import LockIcon from "@mui/icons-material/Lock";
-import AddDepartment from "../System/Department/AddDepartment";
 import { useNavigate } from "react-router-dom";
-import EmployeReg from "../System/Employee_reg/Employee_reg";
-import AddGroup from "../System/Groups/Add_group";
 
+const screenConfig = {
+  "System User": {
+    icon: <AccountCircleIcon />,
+    screens: [
+      { id: 1, text: "Add Department", path: "/department" },
+      { id: 2, text: "Add Group", path: "/group" },
+      { id: 3, text: "Add Employee", path: "/employee" },
+    ],
+  },
+  Permission: {
+    icon: <LockIcon />,
+    screens: [
+      { id: 4, text: "Manage Roles", path: "/roles" },
+      { id: 5, text: "Access Control", path: "/access-control" },
+    ],
+  },
+};
 
 const Departmentsidebar = ({ darkMode }) => {
   const [open, setOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
-  const [activePage, setActivePage] = useState(""); // 👈 track selected menu
-  const systemUserRef = useRef(null);
-  const [dropdownAnchor, setDropdownAnchor] = useState({ top: 0, left: 0 });
+  const [dropdowns, setDropdowns] = useState({
+    systemUser: false,
+    permission: false,
+  });
+  const navigate = useNavigate();
 
- const screens = [
-  {
-    id: "department",
-    text: "Department Registration",
-    path: "/department",
-    component: (props) => <AddDepartment {...props} />,
-  },
-  {
-    id: "group",
-    text: "Group Registration",
-    path: "/group",
-    component: (props) => <AddGroup {...props} />,
-  },
-  {
-    id: "employee",
-    text: "Employee Registration",
-    path: "/employee",
-    component: (props) => <EmployeReg {...props} />,
-  },
-];
-
-
-  useEffect(() => {
-    if (dropdownOpen && systemUserRef.current) {
-      const rect = systemUserRef.current.getBoundingClientRect();
-      setDropdownAnchor({ top: rect.top, left: rect.right + 10 });
-    }
-  }, [dropdownOpen, open]);
-
-  const handleMenuClick = (page) => {
-    setActivePage(page);
-    setDropdownOpen(false); // close dropdown
+  const toggleDropdown = (key) => {
+    setDropdowns((prev) => ({ ...prev, [key]: !prev[key] }));
   };
+
   return (
-    <>
-      <Grid
-        container
-        spacing={2}
-        sx={{ height: "100vh" }}
-        alignItems="flex-start"
-      >
-        {/* Sidebar */}
-        <Grid item>
-          <Drawer
-            variant="permanent"
-            onMouseEnter={() => setOpen(true)}
-            onMouseLeave={() => setOpen(false)}
-            sx={{
+    <Grid container>
+      <Grid item>
+        <Drawer
+          variant="permanent"
+          onMouseEnter={() => setOpen(true)}
+          onMouseLeave={() => {
+            setOpen(false);
+            setDropdowns({});
+          }}
+          sx={{
+            width: open ? 200 : 60,
+            "& .MuiDrawer-paper": {
               width: open ? 200 : 60,
-              "& .MuiDrawer-paper": {
-                width: open ? 200 : 60,
-                height: 300,
-                position: "absolute",
-                top: "50%",
-                transform: "translateY(-50%)",
-                background: "linear-gradient(to bottom, #5FECC8, #5FECC80D)",
-                borderRadius: "30px",
-                transition: "width 0.5s ease-in-out",
-                padding: "1em",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              },
-            }}
-          >
-            <Box sx={{ width: "100%" }}>
-              <List>
-                <ListItemButton
-                  onClick={() => setDropdownOpen((prev) => !prev)}
-                  sx={{ flexDirection: "column", alignItems: "center" }}
-                >
-                  <ListItemIcon sx={{ minWidth: 0 }}>
-                    <AccountCircleIcon />
-                  </ListItemIcon>
-                  {open && (
-                    <ListItemText
-                      primary="System User"
-                      primaryTypographyProps={{ variant: "caption" }}
-                    />
-                  )}
-                </ListItemButton>
-
-                <ListItemButton
-                  sx={{ flexDirection: "column", alignItems: "center" }}
-                >
-                  <ListItemIcon sx={{ minWidth: 0 }}>
-                    <LockIcon />
-                  </ListItemIcon>
-                  {open && (
-                    <ListItemText
-                      primary="Permission"
-                      primaryTypographyProps={{ variant: "caption" }}
-                    />
-                  )}
-                </ListItemButton>
-              </List>
-            </Box>
-          </Drawer>
-        </Grid>
-
-        {/* Right side content */}
-        <Grid item xs sx={{ p: 2 }}>
-          {screens
-            .find((screen) => screen.id === activePage)
-            ?.component({ darkMode })}
-        </Grid>
-      </Grid>
-
-      {dropdownOpen && (
-        <ClickAwayListener onClickAway={() => setDropdownOpen(false)}>
-          <Paper
-            elevation={4}
-            sx={{
-              position: "fixed",
-              top: dropdownAnchor.top,
-              left: dropdownAnchor.left,
-              zIndex: 2000,
-              borderRadius: 2,
-              p: 1,
-              minWidth: 220,
-              backgroundColor: "#fff",
-            }}
-          >
+              position: "absolute",
+              top: "50%",
+              transform: "translateY(-50%)",
+              background: "linear-gradient(to bottom, #5FECC8, #5FECC80D)",
+              borderRadius: "30px",
+              transition: "width 0.5s ease-in-out",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden", // ✅ Prevent scrollbars
+              height: "50vh", // ✅ Height will grow with content
+              maxHeight: "90vh", // ✅ Prevent overflow from screen
+              
+            },
+          }}
+        >
+          <Box sx={{ width: "100%", overflow: "hidden" }}>
             <List>
-              {screens.map((screen) => (
-               <ListItemButton
-  key={screen.id}
-  onClick={() => {
-    setActivePage(screen.id);
-    setDropdownOpen(false);
-    navigate(screen.path); // ✅ Navigate to route
-  }}
-  sx={{ "&:hover": { backgroundColor: "#f0f0f0" } }}
->
-  <ListItemText primary={screen.text} sx={{ color: "black" }} />
-</ListItemButton>
+              {Object.entries(screenConfig).map(
+                ([sectionName, { icon, screens }]) => (
+                  <Box key={sectionName} sx={{ width: "100%" }}>
+                    <ListItemButton
+                      onClick={() => toggleDropdown(sectionName)}
+                      sx={{
+                        flexDirection: open ? "row" : "column",
+                        justifyContent: "center",
+                        py: 1,
+                        gap: 1,
+                      }}
+                    >
+                      <ListItemIcon sx={{ minWidth: 0 }}>{icon}</ListItemIcon>
 
-              ))}
+                      {open && (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 0.5,
+                          }}
+                        >
+                          <Typography variant="caption">
+                            {sectionName === "" ? "System User" : sectionName}
+                          </Typography>
+                          {dropdowns[sectionName] ? (
+                            <ArrowDropUpIcon fontSize="small" />
+                          ) : (
+                            <ArrowDropDownIcon fontSize="small" />
+                          )}
+                        </Box>
+                      )}
+                    </ListItemButton>
+
+                    {open && dropdowns[sectionName] && (
+                      <Box sx={{ mt: 1, pl: 3 }}>
+                        {screens.map((screen) => (
+                          <ListItemButton
+                            key={screen.id}
+                            onClick={() => navigate(screen.path)}
+                            sx={{ py: 0.5 }}
+                          >
+                            <ListItemText
+                              primary={screen.text}
+                              primaryTypographyProps={{ fontSize: 12 }}
+                            />
+                          </ListItemButton>
+                        ))}
+                      </Box>
+                    )}
+                  </Box>
+                )
+              )}
             </List>
-          </Paper>
-        </ClickAwayListener>
-      )}
-    </>
+          </Box>
+        </Drawer>
+      </Grid>
+    </Grid>
   );
 };
 
