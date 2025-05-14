@@ -23,8 +23,8 @@ const screenConfig = {
     icon: <AccountCircleIcon />,
     screens: [
       { id: 1, text: "Add Department", path: "/department" },
-      { id: 2, text: "Add Group", path: "/group" },
-      { id: 3, text: "Add Employee", path: "/employee" },
+      { id: 2, text: "Add Group", path: "/add-group" },
+      { id: 3, text: "Add Employee", path: "/add-employee" },
     ],
   },
   Permission: {

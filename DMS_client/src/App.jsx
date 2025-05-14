@@ -8,12 +8,12 @@ import Login from "./Componenets/Login/Login";
 import Footer from "./Componenets/Footer/Footer";
 import AlertPanel from "./Componenets/DispatchModule/AlertPanel/AlertPanel";
 import Sidebar from "./Componenets/DispatchModule/Sidebar/Sidebar";
+import Add_department from"./Componenets/SuperAdmin/System/Department/Add_department";
 import Departmentsidebar from "./Componenets/SuperAdmin/Sidebar/Departmentsidebar";
 import AddDepartment from "./Componenets/SuperAdmin/System/Department/AddDepartment";
 import Add_group from "./Componenets/SuperAdmin/System/Groups/Add_group";
-import EmployeReg from "./Componenets/SuperAdmin/System/Employee_reg/Employee_reg";
-// import Add_department from "./Componenets/SuperAdmin/System/Department/Add_department";
-// import Add_group from "./Componenets/SuperAdmin/System/Groups/Add_group";
+import Add_employee from "./Componenets/SuperAdmin/System/Employee_reg/Add_employee";
+
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
@@ -84,22 +84,11 @@ function App() {
                 element={<Login setIsLoggedIn={setIsLoggedIn} />}
               />
               <Route path="/Sop" element={<Sop darkMode={darkMode} />} />
-              <Route
-                path="/alert-panel"
-                element={<AlertPanel darkMode={darkMode} />}
-              />
-              <Route
-                path="/department"
-                element={<AddDepartment darkMode={darkMode} />}
-              />
-              <Route
-                path="/group"
-                element={<Add_group darkMode={darkMode} />}
-              />
-              <Route
-                path="/employee"
-                element={<EmployeReg darkMode={darkMode} />}
-              />
+              <Route path="/alert-panel" element={<AlertPanel darkMode={darkMode} />} />
+              <Route path="/add-department" element={<Add_department darkMode={darkMode} />} />
+              <Route path="/add-group" element={<Add_group darkMode={darkMode} />} />
+              <Route path="/add-employee" element={<Add_employee darkMode={darkMode} />} />
+
             </Routes>
           </div>
 

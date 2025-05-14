@@ -15,12 +15,13 @@ import { Select, MenuItem, IconButton, Popper  } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
-
-
-function Add_group({ darkMode }) {
-
+function Add_employee({ darkMode }) {
   const textColor = darkMode ? "#ffffff" : "#000000";
   const bgColor = darkMode ? "#0a1929" : "#ffffff";
+
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(5); // default 5 rows
+
 
 
   const EnquiryCard = styled("div")(() => ({
@@ -144,10 +145,6 @@ function Add_group({ darkMode }) {
     },
   ];
 
-
-  const [page, setPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5); // default 5 rows
-
   const handlePageChange = (event, value) => {
     setPage(value);
   };
@@ -160,12 +157,9 @@ function Add_group({ darkMode }) {
 const [anchorEl, setAnchorEl] = useState(null);
 
 
-
-
-
   return (
     <div>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 2, pb: 2, mt: 3 }}>
+     <Box sx={{ display: "flex", alignItems: "center", gap: 2, pb: 2, mt: 3 }}>
 
         {/* Back Arrow */}
         <IconButton size="small" onClick={() => {/* handle back action here */ }} sx={{
@@ -182,7 +176,7 @@ const [anchorEl, setAnchorEl] = useState(null);
 
         {/* Label */}
         <Typography variant="subtitle2" sx={{ fontWeight: 500, color: darkMode ? "#fff" : "#000" }}>
-          Add Groups
+          Add Employee
         </Typography>
 
         <TextField
@@ -446,7 +440,7 @@ const [anchorEl, setAnchorEl] = useState(null);
               {/* First TextField */}
               <TextField
                 fullWidth
-                placeholder="Department ID"
+                placeholder="Employee Name"
                 InputLabelProps={{ shrink: false }}
                 sx={{
                   // Set desired width
@@ -478,7 +472,7 @@ const [anchorEl, setAnchorEl] = useState(null);
               {/* Second TextField */}
               <TextField
                 fullWidth
-                placeholder="Group Name"
+                placeholder="Emp Contact No"
                 InputLabelProps={{ shrink: false }}
                 sx={{
                   // Set desired width
@@ -508,7 +502,323 @@ const [anchorEl, setAnchorEl] = useState(null);
                 }}
               />
             </Box>
-  
+            <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+              {/* First TextField */}
+              <TextField
+                fullWidth
+                placeholder="Employee Email"
+                InputLabelProps={{ shrink: false }}
+                sx={{
+                  // Set desired width
+                  height: "3rem",
+                  '& .MuiInputBase-input': {
+                    color: 'white !important',
+                  },
+                  '& .MuiInputBase-root': {
+                    height: "100%",             // Ensure input wrapper matches height
+                    padding: "0 12px",          // Horizontal padding
+                    display: 'flex',
+                    alignItems: 'center',       // Center content vertically
+                  },
+                  borderRadius: '12px',
+                  '& fieldset': {
+                    border: 'none', // Remove border
+                  },
+                  backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                  '& input::placeholder': {
+                    fontSize: '0.85rem',
+                    color: 'white !important',
+                  },
+                  boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
+                  '&:hover': {
+                    boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)', // Increase shadow on hover
+                  },
+                }}
+              />
+              {/* Second TextField */}
+              <TextField
+                fullWidth
+                placeholder="Emp DOJ"
+                InputLabelProps={{ shrink: false }}
+                sx={{
+                  // Set desired width
+                  height: "3rem",
+                  '& .MuiInputBase-input': {
+                    color: 'white !important',
+                  },
+                  '& .MuiInputBase-root': {
+                    height: "100%",             // Ensure input wrapper matches height
+                    padding: "0 12px",          // Horizontal padding
+                    display: 'flex',
+                    alignItems: 'center',       // Center content vertically
+                  },
+                  borderRadius: '12px',
+                  '& fieldset': {
+                    border: 'none', // Remove border
+                  },
+                  backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                  '& input::placeholder': {
+                    fontSize: '0.85rem',
+                    color: 'white !important',
+                  },
+                  boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
+                  '&:hover': {
+                    boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)', // Increase shadow on hover
+                  },
+                }}
+              />
+            </Box>
+            <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+              {/* First TextField */}
+              <TextField
+                fullWidth
+                placeholder="Group ID"
+                InputLabelProps={{ shrink: false }}
+                sx={{
+                  // Set desired width
+                  height: "3rem",
+                  '& .MuiInputBase-input': {
+                    color: 'white !important',
+                  },
+                  '& .MuiInputBase-root': {
+                    height: "100%",             // Ensure input wrapper matches height
+                    padding: "0 12px",          // Horizontal padding
+                    display: 'flex',
+                    alignItems: 'center',       // Center content vertically
+                  },
+                  borderRadius: '12px',
+                  '& fieldset': {
+                    border: 'none', // Remove border
+                  },
+                  backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                  '& input::placeholder': {
+                    fontSize: '0.85rem',
+                    color: 'white !important',
+                  },
+                  boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
+                  '&:hover': {
+                    boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)', // Increase shadow on hover
+                  },
+                }}
+              />
+              {/* Second Select  */}
+              <Select
+                fullWidth
+                displayEmpty
+                placeholder="Select State"
+                defaultValue=""
+                inputProps={{
+                  "aria-label": "Select Name",
+                }}
+                sx={{
+                  height: '3rem',
+                  '& .MuiSelect-root': {
+                    color: 'white !important',
+                  },
+                  borderRadius: '12px',
+                  '& fieldset': {
+                    border: 'none', // Remove border
+                  },
+                  backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    border: 'none', // Remove border outline
+                  },
+                  boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
+                  '&:hover': {
+                    boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)', // Increase shadow on hover
+                  },
+                  backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                  '& input::placeholder': {
+                    fontSize: '0.85rem',
+                    color: 'white ',
+                  },
+                  '& .MuiSvgIcon-root': {
+                    color: 'white !important', // Dropdown icon color
+                  },
+                }}
+                IconComponent={KeyboardArrowDownIcon} // Use outlined dropdown arrow
+              >
+                <MenuItem value="" disabled>
+                  Select Option
+                </MenuItem>
+                <MenuItem value="Option 1">Option 1</MenuItem>
+                <MenuItem value="Option 2">Option 2</MenuItem>
+                <MenuItem value="Option 3">Option 3</MenuItem>
+                {/* Add more options as needed */}
+              </Select>
+            </Box>
+
+            <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+              {/* First Dropdown */}
+              <Select
+                fullWidth
+                displayEmpty
+                placeholder="Select District"
+                defaultValue=""
+                inputProps={{
+                  "aria-label": "Select Name",
+                }}
+                sx={{
+                  height: '3rem',
+                  '& .MuiSelect-root': {
+                    color: 'white !important',
+                  },
+                  borderRadius: '12px',
+                  '& fieldset': {
+                    border: 'none', // Remove border
+                  },
+                  backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    border: 'none', // Remove border outline
+                  },
+                  boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
+                  '&:hover': {
+                    boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)', // Increase shadow on hover
+                  },
+                  backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                  '& input::placeholder': {
+                    fontSize: '0.85rem',
+                    color: 'white ',
+                  },
+                  '& .MuiSvgIcon-root': {
+                    color: 'white !important', // Dropdown icon color
+                  },
+                }}
+                IconComponent={KeyboardArrowDownIcon} // Use outlined dropdown arrow
+              >
+                <MenuItem value="" disabled>
+                  Select Option
+                </MenuItem>
+                <MenuItem value="Option 1">Option 1</MenuItem>
+                <MenuItem value="Option 2">Option 2</MenuItem>
+                <MenuItem value="Option 3">Option 3</MenuItem>
+                {/* Add more options as needed */}
+              </Select>
+
+              {/* Second Dropdown */}
+              <Select
+                fullWidth
+                displayEmpty
+                placeholder="Select Tehsil"
+                defaultValue=""
+                inputProps={{
+                  "aria-label": "Select Name",
+                }}
+                sx={{
+                  height: '3rem',
+                  '& .MuiSelect-root': {
+                    color: 'white !important',
+                  },
+                  borderRadius: '12px',
+                  '& fieldset': {
+                    border: 'none', // Remove border
+                  },
+                  backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    border: 'none', // Remove border outline
+                  },
+                  boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
+                  '&:hover': {
+                    boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)', // Increase shadow on hover
+                  },
+                  '& .MuiSvgIcon-root': {
+                    color: 'white !important', // Dropdown icon color
+                  },
+                }}
+                IconComponent={KeyboardArrowDownIcon} // Use outlined dropdown arrow
+              >
+                <MenuItem value="" disabled>
+                  Select Option
+                </MenuItem>
+                <MenuItem value="Option 1">Option 1</MenuItem>
+                <MenuItem value="Option 2">Option 2</MenuItem>
+                <MenuItem value="Option 3">Option 3</MenuItem>
+                {/* Add more options as needed */}
+              </Select>
+            </Box>
+
+             <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+              {/* First Dropdown */}
+              <Select
+                fullWidth
+                displayEmpty
+                placeholder="Select City"
+                defaultValue=""
+                inputProps={{
+                  "aria-label": "Select Name",
+                }}
+                sx={{
+                  height: '3rem',
+                  '& .MuiSelect-root': {
+                    color: 'white !important',
+                  },
+                  borderRadius: '12px',
+                  '& fieldset': {
+                    border: 'none', // Remove border
+                  },
+                  backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    border: 'none', // Remove border outline
+                  },
+                  boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
+                  '&:hover': {
+                    boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)', // Increase shadow on hover
+                  },
+                  backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                  '& input::placeholder': {
+                    fontSize: '0.85rem',
+                    color: 'white ',
+                  },
+                  '& .MuiSvgIcon-root': {
+                    color: 'white !important', // Dropdown icon color
+                  },
+                }}
+                IconComponent={KeyboardArrowDownIcon} // Use outlined dropdown arrow
+              >
+                <MenuItem value="" disabled>
+                  Select Option
+                </MenuItem>
+                <MenuItem value="Option 1">Option 1</MenuItem>
+                <MenuItem value="Option 2">Option 2</MenuItem>
+                <MenuItem value="Option 3">Option 3</MenuItem>
+                {/* Add more options as needed */}
+              </Select>
+
+              {/* Second Textfield */}
+
+                <TextField
+                fullWidth
+                placeholder="Employee DOB"
+                InputLabelProps={{ shrink: false }}
+                sx={{
+                  // Set desired width
+                  height: "3rem",
+                  '& .MuiInputBase-input': {
+                    color: 'white !important',
+                  },
+                  '& .MuiInputBase-root': {
+                    height: "100%",             // Ensure input wrapper matches height
+                    padding: "0 12px",          // Horizontal padding
+                    display: 'flex',
+                    alignItems: 'center',       // Center content vertically
+                  },
+                  borderRadius: '12px',
+                  '& fieldset': {
+                    border: 'none', // Remove border
+                  },
+                  backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                  '& input::placeholder': {
+                    fontSize: '0.85rem',
+                    color: 'white !important',
+                  },
+                  boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
+                  '&:hover': {
+                    boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)', // Increase shadow on hover
+                  },
+                }}
+              />
+              
+            </Box>
 
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 1 }}>
               <Button
@@ -538,4 +848,4 @@ const [anchorEl, setAnchorEl] = useState(null);
   )
 }
 
-export default Add_group
+export default Add_employee
