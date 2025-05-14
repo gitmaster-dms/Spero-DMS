@@ -8,14 +8,21 @@ import Login from "./Componenets/Login/Login";
 import Footer from "./Componenets/Footer/Footer";
 import AlertPanel from "./Componenets/DispatchModule/AlertPanel/AlertPanel";
 import Sidebar from "./Componenets/DispatchModule/Sidebar/Sidebar";
-import Add_department from "./Componenets/SuperAdmin/System/Department/Add_department";
+import Departmentsidebar from "./Componenets/SuperAdmin/Sidebar/Departmentsidebar";
+import AddDepartment from "./Componenets/SuperAdmin/System/Department/AddDepartment";
 import Add_group from "./Componenets/SuperAdmin/System/Groups/Add_group";
-
+import EmployeReg from "./Componenets/SuperAdmin/System/Employee_reg/Employee_reg";
+// import Add_department from "./Componenets/SuperAdmin/System/Department/Add_department";
+// import Add_group from "./Componenets/SuperAdmin/System/Groups/Add_group";
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // <-- Login state
   const location = useLocation();
+  const userGroup = localStorage.getItem("user_group");
+  
+
+  console.log(userGroup, "userGroup");
 
   const theme = useMemo(
     () =>
@@ -46,18 +53,53 @@ function App() {
         }}
       >
         <div style={{ flex: 1 }}>
-          {!isAuthRoute && <Sidebar darkMode={darkMode} toggleDarkMode={() => setDarkMode(prev => !prev)} />}
-          {!isAuthRoute && <Navbar darkMode={darkMode} toggleDarkMode={() => setDarkMode(prev => !prev)} />}
+          {!isAuthRoute && (
+            <>
+              <Navbar
+                darkMode={darkMode}
+                toggleDarkMode={() => setDarkMode((prev) => !prev)}
+              />
 
-          <div style={{ marginLeft: '70px' }}>
+              {/* {userGroup === "1" && (
+                <Sidebar
+                  darkMode={darkMode}
+                  toggleDarkMode={() => setDarkMode((prev) => !prev)}
+                />
+              )} */}
+
+              {/* {userGroup === "2" && ( */}
+                <Departmentsidebar
+                  darkMode={darkMode}
+                  toggleDarkMode={() => setDarkMode((prev) => !prev)}
+                />
+              {/* )} */}
+            </>
+          )}
+
+          <div style={{ marginLeft: "70px" }}>
             <Routes>
-              <Route path="/" element={<Navigate to="/login" replace />} />
-              <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+              <Route path="/" element={<Navigate to="/Login" replace />} />
+              <Route
+                path="/Login"
+                element={<Login setIsLoggedIn={setIsLoggedIn} />}
+              />
               <Route path="/Sop" element={<Sop darkMode={darkMode} />} />
-              <Route path="/alert-panel" element={<AlertPanel darkMode={darkMode} />} />
-              <Route path="/add-department" element={<Add_department darkMode={darkMode} />} />
-              <Route path="/add-group" element={<Add_group darkMode={darkMode} />} />
-
+              <Route
+                path="/alert-panel"
+                element={<AlertPanel darkMode={darkMode} />}
+              />
+              <Route
+                path="/department"
+                element={<AddDepartment darkMode={darkMode} />}
+              />
+              <Route
+                path="/group"
+                element={<Add_group darkMode={darkMode} />}
+              />
+              <Route
+                path="/employee"
+                element={<EmployeReg darkMode={darkMode} />}
+              />
             </Routes>
           </div>
 
