@@ -10,7 +10,7 @@ function Login() {
 
 
     const port = import.meta.env.VITE_APP_API_KEY;
-    console.log(port,'port');
+    // console.log(port,'port');
     
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -59,6 +59,7 @@ function Login() {
                 const fullImageUrl = data.captcha_image_url.startsWith('http')
                     ? data.captcha_image_url
                     : `${port}${data.captcha_image_url}`;
+
                 setCaptchaImageUrl(fullImageUrl);
                 console.log('Captcha image URL:', fullImageUrl);
                 // Reset captcha value when new captcha is fetched
