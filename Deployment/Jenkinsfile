@@ -44,12 +44,12 @@ pipeline {
                         } else {
                             echo "Repository already exists. Resetting and pulling latest changes..."
                             def resetStatus = sh(
-                                script: '''
-                                    git config --global --add safe.directory $(pwd)
+                                script: """
+                                    git config --global --add safe.directory \$(pwd)
                                     git fetch origin ${GIT_BRANCH}
                                     git reset --hard origin/${GIT_BRANCH}
-                                    git clean -fd -e vvenv/  # <-- Add -e vvenv/ here to exclude it
-                                ''',
+                                    git clean -fd -e vvenv/
+                                """,
                                 returnStatus: true
                             )
                             if (resetStatus != 0) {
