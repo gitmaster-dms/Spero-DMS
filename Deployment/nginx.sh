@@ -1,9 +1,9 @@
 #!/bin/bash
 
-sudo cp -rf HHC_cicd.conf /etc/nginx/sites-available/HHC_cicd
-chmod 777 /var/lib/jenkins/workspace/HHC_CICD
+sudo cp -rf nginx_proxy/dms_django_9001.conf /etc/nginx/sites-available/dms_django_9001.conf
+chmod 777 /var/www/html/DMS_goa/
 
-sudo ln -s /etc/nginx/sites-available/HHC_cicd /etc/nginx/sites-enabled
+sudo ln -s /etc/nginx/sites-available/dms_django_9001.conf /etc/nginx/sites-enabled
 sudo nginx -t
  
 sudo systemctl start nginx
