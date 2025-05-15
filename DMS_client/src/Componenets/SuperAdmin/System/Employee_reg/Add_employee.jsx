@@ -14,8 +14,15 @@ import Pagination from '@mui/material/Pagination';
 import { Select, MenuItem, IconButton, Popper  } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { useAuth } from './../../../../Context/ContextAPI';
 
 function Add_employee({ darkMode }) {
+   const { states,districts,selectedStateId, setSelectedStateId,loading,error,} = useAuth();
+
+ const handleStateChange = (e) => {
+    const id = e.target.value;
+    setSelectedStateId(id);
+  };
   const textColor = darkMode ? "#ffffff" : "#000000";
   const bgColor = darkMode ? "#0a1929" : "#ffffff";
 
@@ -547,6 +554,7 @@ const [anchorEl, setAnchorEl] = useState(null);
               />
               {/* Second Select  */}
               <Select
+              value={selectedStateId || ''} onChange={handleStateChange}
                 fullWidth
                 displayEmpty
                 placeholder="Select State"
@@ -585,9 +593,11 @@ const [anchorEl, setAnchorEl] = useState(null);
                 <MenuItem value="" disabled>
                   Select State
                 </MenuItem>
-                <MenuItem value="Option 1">Option 1</MenuItem>
-                <MenuItem value="Option 2">Option 2</MenuItem>
-                <MenuItem value="Option 3">Option 3</MenuItem>
+                  {states.map(state => (
+                <MenuItem key={state.state_id}  value={state.state_id}>{state.state_name}</MenuItem>
+                 ))}
+
+                 
                 {/* Add more options as needed */}
               </Select>
             </Box>
@@ -633,9 +643,9 @@ const [anchorEl, setAnchorEl] = useState(null);
                 <MenuItem value="" disabled>
                   Select District
                 </MenuItem>
-                <MenuItem value="Option 1">Option 1</MenuItem>
-                <MenuItem value="Option 2">Option 2</MenuItem>
-                <MenuItem value="Option 3">Option 3</MenuItem>
+                 {districts.map(districts => (
+                <MenuItem key={districts.dis_id} value={districts.dis_id}>{districts. dis_name}</MenuItem>
+                 ))}
                 {/* Add more options as needed */}
               </Select>
 
@@ -672,11 +682,12 @@ const [anchorEl, setAnchorEl] = useState(null);
                 IconComponent={KeyboardArrowDownIcon} // Use outlined dropdown arrow
               >
                 <MenuItem value="" disabled>
-                  Select Tehsil
+                  Select Tehsil 
                 </MenuItem>
-                <MenuItem value="Option 1">Option 1</MenuItem>
-                <MenuItem value="Option 2">Option 2</MenuItem>
-                <MenuItem value="Option 3">Option 3</MenuItem>
+           
+                <MenuItem  value="">option2</MenuItem>
+             
+               
                 {/* Add more options as needed */}
               </Select>
             </Box>
@@ -722,9 +733,9 @@ const [anchorEl, setAnchorEl] = useState(null);
                 <MenuItem value="" disabled>
                   Select City
                 </MenuItem>
-                <MenuItem value="Option 1">Option 1</MenuItem>
-                <MenuItem value="Option 2">Option 2</MenuItem>
-                <MenuItem value="Option 3">Option 3</MenuItem>
+             
+                <MenuItem value="">option 1</MenuItem>
+                 
                 {/* Add more options as needed */}
               </Select>
 
