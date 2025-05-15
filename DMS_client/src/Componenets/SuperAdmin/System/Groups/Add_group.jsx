@@ -9,9 +9,8 @@ import TableRow from '@mui/material/TableRow';
 import { Search, ArrowBack } from "@mui/icons-material";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { styled } from "@mui/material/styles";
-// import { alerts } from "./../../../DispatchModule/SOP/dummydata";
 import Pagination from '@mui/material/Pagination';
-import { Select, MenuItem, IconButton, Popper  } from "@mui/material";
+import { Select, MenuItem, IconButton, Popper } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
@@ -63,13 +62,13 @@ function Add_group({ darkMode }) {
   });
 
   const Alert = [
-    "Name",
-    "Title",
-    "Title",
-    "Title",
-    "Title",
-    "Title",
-    "Title",
+    "Department ID",
+    "Group Name",
+    // "Title",
+    // "Title",
+    // "Title",
+    // "Title",
+    // "Title",
     "Action",
   ];
 
@@ -80,66 +79,36 @@ function Add_group({ darkMode }) {
       id: 1,
       alertId: "Flood",
       disasterId: "Unknown",
-      disasterType: "Unknownd",
-      date: "",
-      time: "Unknown",
-      priority: "Unknown",
-      initiatedBy: "Unknown",
       status: "Unknown",
     },
     {
       id: 2,
       alertId: "Flood",
       disasterId: "Unknown",
-      disasterType: "Unknown",
-      date: "",
-      time: "Unknown",
-      priority: "Unknown",
-      initiatedBy: "Unknown",
       status: "Unknown",
     },
     {
       id: 3,
       alertId: "Flood",
       disasterId: "Unknown",
-      disasterType: "Unknown",
-      date: "",
-      time: "Unknown",
-      priority: "Unknown",
-      initiatedBy: "Unknown",
       status: "Unknown",
     },
     {
       id: 4,
       alertId: "Flood",
       disasterId: "Unknown",
-      disasterType: "Unknownone",
-      date: "",
-      time: "Unknown",
-      priority: "Unknown",
-      initiatedBy: "Unknown",
       status: "Unknown",
     },
     {
       id: 5,
       alertId: "Flood",
       disasterId: "Unknown",
-      disasterType: "Unknownd",
-      date: "",
-      time: "Unknown",
-      priority: "Unknown",
-      initiatedBy: "Unknown",
       status: "Unknown",
     },
     {
       id: 6,
       alertId: "Flood",
       disasterId: "Unknown",
-      disasterType: "Unknown",
-      date: "",
-      time: "Unknown",
-      priority: "Unknown",
-      initiatedBy: "Unknown",
       status: "Unknown",
     },
   ];
@@ -157,7 +126,7 @@ function Add_group({ darkMode }) {
     setPage(1); // Reset to first page
   };
 
-const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
 
 
@@ -219,7 +188,7 @@ const [anchorEl, setAnchorEl] = useState(null);
       </Box>
       <Grid container spacing={2}>
         <Grid item xs={12} md={7}>
-          <Paper elevation={3} sx={{ padding: 3, borderRadius: 3, backgroundColor: bgColor, mt: 3, mb: 5 }}>
+          <Paper elevation={3} sx={{ padding: 3, borderRadius: 3, backgroundColor: bgColor, mt: 1, mb: 5 }}>
             <TableContainer>
               <Table>
                 <TableBody>
@@ -251,30 +220,21 @@ const [anchorEl, setAnchorEl] = useState(null);
                           status={item.status}
                           sx={{ display: "flex", flexDirection: "row" }}
                         >
-                          {[item.alertId, item.disasterId, item.disasterType, `${item.date} ${item.time}`].map(
+                          {[item.alertId, item.disasterId,].map(
                             (val, i) => (
                               <StyledCardContent key={i} sx={{ flex: 1, justifyContent: "center" }}>
                                 <Typography variant="subtitle2">{val}</Typography>
                               </StyledCardContent>
                             )
                           )}
-                          <StyledCardContent sx={{ flex: 1, justifyContent: "center" }}>
+                          {/* <StyledCardContent sx={{ flex: 1, justifyContent: "center" }}>
                             <Typography variant="subtitle2">
                               {item.priority}
                             </Typography>
-                          </StyledCardContent>
-                          <StyledCardContent sx={{ flex: 1, justifyContent: "center" }}>
-                            <Typography variant="subtitle2">{item.initiatedBy}</Typography>
-                          </StyledCardContent>
-                          <StyledCardContent sx={{ flex: 1, justifyContent: "center" }}>
-                            <Typography variant="subtitle2">{item.initiatedBy}</Typography>
-                          </StyledCardContent>
+                          </StyledCardContent> */}
+
                           <StyledCardContent sx={{ flex: 1, justifyContent: "center" }}>
                             <MoreHorizIcon
-                               onClick={(event) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-  }}
-
                               sx={{
                                 color: "#00f0c0",
                                 cursor: "pointer",
@@ -289,64 +249,6 @@ const [anchorEl, setAnchorEl] = useState(null);
               </Table>
             </TableContainer>
 
-            <Popper open={Boolean(anchorEl)} anchorEl={anchorEl} placement="bottom-end" transition>
-  {({ TransitionProps }) => (
-    <Fade {...TransitionProps} timeout={150}>
-      <Paper
-        sx={{
-          p: 2,
-          backgroundColor: "#1e293b",
-          color: "#fff",
-          borderRadius: 2,
-          minWidth: 180,
-          boxShadow: 3,
-        }}
-      >
-        <Typography variant="subtitle2" sx={{ mb: 1 }}>
-          Action
-        </Typography>
-        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}>
-          <Button
-            variant="contained"
-            size="small"
-            onClick={() => {
-              console.log("Edit clicked");
-              setAnchorEl(null);
-            }}
-            sx={{
-              backgroundColor: "#00C853",
-              textTransform: "none",
-              fontSize: "13px",
-              px: 2,
-              "&:hover": { backgroundColor: "#00B44A" },
-            }}
-          >
-            Edit
-          </Button>
-          <Button
-            variant="contained"
-            size="small"
-            onClick={() => {
-              console.log("Delete clicked");
-              setAnchorEl(null);
-            }}
-            sx={{
-              backgroundColor: "#D32F2F",
-              textTransform: "none",
-              fontSize: "13px",
-              px: 2,
-              "&:hover": { backgroundColor: "#C62828" },
-            }}
-          >
-            Delete
-          </Button>
-        </Box>
-      </Paper>
-    </Fade>
-  )}
-</Popper>
-
-
 
 
             <Box
@@ -358,7 +260,7 @@ const [anchorEl, setAnchorEl] = useState(null);
             >
               {/* Left: Records per page */}
               <Box display="flex" alignItems="center" gap={1}>
-                <Typography variant="body2" sx={{ color: "#ffffff" }}>
+                <Typography variant="body2" sx={{ color: textColor }}>
                   Records per page:
                 </Typography>
                 <Select
@@ -368,16 +270,16 @@ const [anchorEl, setAnchorEl] = useState(null);
                   variant="outlined"
                   sx={{
                     fontSize: "13px",
-                    color: "#ffffff",
-                    borderColor: "#ffffff",
+                    color: textColor,
+                    borderColor: bgColor,
                     height: "30px",
                     minWidth: "70px",
                     backgroundColor: "transparent",
                     "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#ffffff",
+                      borderColor: textColor,
                     },
                     "& .MuiSvgIcon-root": {
-                      color: "#ffffff",
+                      color: textColor,
                     },
                   }}
                 >
@@ -400,7 +302,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   display: "flex",
                   alignItems: "center",
                   gap: 2,
-                  color: "#ffffff",
+                  color: textColor,
                   fontSize: "13px",
                   cursor: "default",
                 }}
@@ -439,8 +341,8 @@ const [anchorEl, setAnchorEl] = useState(null);
         </Grid>
 
         <Grid item xs={12} md={5}>
-          <Paper elevation={3} sx={{ padding: 1, borderRadius: 3, backgroundColor: bgColor, mt: 3, mb: 5 }}>
-            <h3>Add User</h3>
+          <Paper elevation={3} sx={{ padding: 1, borderRadius: 3, backgroundColor: bgColor, mt: 1, mb: 5 }}>
+            <h3>Add Group</h3>
 
             <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
               {/* First TextField */}
@@ -452,7 +354,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   // Set desired width
                   height: "3rem",
                   '& .MuiInputBase-input': {
-                    color: 'white !important',
+                    color: textColor,
                   },
                   '& .MuiInputBase-root': {
                     height: "100%",             // Ensure input wrapper matches height
@@ -467,7 +369,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   backgroundColor: 'rgba(255, 255, 255, 0.16)',
                   '& input::placeholder': {
                     fontSize: '0.85rem',
-                    color: 'white !important',
+                    color: textColor,
                   },
                   boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
                   '&:hover': {
@@ -484,7 +386,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   // Set desired width
                   height: "3rem",
                   '& .MuiInputBase-input': {
-                    color: 'white !important',
+                    color: textColor,
                   },
                   '& .MuiInputBase-root': {
                     height: "100%",             // Ensure input wrapper matches height
@@ -499,7 +401,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   backgroundColor: 'rgba(255, 255, 255, 0.16)',
                   '& input::placeholder': {
                     fontSize: '0.85rem',
-                    color: 'white !important',
+                    color: textColor,
                   },
                   boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
                   '&:hover': {
@@ -508,7 +410,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                 }}
               />
             </Box>
-  
+
 
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 1 }}>
               <Button
@@ -517,13 +419,13 @@ const [anchorEl, setAnchorEl] = useState(null);
                   mt: 2,
                   width: '40%',
                   backgroundColor: '#00f0c0', // Set background color
-                  color: 'black', // Set text color to black
+                  color: textColor,// Set text color to black
 
                   fontWeight: 'bold',
                   borderRadius: '12px',
                   '&:hover': {
                     backgroundColor: bgColor, // Change background color on hover
-                    color: 'white !important',
+                    color: textColor,
                   },
                 }}
               >

@@ -78,9 +78,9 @@ function App() {
 
           <div style={{ marginLeft: "70px" }}>
             <Routes>
-              <Route path="/" element={<Navigate to="/Login" replace />} />
+              <Route path="/" element={<Navigate to="/login" replace />} />
               <Route
-                path="/Login"
+                path="/login"
                 element={<Login setIsLoggedIn={setIsLoggedIn} />}
               />
               <Route path="/Sop" element={<Sop darkMode={darkMode} />} />

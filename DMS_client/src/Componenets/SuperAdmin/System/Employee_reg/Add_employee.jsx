@@ -64,13 +64,18 @@ function Add_employee({ darkMode }) {
   });
 
   const Alert = [
-    "Name",
-    "Title",
-    "Title",
-    "Title",
-    "Title",
-    "Title",
-    "Title",
+    "Emp Name",
+    "Emp Contact",
+    "Emp Email",
+    "Emp DOJ",
+    "Group ID",
+    "Emp DOB",
+     "State",
+
+    // "State",
+    // "District",
+    // "Tehsil",
+    // "City",
     "Action",
   ];
 
@@ -86,7 +91,7 @@ function Add_employee({ darkMode }) {
       time: "Unknown",
       priority: "Unknown",
       initiatedBy: "Unknown",
-      status: "Unknown",
+     
     },
     {
       id: 2,
@@ -143,6 +148,7 @@ function Add_employee({ darkMode }) {
       initiatedBy: "Unknown",
       status: "Unknown",
     },
+   
   ];
 
   const handlePageChange = (event, value) => {
@@ -213,7 +219,7 @@ const [anchorEl, setAnchorEl] = useState(null);
       </Box>
       <Grid container spacing={2}>
         <Grid item xs={12} md={7}>
-          <Paper elevation={3} sx={{ padding: 3, borderRadius: 3, backgroundColor: bgColor, mt: 3, mb: 5 }}>
+          <Paper elevation={3} sx={{ padding: 3, borderRadius: 3, backgroundColor: bgColor, mt: 1, mb: 1 }}>
             <TableContainer>
               <Table>
                 <TableBody>
@@ -265,10 +271,6 @@ const [anchorEl, setAnchorEl] = useState(null);
                           </StyledCardContent>
                           <StyledCardContent sx={{ flex: 1, justifyContent: "center" }}>
                             <MoreHorizIcon
-                               onClick={(event) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-  }}
-
                               sx={{
                                 color: "#00f0c0",
                                 cursor: "pointer",
@@ -283,66 +285,7 @@ const [anchorEl, setAnchorEl] = useState(null);
               </Table>
             </TableContainer>
 
-            <Popper open={Boolean(anchorEl)} anchorEl={anchorEl} placement="bottom-end" transition>
-  {({ TransitionProps }) => (
-    <Fade {...TransitionProps} timeout={150}>
-      <Paper
-        sx={{
-          p: 2,
-          backgroundColor: "#1e293b",
-          color: "#fff",
-          borderRadius: 2,
-          minWidth: 180,
-          boxShadow: 3,
-        }}
-      >
-        <Typography variant="subtitle2" sx={{ mb: 1 }}>
-          Action
-        </Typography>
-        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}>
-          <Button
-            variant="contained"
-            size="small"
-            onClick={() => {
-              console.log("Edit clicked");
-              setAnchorEl(null);
-            }}
-            sx={{
-              backgroundColor: "#00C853",
-              textTransform: "none",
-              fontSize: "13px",
-              px: 2,
-              "&:hover": { backgroundColor: "#00B44A" },
-            }}
-          >
-            Edit
-          </Button>
-          <Button
-            variant="contained"
-            size="small"
-            onClick={() => {
-              console.log("Delete clicked");
-              setAnchorEl(null);
-            }}
-            sx={{
-              backgroundColor: "#D32F2F",
-              textTransform: "none",
-              fontSize: "13px",
-              px: 2,
-              "&:hover": { backgroundColor: "#C62828" },
-            }}
-          >
-            Delete
-          </Button>
-        </Box>
-      </Paper>
-    </Fade>
-  )}
-</Popper>
-
-
-
-
+          
             <Box
               display="flex"
               justifyContent="space-between"
@@ -352,7 +295,7 @@ const [anchorEl, setAnchorEl] = useState(null);
             >
               {/* Left: Records per page */}
               <Box display="flex" alignItems="center" gap={1}>
-                <Typography variant="body2" sx={{ color: "#ffffff" }}>
+                <Typography variant="body2" sx={{ color: textColor }}>
                   Records per page:
                 </Typography>
                 <Select
@@ -360,21 +303,22 @@ const [anchorEl, setAnchorEl] = useState(null);
                   onChange={handleRowsPerPageChange}
                   size="small"
                   variant="outlined"
-                  sx={{
+                 sx={{
                     fontSize: "13px",
-                    color: "#ffffff",
-                    borderColor: "#ffffff",
+                    color: textColor,
+                    borderColor: bgColor,
                     height: "30px",
                     minWidth: "70px",
                     backgroundColor: "transparent",
                     "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#ffffff",
+                      borderColor: textColor,
                     },
                     "& .MuiSvgIcon-root": {
-                      color: "#ffffff",
+                      color: textColor,
                     },
                   }}
                 >
+                
                   {[5, 10, 25, 50].map((option) => (
                     <MenuItem key={option} value={option}>
                       {option}
@@ -394,7 +338,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   display: "flex",
                   alignItems: "center",
                   gap: 2,
-                  color: "#ffffff",
+               color:textColor,
                   fontSize: "13px",
                   cursor: "default",
                 }}
@@ -433,8 +377,8 @@ const [anchorEl, setAnchorEl] = useState(null);
         </Grid>
 
         <Grid item xs={12} md={5}>
-          <Paper elevation={3} sx={{ padding: 1, borderRadius: 3, backgroundColor: bgColor, mt: 3, mb: 5 }}>
-            <h3>Add User</h3>
+          <Paper elevation={3} sx={{ padding: 1, borderRadius: 3, backgroundColor: bgColor, mt: 1, mb: 5 }}>
+            <h3>Add Employee</h3>
 
             <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
               {/* First TextField */}
@@ -446,7 +390,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   // Set desired width
                   height: "3rem",
                   '& .MuiInputBase-input': {
-                    color: 'white !important',
+                    color: textColor,
                   },
                   '& .MuiInputBase-root': {
                     height: "100%",             // Ensure input wrapper matches height
@@ -461,7 +405,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   backgroundColor: 'rgba(255, 255, 255, 0.16)',
                   '& input::placeholder': {
                     fontSize: '0.85rem',
-                    color: 'white !important',
+                    color: textColor,
                   },
                   boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
                   '&:hover': {
@@ -478,7 +422,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   // Set desired width
                   height: "3rem",
                   '& .MuiInputBase-input': {
-                    color: 'white !important',
+                    color: textColor,
                   },
                   '& .MuiInputBase-root': {
                     height: "100%",             // Ensure input wrapper matches height
@@ -493,7 +437,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   backgroundColor: 'rgba(255, 255, 255, 0.16)',
                   '& input::placeholder': {
                     fontSize: '0.85rem',
-                    color: 'white !important',
+                     color: textColor,
                   },
                   boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
                   '&:hover': {
@@ -512,7 +456,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   // Set desired width
                   height: "3rem",
                   '& .MuiInputBase-input': {
-                    color: 'white !important',
+                     color: textColor,
                   },
                   '& .MuiInputBase-root': {
                     height: "100%",             // Ensure input wrapper matches height
@@ -527,7 +471,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   backgroundColor: 'rgba(255, 255, 255, 0.16)',
                   '& input::placeholder': {
                     fontSize: '0.85rem',
-                    color: 'white !important',
+                    color: textColor,
                   },
                   boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
                   '&:hover': {
@@ -544,7 +488,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   // Set desired width
                   height: "3rem",
                   '& .MuiInputBase-input': {
-                    color: 'white !important',
+                    color: textColor,
                   },
                   '& .MuiInputBase-root': {
                     height: "100%",             // Ensure input wrapper matches height
@@ -559,7 +503,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   backgroundColor: 'rgba(255, 255, 255, 0.16)',
                   '& input::placeholder': {
                     fontSize: '0.85rem',
-                    color: 'white !important',
+                     color: textColor,
                   },
                   boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
                   '&:hover': {
@@ -578,7 +522,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   // Set desired width
                   height: "3rem",
                   '& .MuiInputBase-input': {
-                    color: 'white !important',
+                    color: textColor,
                   },
                   '& .MuiInputBase-root': {
                     height: "100%",             // Ensure input wrapper matches height
@@ -593,7 +537,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   backgroundColor: 'rgba(255, 255, 255, 0.16)',
                   '& input::placeholder': {
                     fontSize: '0.85rem',
-                    color: 'white !important',
+                    color: textColor,
                   },
                   boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
                   '&:hover': {
@@ -608,12 +552,12 @@ const [anchorEl, setAnchorEl] = useState(null);
                 placeholder="Select State"
                 defaultValue=""
                 inputProps={{
-                  "aria-label": "Select Name",
+                  "aria-label": "Select State",
                 }}
                 sx={{
                   height: '3rem',
                   '& .MuiSelect-root': {
-                    color: 'white !important',
+                    color: textColor,
                   },
                   borderRadius: '12px',
                   '& fieldset': {
@@ -630,7 +574,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   backgroundColor: 'rgba(255, 255, 255, 0.16)',
                   '& input::placeholder': {
                     fontSize: '0.85rem',
-                    color: 'white ',
+                    color: textColor,
                   },
                   '& .MuiSvgIcon-root': {
                     color: 'white !important', // Dropdown icon color
@@ -639,7 +583,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                 IconComponent={KeyboardArrowDownIcon} // Use outlined dropdown arrow
               >
                 <MenuItem value="" disabled>
-                  Select Option
+                  Select State
                 </MenuItem>
                 <MenuItem value="Option 1">Option 1</MenuItem>
                 <MenuItem value="Option 2">Option 2</MenuItem>
@@ -661,7 +605,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                 sx={{
                   height: '3rem',
                   '& .MuiSelect-root': {
-                    color: 'white !important',
+                    color: textColor,
                   },
                   borderRadius: '12px',
                   '& fieldset': {
@@ -678,16 +622,16 @@ const [anchorEl, setAnchorEl] = useState(null);
                   backgroundColor: 'rgba(255, 255, 255, 0.16)',
                   '& input::placeholder': {
                     fontSize: '0.85rem',
-                    color: 'white ',
+                    color: textColor,
                   },
                   '& .MuiSvgIcon-root': {
-                    color: 'white !important', // Dropdown icon color
+                     color: textColor,// Dropdown icon color
                   },
                 }}
                 IconComponent={KeyboardArrowDownIcon} // Use outlined dropdown arrow
               >
                 <MenuItem value="" disabled>
-                  Select Option
+                  Select District
                 </MenuItem>
                 <MenuItem value="Option 1">Option 1</MenuItem>
                 <MenuItem value="Option 2">Option 2</MenuItem>
@@ -707,7 +651,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                 sx={{
                   height: '3rem',
                   '& .MuiSelect-root': {
-                    color: 'white !important',
+                    color: textColor,
                   },
                   borderRadius: '12px',
                   '& fieldset': {
@@ -722,13 +666,13 @@ const [anchorEl, setAnchorEl] = useState(null);
                     boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)', // Increase shadow on hover
                   },
                   '& .MuiSvgIcon-root': {
-                    color: 'white !important', // Dropdown icon color
+                    color: textColor, // Dropdown icon color
                   },
                 }}
                 IconComponent={KeyboardArrowDownIcon} // Use outlined dropdown arrow
               >
                 <MenuItem value="" disabled>
-                  Select Option
+                  Select Tehsil
                 </MenuItem>
                 <MenuItem value="Option 1">Option 1</MenuItem>
                 <MenuItem value="Option 2">Option 2</MenuItem>
@@ -750,7 +694,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                 sx={{
                   height: '3rem',
                   '& .MuiSelect-root': {
-                    color: 'white !important',
+                   color: textColor,
                   },
                   borderRadius: '12px',
                   '& fieldset': {
@@ -764,19 +708,19 @@ const [anchorEl, setAnchorEl] = useState(null);
                   '&:hover': {
                     boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)', // Increase shadow on hover
                   },
-                  backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                
                   '& input::placeholder': {
                     fontSize: '0.85rem',
-                    color: 'white ',
+                     color: textColor,
                   },
                   '& .MuiSvgIcon-root': {
-                    color: 'white !important', // Dropdown icon color
+                     color: textColor,// Dropdown icon color
                   },
                 }}
                 IconComponent={KeyboardArrowDownIcon} // Use outlined dropdown arrow
               >
                 <MenuItem value="" disabled>
-                  Select Option
+                  Select City
                 </MenuItem>
                 <MenuItem value="Option 1">Option 1</MenuItem>
                 <MenuItem value="Option 2">Option 2</MenuItem>
@@ -794,7 +738,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   // Set desired width
                   height: "3rem",
                   '& .MuiInputBase-input': {
-                    color: 'white !important',
+                    color: textColor,
                   },
                   '& .MuiInputBase-root': {
                     height: "100%",             // Ensure input wrapper matches height
@@ -809,7 +753,7 @@ const [anchorEl, setAnchorEl] = useState(null);
                   backgroundColor: 'rgba(255, 255, 255, 0.16)',
                   '& input::placeholder': {
                     fontSize: '0.85rem',
-                    color: 'white !important',
+                    color: textColor,
                   },
                   boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
                   '&:hover': {
@@ -824,16 +768,16 @@ const [anchorEl, setAnchorEl] = useState(null);
               <Button
                 variant="contained"
                 sx={{
-                  mt: 2,
+              
                   width: '40%',
                   backgroundColor: '#00f0c0', // Set background color
-                  color: 'black', // Set text color to black
+                   color: textColor,// Set text color to black
 
                   fontWeight: 'bold',
                   borderRadius: '12px',
                   '&:hover': {
                     backgroundColor: bgColor, // Change background color on hover
-                    color: 'white !important',
+                    color: textColor,
                   },
                 }}
               >
