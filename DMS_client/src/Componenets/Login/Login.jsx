@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, TextField, Button, useMediaQuery, IconButton } from '@mui/material';
+import { Box, Typography, TextField, Button, useMediaQuery, IconButton, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import loginBg from '../../assets/Bg_login1.png';
 import Spero from '../../assets/spero1.png';
@@ -7,6 +7,11 @@ import { useNavigate } from 'react-router-dom';
 import CachedIcon from '@mui/icons-material/Cached';
 
 function Login() {
+
+
+    const port = import.meta.env.VITE_APP_API_KEY;
+    // console.log(port,'port');
+    
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const navigate = useNavigate();
@@ -35,7 +40,7 @@ function Login() {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
-            const response = await fetch('http://127.0.0.1:8000/admin_web/login/captcha/', {
+            const response = await fetch(`${port}/admin_web/login/captcha/`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -53,7 +58,8 @@ function Login() {
                 // Make sure the URL is properly formatted with the base URL
                 const fullImageUrl = data.captcha_image_url.startsWith('http')
                     ? data.captcha_image_url
-                    : `http://127.0.0.1:8000${data.captcha_image_url}`;
+                    : `${port}${data.captcha_image_url}`;
+
                 setCaptchaImageUrl(fullImageUrl);
                 console.log('Captcha image URL:', fullImageUrl);
                 // Reset captcha value when new captcha is fetched
@@ -85,35 +91,35 @@ function Login() {
         setUsernameError('');
         setPasswordError('');
         setCaptchaTextError('');
-    
+
         let hasError = false;
-    
+
         if (!emp_username) {
             setUsernameError('Please enter User ID');
             hasError = true;
         }
-    
+
         if (!password) {
             setPasswordError('Please enter Password');
             hasError = true;
         }
-    
+
         if (captchaError || (!captchaValue && captchaKey)) {
             setCaptchaTextError('Please enter valid captcha text');
             hasError = true;
         }
-    
+
         if (hasError) {
             return;
         }
-    
+
         try {
             setLoading(true);
-    
+
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000);
-    
-            const response = await fetch('http://127.0.0.1:8000/admin_web/login/', {
+
+            const response = await fetch(`${port}/admin_web/login/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -126,12 +132,12 @@ function Login() {
                 }),
                 signal: controller.signal,
             });
-    
+
             clearTimeout(timeoutId);
-    
+
             const data = await response.json();
             console.log('Login response:', data);
-    
+
             if (!response.ok) {
                 // Handle DRF-style errors first
                 if (data.errors?.non_field_errors?.[0]?.toLowerCase().includes('captcha')) {
@@ -147,18 +153,37 @@ function Login() {
                 }
                 return;
             }
-    
+
+            // Handle successful login
+            // if (data.token) {
+            //     localStorage.setItem('token', data.token.access); // or store full token if needed
+            //     localStorage.setItem('user', JSON.stringify(data.token.colleague)); // ✅ Store user info
+            //     navigate('/alert-panel');
+
+
+            // }
             // Handle successful login
             if (data.token) {
-                localStorage.setItem('token', data.token);
+                localStorage.setItem('access_token', data.token.access);
+                localStorage.setItem('refresh_token', data.token.refresh);
+                localStorage.setItem('user', JSON.stringify(data.token.colleague));
+                localStorage.setItem('user_group', data.token.user_group);
+
+                // 🔍 Console logs
+                console.log('Access Token:', data.token.access);
+                console.log('Refresh Token:', data.token.refresh);
+                console.log('User Group:', data.token.user_group);
+                console.log('User Info:', data.token.colleague);
+
                 navigate('/alert-panel');
-                return;
             }
-             else {
+
+
+            else {
                 console.error('Login response did not contain token');
                 setPasswordError('Login failed. Please try again.');
             }
-    
+
         } catch (err) {
             console.error('Login error:', err);
             if (err.name === 'AbortError') {
@@ -172,8 +197,21 @@ function Login() {
             setLoading(false);
         }
     };
-    
-    
+
+
+    const [openForgotDialog, setOpenForgotDialog] = useState(false);
+    const [username, setUsername] = useState('');
+    const [contact, setContact] = useState(''); // mobile no or email
+
+    const handleForgotPasswordSubmit = () => {
+        // Call your API or validation logic here
+        console.log("Username:", username);
+        console.log("Contact:", contact);
+        // Close dialog after submit
+        setOpenForgotDialog(false);
+    };
+
+
 
     return (
         <Box sx={{ height: '100vh', width: '100%', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: isSmallScreen ? 'column' : 'row' }}>
@@ -395,15 +433,15 @@ function Login() {
 
                             {/* Captcha Error */}
                             {captchaTextError && (
-    <Typography sx={{
-        color: '#ff1744',
-        fontSize: '0.75rem',
-        mt: 0.5,
-        ml: 0.5
-    }}>
-        {captchaTextError}
-    </Typography>
-)}
+                                <Typography sx={{
+                                    color: '#ff1744',
+                                    fontSize: '0.75rem',
+                                    mt: 0.5,
+                                    ml: 0.5
+                                }}>
+                                    {captchaTextError}
+                                </Typography>
+                            )}
 
                         </Box>
 
@@ -428,6 +466,28 @@ function Login() {
                         >
                             {loading ? 'Logging in...' : 'Login'}
                         </Button>
+                        <Box
+                            sx={{
+                                width: '100%',
+                                mt: 2,
+                                display: 'flex',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <Typography
+                                component="span"
+                                onClick={() => setOpenForgotDialog(true)}
+                                sx={{
+                                    textDecoration: 'underline',
+                                    color: 'primary.main',
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                Forgot Password?
+                            </Typography>
+                        </Box>
+
+
 
                         <Box
                             component="img"
@@ -439,7 +499,99 @@ function Login() {
                             }}
                         />
                     </Box>
+
+
                 </Box>
+                <Dialog open={openForgotDialog} onClose={() => setOpenForgotDialog(false)}
+                    PaperProps={{
+                        sx: {
+                            background: 'radial-gradient(6035.71% 72.44% at 0% 50%, rgba(95, 236, 200, 0.7) 0%, rgba(95, 236, 200, 0.035) 100%)',
+                            backdropFilter: 'blur(10px)',
+                            borderRadius: '12px',
+                            padding: 2,
+                        }
+                    }}>
+                    <DialogTitle>Reset Password</DialogTitle>
+                    <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
+                        <Typography sx={{ color: 'white', fontWeight: 500, fontSize: '12px' }}>
+                            Enter User Name
+                        </Typography>
+
+                        <TextField
+
+                            fullWidth
+                            variant="outlined"
+                            placeholder="Enter User Name"
+                            type="name"
+                            InputLabelProps={{ shrink: false }}
+                            sx={{
+                                '& .MuiInputBase-input': {
+                                    color: 'black',
+                                },
+                                borderRadius: '12px',
+                                '& fieldset': {
+                                    borderRadius: '8px',
+                                },
+                                backgroundColor: 'white',
+                                '& input::placeholder': {
+                                    fontSize: '0.75rem',
+                                    color: '#9e9e9e',
+                                },
+                            }}
+                        />
+
+                        <Typography sx={{ color: 'white', fontWeight: 500, fontSize: '12px' }}>
+                            Email or Mobile Number
+                        </Typography>
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            placeholder="Email or Mobile Number"
+                            onChange={(e) => setContact(e.target.value)}
+                            InputLabelProps={{ shrink: false }}
+                            sx={{
+                                '& .MuiInputBase-input': {
+                                    color: 'black',
+                                },
+                                borderRadius: '12px',
+                                '& fieldset': {
+                                    borderRadius: '8px',
+                                },
+                                backgroundColor: 'white',
+                                '& input::placeholder': {
+                                    fontSize: '0.75rem',
+                                    color: '#9e9e9e',
+                                },
+                            }}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setOpenForgotDialog(false)} sx={{
+                            mt: 1,
+                            width: '50%',
+                            // backgroundColor: '#101329',
+                            color: '#fff',
+                            borderRadius: '30px',
+                            textTransform: 'none',
+                            fontWeight: 'bold',
+
+                        }}>Cancel</Button>
+                        <Button variant="contained" onClick={handleForgotPasswordSubmit} sx={{
+                            mt: 1,
+                            width: '50%',
+                            backgroundColor: '#101329',
+                            color: '#fff',
+                            borderRadius: '30px',
+                            textTransform: 'none',
+                            fontWeight: 'bold',
+                            border: loading ? '2px solid #101329' : 'none',
+                            '&:hover': {
+                                backgroundColor: '#101329',
+                            },
+                        }}>Submit</Button>
+                    </DialogActions>
+                </Dialog>
+
             </Box>
         </Box>
     );
