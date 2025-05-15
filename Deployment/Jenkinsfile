@@ -18,6 +18,7 @@ pipeline {
                     sh '''
                         if [ ! -d "${TARGET_DIR}" ]; then
                             echo "Directory does not exist. Creating ${TARGET_DIR}..."
+                            sudo chown -R jenkins:jenkins "${TARGET_DIR}"
                             mkdir -p "${TARGET_DIR}"
                             chmod -R 775 "${TARGET_DIR}"
                         else
