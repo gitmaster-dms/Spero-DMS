@@ -45,14 +45,20 @@ pipeline {
                             echo "Repository already exists. Resetting and pulling latest changes..."
                             def resetStatus = sh(
                                 script: """
+                                    echo "Running Git Reset Steps..."
                                     git config --global --add safe.directory \$(pwd)
+                                    echo "Fetching branch: ${GIT_BRANCH}"
                                     git fetch origin ${GIT_BRANCH}
+                                    echo "Resetting to origin/${GIT_BRANCH}"
                                     git reset --hard origin/${GIT_BRANCH}
+                                    echo "Cleaning untracked files (excluding vvenv/)..."
                                     git clean -fd -e vvenv/
                                 """,
                                 returnStatus: true
                             )
+
                             if (resetStatus != 0) {
+                                echo "Git reset or clean failed with status: ${resetStatus}"
                                 error("Git reset/pull failed! Exiting pipeline.")
                             }
                         }
