@@ -1,5 +1,5 @@
 // src/App.js
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
@@ -11,9 +11,23 @@ import AppRoutes from "./routes/AppRoutes";
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userGroup, setUserGroup] = useState(null);
   const location = useLocation();
-  const userGroup = localStorage.getItem("user_group");
+
+  const isAuthRoute = location.pathname === "/login";
+
+  // Load dark mode & user group from localStorage
+  useEffect(() => {
+    const savedMode = localStorage.getItem("dark_mode");
+    const storedGroup = localStorage.getItem("user_group");
+    if (savedMode) setDarkMode(savedMode === "true");
+    if (storedGroup) setUserGroup(storedGroup);
+  }, []);
+
+  // Save dark mode preference
+  useEffect(() => {
+    localStorage.setItem("dark_mode", darkMode);
+  }, [darkMode]);
 
   const theme = useMemo(
     () =>
@@ -24,8 +38,6 @@ function App() {
       }),
     [darkMode]
   );
-
-  const isAuthRoute = location.pathname === "/login";
 
   return (
     <ThemeProvider theme={theme}>
@@ -45,16 +57,15 @@ function App() {
                 darkMode={darkMode}
                 toggleDarkMode={() => setDarkMode((prev) => !prev)}
               />
-              {userGroup === "2" ? (
-                <Sidebar darkMode={darkMode} />
-              ) : (
-                <Departmentsidebar darkMode={darkMode} />
-              )}
+
+              {/* 👇 Correct Sidebar logic */}
+              {userGroup === "2" && <Sidebar darkMode={darkMode} />}
+              {userGroup === "1" && <Departmentsidebar darkMode={darkMode} />}
             </>
           )}
 
           <div style={{ marginLeft: "70px" }}>
-            <AppRoutes darkMode={darkMode} setIsLoggedIn={setIsLoggedIn} />
+            <AppRoutes darkMode={darkMode} />
           </div>
 
           {!isAuthRoute && <Footer darkMode={darkMode} />}
