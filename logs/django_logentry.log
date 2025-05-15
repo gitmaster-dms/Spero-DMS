@@ -1,0 +1,6 @@
+WARNING 2025-05-15 13:08:25,559 log Bad Request: /admin_web/logout/
+WARNING 2025-05-15 13:08:25,559 basehttp "POST //admin_web/logout/ HTTP/1.1" 400 37
+WARNING 2025-05-15 13:10:13,401 log Bad Request: /admin_web/logout/
+WARNING 2025-05-15 13:10:13,402 basehttp "POST //admin_web/logout/ HTTP/1.1" 400 37
+WARNING 2025-05-15 13:11:16,052 log Bad Request: /admin_web/logout/
+WARNING 2025-05-15 13:11:16,052 basehttp "POST //admin_web/logout/ HTTP/1.1" 400 37
