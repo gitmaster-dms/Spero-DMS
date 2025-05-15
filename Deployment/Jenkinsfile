@@ -39,33 +39,33 @@ pipeline {
                                 returnStatus: true
                             )
                             if (cloneStatus != 0) {
+                                echo "Git clone failed with status: ${cloneStatus}"
+                                sh "git clone -b ${GIT_BRANCH} ${GIT_REPO_URL} ." // run again to see full error
                                 error("Git clone failed! Exiting pipeline.")
                             }
                         } else {
                             echo "Repository already exists. Resetting and pulling latest changes..."
-                            def resetStatus = sh(
-                                script: """
-                                    echo "Running Git Reset Steps..."
-                                    git config --global --add safe.directory \$(pwd)
-                                    echo "Fetching branch: ${GIT_BRANCH}"
-                                    git fetch origin ${GIT_BRANCH}
-                                    echo "Resetting to origin/${GIT_BRANCH}"
-                                    git reset --hard origin/${GIT_BRANCH}
-                                    echo "Cleaning untracked files (excluding vvenv/)..."
-                                    git clean -fd -e vvenv/
-                                """,
-                                returnStatus: true
-                            )
 
-                            if (resetStatus != 0) {
-                                echo "Git reset or clean failed with status: ${resetStatus}"
-                                error("Git reset/pull failed! Exiting pipeline.")
-                            }
+                            // Print debug values
+                            sh "echo GIT_BRANCH=${GIT_BRANCH}; echo GIT_REPO_URL=${GIT_REPO_URL}; echo TARGET_DIR=${TARGET_DIR}; pwd"
+
+                            // Run without returnStatus to let Jenkins show the actual error
+                            sh """
+                                echo "Running Git Reset Steps..."
+                                git config --global --add safe.directory \$(pwd)
+                                echo "Fetching branch: ${GIT_BRANCH}"
+                                git fetch origin ${GIT_BRANCH}
+                                echo "Resetting to origin/${GIT_BRANCH}"
+                                git reset --hard origin/${GIT_BRANCH}
+                                echo "Cleaning untracked files (excluding vvenv/)..."
+                                git clean -fd -e vvenv/
+                            """
                         }
                     }
                 }
             }
         }
+
 
 
         stage('Check Files') {
