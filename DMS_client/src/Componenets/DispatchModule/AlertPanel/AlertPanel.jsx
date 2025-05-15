@@ -6,6 +6,8 @@ import {
 import { styled } from '@mui/system';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import MapView from './MapView';
+
 
 const EnquiryCard = styled('div')({
     display: 'flex',
@@ -246,7 +248,7 @@ const AlertPanel = ({ darkMode }) => {
                         border: '1px solid #ffeeba'
                     }}>
                         <Typography variant="h6" sx={{ color: '#856404' }}>
-                            Hey! Welcome to the Alert Panel!
+                            <MapView /> 
                         </Typography>
                     </Box>
                 </Grid>

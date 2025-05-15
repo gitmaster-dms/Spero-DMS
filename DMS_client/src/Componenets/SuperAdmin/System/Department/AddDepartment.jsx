@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import {
   Paper,
   Grid,
@@ -18,14 +18,28 @@ import {
   TableRow,
   IconButton,
   Modal,
+  InputAdornment,
+  Select,
+  Popover,
+  Tooltip,
 } from "@mui/material";
-import { Search, Visibility, AddCircleOutline } from "@mui/icons-material";
+import {
+  Search,
+  Visibility,
+  AddCircleOutline,
+  EditNotifications,
+  DeleteOutline,
+  EditOutlined,
+} from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 const EnquiryCard = styled("div")(() => ({
   display: "flex",
@@ -38,6 +52,21 @@ const EnquiryCard = styled("div")(() => ({
   height: "40px",
 }));
 
+const fontsTableBody = {
+  fontFamily: "Roboto",
+  fontWeight: 400,
+  fontSize: 13,
+  letterSpacing: 0,
+  textAlign: "center",
+};
+
+const fontsTableHeading = {
+  fontFamily: "Roboto",
+  fontWeight: 500,
+  fontSize: 14,
+  letterSpacing: 0,
+  textAlign: "center",
+};
 const EnquiryCardBody = styled("tr")(({ theme, status }) => ({
   display: "flex",
   alignItems: "center",
@@ -66,51 +95,13 @@ const StyledCardContent = styled("td")({
   display: "flex",
   alignItems: "center",
 });
-const alertData = [
-  {
-    id: 1,
-    incidentId: "2023052400004",
-    eventDateTime: "4-04-2025 13:44:07",
-    location: "North Goa",
-    alertType: "Unknown",
-    trigger: "Triggered",
-    status: "65%",
-  },
-  {
-    id: 2,
-    incidentId: "2023052400005",
-    eventDateTime: "4-04-2025 13:44:07",
-    location: "North Goa",
-    alertType: "Unknown",
-    trigger: "Trigger",
-    status: "10%",
-  },
-  {
-    id: 3,
-    incidentId: "2023052400005",
-    eventDateTime: "4-04-2025 13:44:07",
-    location: "North Goa",
-    alertType: "Unknown",
-    trigger: "Trigger",
-    status: "30%",
-  },
-  {
-    id: 4,
-    incidentId: "2023052400005",
-    eventDateTime: "4-04-2025 13:44:07",
-    location: "North Goa",
-    alertType: "Unknown",
-    trigger: "Trigger",
-    status: "80%",
-  },
-];
 
 const modalStyle = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  backgroundColor: "red",
+  backgroundColor: "white",
   color: "black",
   boxShadow: 24,
   p: 4,
@@ -119,23 +110,208 @@ const modalStyle = {
 
 const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const handleOpen = () => setModalOpen(true);
-  const handleClose = () => setModalOpen(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const open = Boolean(anchorEl);
+  const handleOpen = (event, item) => {
+    setAnchorEl(event.currentTarget);
+    // Optionally store item in state if needed
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const navigate = useNavigate();
+  const [disasterId, selectedDisasterId] = useState("");
+  const [disasterName, setSelectedDisasterId] = useState("");
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const alertData2 = [
+    {
+      id: 1,
+      incidentId: "2023052400004",
+      eventDateTime: "4-04-2025 13:44:07",
+      location: "North Goa",
+      alertType: "Unknown",
+      trigger: "Triggered",
+      status: "65%",
+    },
+    {
+      id: 2,
+      incidentId: "2023052400005",
+      eventDateTime: "4-04-2025 13:44:07",
+      location: "North Goa",
+      alertType: "Unknown",
+      trigger: "Trigger",
+      status: "10%",
+    },
+    {
+      id: 3,
+      incidentId: "2023052400005",
+      eventDateTime: "4-04-2025 13:44:07",
+      location: "North Goa",
+      alertType: "Unknown",
+      trigger: "Trigger",
+      status: "30%",
+    },
+    {
+      id: 4,
+      incidentId: "2023052400005",
+      eventDateTime: "4-04-2025 13:44:07",
+      location: "North Goa",
+      alertType: "Unknown",
+      trigger: "Trigger",
+      status: "80%",
+    },
+  ];
+
+  // Sliced data for current page
+
+  const [alertData, setAlertData] = useState([
+    {
+      departmentName: "000095643228282",
+      disasterId: "D-123",
+      state: "Maharashtra",
+      district: "Pune",
+      tehsil: "Talegaon",
+      city: "Lohgaon",
+    },
+    {
+      departmentName: "000095643228282",
+      disasterId: "D-123",
+      state: "Maharashtra",
+      district: "Pune",
+      tehsil: "Talegaon",
+      city: "Lohgaon",
+    },
+    {
+      departmentName: "000095643228282",
+      disasterId: "D-123",
+      state: "Maharashtra",
+      district: "Pune",
+      tehsil: "Talegaon",
+      city: "Lohgaon",
+    },
+    {
+      departmentName: "000095643228282",
+      disasterId: "D-123",
+      state: "Maharashtra",
+      district: "Pune",
+      tehsil: "Talegaon",
+      city: "Lohgaon",
+    },
+    {
+      departmentName: "000095643228282",
+      disasterId: "D-123",
+      state: "Maharashtra",
+      district: "Pune",
+      tehsil: "Talegaon",
+      city: "Lohgaon",
+    },
+    {
+      departmentName: "000095643228282",
+      disasterId: "D-123",
+      state: "Maharashtra",
+      district: "Pune",
+      tehsil: "Talegaon",
+      city: "Lohgaon",
+    },
+    {
+      departmentName: "0000956432282",
+      disasterId: "D-123",
+      state: "Maharashtra",
+      district: "Pune",
+      tehsil: "Talegaon",
+      city: "Lohgaon",
+    },
+    // Add more dummy objects...
+  ]);
+  const paginatedData = useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    return alertData.slice(start, end);
+  }, [page, rowsPerPage, alertData]);
 
   const labelColor = darkMode ? "#5FECC8" : "#1976d2";
   const borderColor = darkMode ? "#7F7F7F" : "#ccc";
   const fontFamily = "Roboto, sans-serif";
   const textColor = darkMode ? "#ffffff" : "#000000";
   const bgColor = darkMode ? "#0a1929" : "#ffffff";
+  const TableDataColor = darkMode
+    ? "rgba(0, 0, 0, 0.04)"
+    : "rgba(255, 255, 255, 0.16)";
+
+  const inputBgColor = darkMode
+    ? "rgba(255, 255, 255, 0.16)"
+    : "rgba(0, 0, 0, 0.04)";
+
+  const disasterOptions = [
+    { id: 1, name: "Flood" },
+    { id: 2, name: "Earthquake" },
+    { id: 3, name: "Fire" },
+  ];
+
+  const inputStyle = {
+    height: "3rem",
+    "& .MuiInputBase-input": {
+      color: `${textColor} !important`,
+    },
+    "& .MuiInputBase-root": {
+      height: "100%",
+      padding: "0 12px",
+      display: "flex",
+      alignItems: "center",
+    },
+    borderRadius: "12px",
+    "& fieldset": {
+      border: "none",
+    },
+    backgroundColor: inputBgColor,
+    "& input::placeholder": {
+      fontSize: "0.85rem",
+      color: `${textColor} !important`,
+    },
+    boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
+    "&:hover": {
+      boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)",
+    },
+  };
+
+  const textfieldInputfonts = {
+    fontFamily: "Roboto",
+    fontWeight: 400,
+    fontSize: "14px",
+    lineHeight: "25.2px",
+    letterSpacing: 0,
+    verticalAlign: "middle",
+    backgroundColor: inputStyle, // Optional: Add background for better visibility
+    color: "#000", // Optional: Set text color
+    "& .MuiSelect-select": {
+      paddingY: "8px", // Optional: adjusts vertical padding
+    },
+    "& fieldset": {
+      borderColor: "#ccc", // Optional: custom border
+    },
+  };
+
+  const selectStyle = {
+    ...inputStyle,
+    "& .MuiSelect-select": {
+      fontSize: "0.85rem",
+      color: textColor,
+    },
+    "& .MuiSelect-icon": {
+      color: textColor,
+    },
+  };
 
   return (
     <Box sx={{ p: 2 }}>
       <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
         <Box
           sx={{
-            width: 35,
-            height: 35,
+            width: 30,
+            height: 30,
             borderRadius: "50%",
             backgroundColor: "#5FECC8",
             display: "flex",
@@ -144,7 +320,9 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
             mr: 2,
           }}
         >
-          <ArrowBackIcon sx={{ color: "#000000" }} />
+          <ArrowBackIosIcon
+            sx={{ fontSize: 20, color: darkMode ? "#fff" : "#000" }}
+          />{" "}
         </Box>
         <Box
           sx={{
@@ -158,20 +336,43 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
             {/* <AccountCircleIcon sx={{ color: labelColor }} /> */}
             <Typography
               variant="h6"
-              sx={{ color: labelColor, fontWeight: 600, fontFamily }}
+              sx={{
+                color: labelColor,
+                fontWeight: 600,
+                fontFamily,
+                fontSize: 16,
+              }}
             >
               Add Employee
             </Typography>
             <TextField
-              placeholder="Search your location"
-              variant="outlined"
-              fullWidth
+              // variant="outlined"
+              size="small"
+              placeholder="Search"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search sx={{ color: "gray", fontSize: 18 }} />
+                  </InputAdornment>
+                ),
+              }}
               sx={{
-                input: { color: textColor },
-                label: { color: textColor },
+                width: "200px",
+                ml: 5,
                 "& .MuiOutlinedInput-root": {
-                  backgroundColor: darkMode ? "#ffffff29" : "#f4f4f4",
-                  borderRadius: "30px",
+                  borderRadius: "25px",
+                  backgroundColor: darkMode ? "#1e293b" : "#fff",
+                  color: darkMode ? "#fff" : "#000",
+                  px: 1,
+                  py: 0.2,
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: darkMode ? "#444" : "#ccc",
+                },
+                "& input": {
+                  color: darkMode ? "#fff" : "#000",
+                  padding: "6px 8px",
+                  fontSize: "13px",
                 },
               }}
             />
@@ -205,28 +406,49 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                       }}
                     >
                       <StyledCardContent
-                        sx={{ flex: 0.3, borderRight: "1px solid black" }}
+                        sx={{
+                          flex: 0.3,
+                          borderRight: "1px solid black",
+                          justifyContent: "center",
+                        }}
                       >
-                        <Typography variant="subtitle2">Sr. No</Typography>
+                        <Typography variant="subtitle2" sx={fontsTableHeading}>
+                          Sr. No
+                        </Typography>
                       </StyledCardContent>
                       <StyledCardContent
-                        sx={{ flex: 1.3, borderRight: "1px solid black" }}
+                        sx={{
+                          flex: 1.2,
+                          borderRight: "1px solid black",
+                          justifyContent: "center",
+                          ...fontsTableHeading,
+                        }}
                       >
                         <Typography variant="subtitle2">
                           Department Name
                         </Typography>
                       </StyledCardContent>
                       <StyledCardContent
-                        sx={{ flex: 1.2, borderRight: "1px solid black" }}
+                        sx={{
+                          flex: 1.2,
+                          borderRight: "1px solid black",
+                          justifyContent: "center",
+                          ...fontsTableHeading,
+                        }}
                       >
                         <Typography variant="subtitle2">Disaster ID</Typography>
                       </StyledCardContent>
                       <StyledCardContent
-                        sx={{ flex: 1, borderRight: "1px solid black" }}
+                        sx={{
+                          flex: 1,
+                          borderRight: "1px solid black",
+                          justifyContent: "center",
+                          ...fontsTableHeading,
+                        }}
                       >
                         <Typography variant="subtitle2">State</Typography>
                       </StyledCardContent>
-                      <StyledCardContent
+                      {/* <StyledCardContent
                         sx={{ flex: 1, borderRight: "1px solid black" }}
                       >
                         <Typography variant="subtitle2">District</Typography>
@@ -235,18 +457,23 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                         sx={{ flex: 1, borderRight: "1px solid black" }}
                       >
                         <Typography variant="subtitle2">Tehsil</Typography>
-                      </StyledCardContent>
+                      </StyledCardContent> */}
                       <StyledCardContent
                         sx={{
                           flex: 1,
-                          textAlign: "center",
+                          justifyContent: "center",
                           borderRight: "1px solid black",
+                          ...fontsTableHeading,
                         }}
                       >
                         <Typography variant="subtitle2">City</Typography>
                       </StyledCardContent>
                       <StyledCardContent
-                        sx={{ flex: 0.8, textAlign: "center" }}
+                        sx={{
+                          flex: 0.8,
+                          justifyContent: "center",
+                          ...fontsTableHeading,
+                        }}
                       >
                         <Typography variant="subtitle2">Actions</Typography>
                       </StyledCardContent>
@@ -255,64 +482,265 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                 </TableHead>
 
                 <TableBody>
-                  {alertData.map((item, index) => (
-                    <EnquiryCardBody
-                      key={index}
-                      sx={{
-                        backgroundColor: bgColor,
-                        p: 2,
-                        borderRadius: 2,
-                        color: textColor,
-                        display: "flex",
-                        width: "100%",
-                        mb: 1,
-                      }}
-                    >
-                      <StyledCardContent sx={{ flex: 0.3 }}>
-                        <Typography variant="subtitle2">{index + 1}</Typography>
-                      </StyledCardContent>
-                      <StyledCardContent sx={{ flex: 1.5 }}>
-                        <Typography variant="subtitle2">
-                          Mock Details
-                        </Typography>
-                      </StyledCardContent>
-                      <StyledCardContent sx={{ flex: 1.1 }}>
-                        <Typography variant="subtitle2">+1222222</Typography>
-                      </StyledCardContent>
-                      <StyledCardContent sx={{ flex: 1 }}>
-                        <Typography variant="subtitle2">Maharashtra</Typography>
-                      </StyledCardContent>
-                      <StyledCardContent sx={{ flex:0.8 }}>
-                        <Typography variant="subtitle2">Pune</Typography>
-                      </StyledCardContent>
-                      <StyledCardContent sx={{ flex: 1.3 }}>
-                        <Typography variant="subtitle2">Talegaon</Typography>
-                      </StyledCardContent>
-                      <StyledCardContent sx={{ flex: 1.3}}>
-                        <Typography variant="subtitle2">Lohgaon</Typography>
-                      </StyledCardContent>
-                      <StyledCardContent
-                        sx={{ flex: 0.8, textAlign: "center" }}
-                      >
-                        <IconButton onClick={handleOpen}>
-                          <VisibilityIcon sx={{ color: labelColor }} />
-                        </IconButton>
-                      </StyledCardContent>
-                    </EnquiryCardBody>
-                  ))}
+                  {paginatedData.length === 0 ? (
+                    <Box p={2}>
+                      <Typography align="center" color="textSecondary">
+                        No tasks available.
+                      </Typography>
+                    </Box>
+                  ) : (
+                    paginatedData
+                      .slice((page - 1) * rowsPerPage, page * rowsPerPage)
+                      .map((item, index) => (
+                        <EnquiryCardBody
+                          key={index}
+                          sx={{
+                            backgroundColor: inputBgColor,
+                            p: 2,
+                            borderRadius: 2,
+                            color: textColor,
+                            display: "flex",
+                            width: "100%",
+                            mb: 1,
+                          }}
+                        >
+                          <StyledCardContent
+                            sx={{ flex: 0.3, justifyContent: "center" }}
+                          >
+                            <Typography variant="subtitle2" sx={fontsTableBody}>
+                              {(page - 1) * rowsPerPage + index + 1}
+                            </Typography>
+                          </StyledCardContent>
+                          <StyledCardContent
+                            sx={{
+                              flex: 1.8,
+                              justifyContent: "center",
+                              ...fontsTableBody,
+                            }}
+                          >
+                            <Typography variant="subtitle2">
+                              {item.departmentName}
+                            </Typography>
+                          </StyledCardContent>
+                          <StyledCardContent
+                            sx={{
+                              flex: 1.5,
+                              justifyContent: "center",
+                              ...fontsTableBody,
+                            }}
+                          >
+                            <Typography variant="subtitle2">
+                              {item.disasterId}
+                            </Typography>
+                          </StyledCardContent>
+                          <StyledCardContent
+                            sx={{
+                              flex: 1.4,
+                              justifyContent: "center",
+                              ...fontsTableBody,
+                            }}
+                          >
+                            <Typography variant="subtitle2">
+                              {item.state}
+                            </Typography>
+                          </StyledCardContent>
+                          {/* <StyledCardContent sx={{ flex: 0.8 }}>
+                            <Typography variant="subtitle2">
+                              {item.district}
+                            </Typography>
+                          </StyledCardContent>
+                          <StyledCardContent sx={{ flex: 1.3 }}>
+                            <Typography variant="subtitle2">
+                              {item.tehsil}
+                            </Typography>
+                          </StyledCardContent> */}
+                          <StyledCardContent
+                            sx={{
+                              flex: 1.3,
+                              justifyContent: "center",
+                              ...fontsTableBody,
+                            }}
+                          >
+                            <Typography variant="subtitle2">
+                              {item.city}
+                            </Typography>
+                          </StyledCardContent>
+                          <StyledCardContent
+                            sx={{
+                              flex: 1,
+                              justifyContent: "center",
+                              ...fontsTableBody,
+                            }}
+                          >
+                            <MoreHorizIcon
+                              onClick={(e) => handleOpen(e, item)}
+                              sx={{
+                                color: "#00f0c0",
+                                cursor: "pointer",
+                                fontSize: 28,
+                                justifyContent: "center",
+                                ...fontsTableBody,
+                              }}
+                            />
+                          </StyledCardContent>
+                        </EnquiryCardBody>
+                      ))
+                  )}
+                  {/* {paginatedData.map((item, index) => ( */}
+
+                  {/* // ))} */}
                 </TableBody>
               </Table>
             </TableContainer>
+
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              mt={2}
+              px={1}
+            >
+              {/* Records Per Page */}
+              <Box display="flex" alignItems="center" gap={1}>
+                <Typography variant="body2" sx={{ color: textColor }}>
+                  Records per page:
+                </Typography>
+                <Select
+                  value={rowsPerPage}
+                  onChange={(e) => {
+                    setRowsPerPage(parseInt(e.target.value));
+                    setPage(1); // Reset to first page on limit change
+                  }}
+                  size="small"
+                  variant="outlined"
+                  sx={{
+                    fontSize: "13px",
+                    color: textColor,
+                    borderColor: borderColor,
+                    height: "30px",
+                    minWidth: "70px",
+                    backgroundColor: bgColor,
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: borderColor,
+                    },
+                    "& .MuiSvgIcon-root": { color: textColor },
+                  }}
+                >
+                  {[5, 10, 25, 50].map((option) => (
+                    <MenuItem key={option} value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Box>
+
+              {/* Page Navigation */}
+              <Box
+                sx={{
+                  border: "1px solid #ffffff",
+                  borderRadius: "6px",
+                  px: 2,
+                  py: 0.5,
+                  height: "30px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 2,
+                  color: textColor,
+                  fontSize: "13px",
+                }}
+              >
+                <Box
+                  onClick={() => page > 1 && setPage(page - 1)}
+                  sx={{
+                    cursor: page > 1 ? "pointer" : "not-allowed",
+                    userSelect: "none",
+                  }}
+                >
+                  &#8249;
+                </Box>
+                <Box>{page}</Box>
+                <Box
+                  onClick={() =>
+                    page < Math.ceil(alertData.length / rowsPerPage) &&
+                    setPage(page + 1)
+                  }
+                  sx={{
+                    cursor:
+                      page < Math.ceil(alertData.length / rowsPerPage)
+                        ? "pointer"
+                        : "not-allowed",
+                    userSelect: "none",
+                  }}
+                >
+                  &#8250;
+                </Box>
+              </Box>
+            </Box>
           </Paper>
         </Grid>
-        <Modal open={modalOpen} onClose={handleClose}>
-          <Box sx={modalStyle}>
-            <Typography variant="h6" component="h2">
-              User Actions
-            </Typography>
-            <Typography sx={{ mt: 2 }}>View | Edit | Delete</Typography>
-          </Box>
-        </Modal>
+
+        <Popover
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "center",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "center",
+            horizontal: "left",
+          }}
+          PaperProps={{
+            sx: {
+              p: 2,
+              display: "flex",
+              flexDirection: "column",
+              gap: 1.5,
+              borderRadius: 2,
+              minWidth: 120,
+            },
+          }}
+        >
+          <Button
+            fullWidth
+            variant="outlined"
+            color="primary"
+            startIcon={<VisibilityIcon />}
+            onClick={() => {
+              alert("View clicked");
+              handleClose();
+            }}
+          >
+            View
+          </Button>
+
+          <Button
+            fullWidth
+            variant="outlined"
+            color="warning"
+            startIcon={<EditOutlined />}
+            onClick={() => {
+              alert("Edit clicked");
+              handleClose();
+            }}
+          >
+            Edit
+          </Button>
+
+          <Button
+            fullWidth
+            variant="outlined"
+            color="error"
+            startIcon={<DeleteOutline />}
+            onClick={() => {
+              alert("Delete clicked");
+              handleClose();
+            }}
+          >
+            Delete
+          </Button>
+        </Popover>
 
         {/* Department Registration Form */}
         <Grid item xs={12} md={5}>
@@ -327,9 +755,10 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
           >
             <Typography
               sx={{
-                color: "#fff",
+                color: labelColor,
                 fontWeight: 600,
-                fontSize: 18,
+                fontSize: 16,
+                fontFamily: "Roboto",
                 mb: 2,
                 fontFamily,
               }}
@@ -338,107 +767,149 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
             </Typography>
 
             <Grid container spacing={2}>
+              {/* Department Name - TextField */}
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
-                  label="Department Name"
-                  variant="outlined"
-                  sx={{
-                    backgroundColor: "#FFFFFF29",
-                    input: { color: textColor, height: "0.7em" },
-                    label: { color: textColor },
-                  }}
-                  InputLabelProps={{ style: { color: textColor } }}
+                  size="small"
+                  placeholder="Department Name"
+                  InputLabelProps={{ shrink: false }}
+                  sx={inputStyle}
                 />
               </Grid>
 
+              {/* State - Dropdown */}
               <Grid item xs={12} sm={6}>
-                <TextField
+                <Select
                   fullWidth
-                  select
-                  label="Disaster ID"
-                  variant="outlined"
+                  displayEmpty
+                  defaultValue=""
+                  inputProps={{ "aria-label": "Select State" }}
                   sx={{
-                    backgroundColor: "#FFFFFF29",
-                    input: { color: textColor, height: "0.7em" },
-                    label: { color: textColor },
+                    ...textfieldInputfonts,
+                    ...inputStyle, // If you have other global input styles
                   }}
-                  InputLabelProps={{ style: { color: textColor } }}
                 >
-                  <MenuItem value="DID001">DID001</MenuItem>
-                  <MenuItem value="DID002">DID002</MenuItem>
-                </TextField>
+                  <MenuItem value="" disabled>
+                    Select State
+                  </MenuItem>
+                  <MenuItem value="State 1">State 1</MenuItem>
+                  <MenuItem value="State 2">State 2</MenuItem>
+                </Select>
               </Grid>
 
+              {/* District - Dropdown */}
               <Grid item xs={12} sm={6}>
-                <TextField
+                <Select
                   fullWidth
-                  label="State"
-                  variant="outlined"
+                  displayEmpty
+                  defaultValue=""
+                  inputProps={{ "aria-label": "Select District" }}
                   sx={{
-                    backgroundColor: "#FFFFFF29",
-                    input: { color: textColor, height: "0.7em" },
-                    label: { color: textColor },
+                    ...textfieldInputfonts,
+                    ...inputStyle, // If you have other global input styles
                   }}
-                  InputLabelProps={{ style: { color: textColor } }}
-                />
+                >
+                  <MenuItem value="" disabled>
+                    Select District
+                  </MenuItem>
+                  <MenuItem value="District 1">District 1</MenuItem>
+                  <MenuItem value="District 2">District 2</MenuItem>
+                </Select>
               </Grid>
 
+              {/* Tehsil - Dropdown */}
               <Grid item xs={12} sm={6}>
-                <TextField
+                <Select
                   fullWidth
-                  label="District"
-                  variant="outlined"
+                  displayEmpty
+                  defaultValue=""
+                  inputProps={{ "aria-label": "Select Tehsil" }}
                   sx={{
-                    backgroundColor: "#FFFFFF29",
-                    input: { color: textColor, height: "0.7em" },
-                    label: { color: textColor },
+                    ...textfieldInputfonts,
+                    ...inputStyle, // If you have other global input styles
                   }}
-                  InputLabelProps={{ style: { color: textColor } }}
-                />
+                >
+                  <MenuItem value="" disabled>
+                    Select Tehsil
+                  </MenuItem>
+                  <MenuItem value="Tehsil 1">Tehsil 1</MenuItem>
+                  <MenuItem value="Tehsil 2">Tehsil 2</MenuItem>
+                </Select>
               </Grid>
 
+              {/* City - Dropdown */}
               <Grid item xs={12} sm={6}>
-                <TextField
+                <Select
                   fullWidth
-                  label="Tehsil"
-                  variant="outlined"
+                  displayEmpty
+                  defaultValue=""
+                  inputProps={{ "aria-label": "Select City" }}
                   sx={{
-                    backgroundColor: "#FFFFFF29",
-                    input: { color: textColor, height: "0.7em" },
-                    label: { color: textColor },
+                    ...textfieldInputfonts,
+                    ...inputStyle, // If you have other global input styles
                   }}
-                  InputLabelProps={{ style: { color: textColor } }}
-                />
+                >
+                  <MenuItem value="" disabled>
+                    Select City
+                  </MenuItem>
+                  <MenuItem value="City 1">City 1</MenuItem>
+                  <MenuItem value="City 2">City 2</MenuItem>
+                </Select>
               </Grid>
 
+              {/* Disaster ID - Dropdown */}
               <Grid item xs={12} sm={6}>
-                <TextField
+                <Select
                   fullWidth
-                  label="City"
-                  variant="outlined"
+                  displayEmpty
+                  defaultValue=""
+                  inputProps={{ "aria-label": "Select Disaster" }}
                   sx={{
-                    backgroundColor: "#FFFFFF29",
-                    input: { color: textColor, height: "0.7em" },
-                    label: { color: textColor },
+                    ...textfieldInputfonts,
+                    ...inputStyle, // If you have other global input styles
                   }}
-                  InputLabelProps={{ style: { color: textColor } }}
-                />
+                >
+                  <MenuItem
+                    value=""
+                    disabled
+                    sx={{ backgroundColor: inputStyle }}
+                  >
+                    Select Disaster ID
+                  </MenuItem>
+                  <MenuItem value="Disaster 1">Disaster 1</MenuItem>
+                  <MenuItem value="Disaster 2">Disaster 2</MenuItem>
+                </Select>
               </Grid>
 
+              {/* Submit Button */}
               <Grid item xs={12}>
-                <Button
-                  fullWidth
-                  variant="contained"
+                <Box
                   sx={{
-                    backgroundColor: "#5FECC8",
-                    color: "#000",
-                    fontWeight: "bold",
-                    mt: 2,
+                    display: "flex",
+                    justifyContent: "center",
+                    mt: 3,
+                    mb: 1,
                   }}
                 >
-                  Submit
-                </Button>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      mt: 2,
+                      width: "40%",
+                      backgroundColor: "#00f0c0",
+                      color: "black",
+                      fontWeight: "bold",
+                      borderRadius: "12px",
+                      "&:hover": {
+                        backgroundColor: bgColor,
+                        color: "white !important",
+                      },
+                    }}
+                  >
+                    Submit
+                  </Button>
+                </Box>
               </Grid>
             </Grid>
           </Paper>

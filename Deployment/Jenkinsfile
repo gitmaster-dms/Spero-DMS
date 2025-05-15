@@ -36,15 +36,15 @@ pipeline {
                         if (!fileExists('.git')) {
                             echo "Cloning repository into ${TARGET_DIR}..."
                             sh """
-                                sudo git clone -b ${GIT_BRANCH} ${GIT_REPO_URL} .
+                                git clone -b ${GIT_BRANCH} ${GIT_REPO_URL} .
                             """
                         } else {
                             echo "Repository already exists. Pulling latest changes..."
                             sh """
-                                sudo git config --global --add safe.directory \$(pwd)
-                                sudo git fetch origin ${GIT_BRANCH}
-                                sudo git reset --hard origin/${GIT_BRANCH}
-                                sudo git clean -fd -e vvenv/
+                                git config --global --add safe.directory \$(pwd)
+                                git fetch origin ${GIT_BRANCH}
+                                git reset --hard origin/${GIT_BRANCH}
+                                git clean -fd -e vvenv/
                             """
                         }
                     }
