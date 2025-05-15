@@ -18,6 +18,7 @@ pipeline {
                     sh '''
                         if [ ! -d "${TARGET_DIR}" ]; then
                             echo "Directory does not exist. Creating ${TARGET_DIR}..."
+                            sudo chown -R jenkins:jenkins "${TARGET_DIR}"
                             mkdir -p "${TARGET_DIR}"
                             chmod -R 775 "${TARGET_DIR}"
                         else
@@ -34,32 +35,24 @@ pipeline {
                     script {
                         if (!fileExists('.git')) {
                             echo "Cloning repository into ${TARGET_DIR}..."
-                            def cloneStatus = sh(
-                                script: "git clone -b ${GIT_BRANCH} ${GIT_REPO_URL} .",
-                                returnStatus: true
-                            )
-                            if (cloneStatus != 0) {
-                                error("Git clone failed! Exiting pipeline.")
-                            }
+                            sh """
+                                sudo git clone -b ${GIT_BRANCH} ${GIT_REPO_URL} .
+                            """
                         } else {
-                            echo "Repository already exists. Resetting and pulling latest changes..."
-                            def resetStatus = sh(
-                                script: '''
-                                    git config --global --add safe.directory $(pwd)
-                                    git fetch origin ${GIT_BRANCH}
-                                    git reset --hard origin/${GIT_BRANCH}
-                                    git clean -fd -e vvenv/  # <-- Add -e vvenv/ here to exclude it
-                                ''',
-                                returnStatus: true
-                            )
-                            if (resetStatus != 0) {
-                                error("Git reset/pull failed! Exiting pipeline.")
-                            }
+                            echo "Repository already exists. Pulling latest changes..."
+                            sh """
+                                sudo git config --global --add safe.directory \$(pwd)
+                                sudo git fetch origin ${GIT_BRANCH}
+                                sudo git reset --hard origin/${GIT_BRANCH}
+                                sudo git clean -fd -e vvenv/
+                            """
                         }
                     }
                 }
             }
         }
+
+
 
 
         stage('Check Files') {

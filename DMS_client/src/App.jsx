@@ -1,28 +1,19 @@
 // src/App.js
 import { useState, useMemo } from "react";
-import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
-import Navbar from "./Componenets/Navbar/Navbar";
-import Sop from "./Componenets/DispatchModule/SOP/Sop";
-import Login from "./Componenets/Login/Login";
-import Footer from "./Componenets/Footer/Footer";
-import AlertPanel from "./Componenets/DispatchModule/AlertPanel/AlertPanel";
-import Sidebar from "./Componenets/DispatchModule/Sidebar/Sidebar";
-import Add_department from"./Componenets/SuperAdmin/System/Department/Add_department";
-import Departmentsidebar from "./Componenets/SuperAdmin/Sidebar/Departmentsidebar";
-import AddDepartment from "./Componenets/SuperAdmin/System/Department/AddDepartment";
-import Add_group from "./Componenets/SuperAdmin/System/Groups/Add_group";
-import Add_employee from "./Componenets/SuperAdmin/System/Employee_reg/Add_employee";
+import { useLocation } from "react-router-dom";
 
+import Navbar from "./Componenets/Navbar/Navbar";
+import Footer from "./Componenets/Footer/Footer";
+import Sidebar from "./Componenets/DispatchModule/Sidebar/Sidebar";
+import Departmentsidebar from "./Componenets/SuperAdmin/Sidebar/Departmentsidebar";
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // <-- Login state
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const location = useLocation();
   const userGroup = localStorage.getItem("user_group");
-  
-
-  console.log(userGroup, "userGroup");
 
   const theme = useMemo(
     () =>
@@ -34,12 +25,7 @@ function App() {
     [darkMode]
   );
 
-  const authRoutes = ["/login"];
-
-  const isAuthRoute = authRoutes.includes(location.pathname);
-
-  const hideSidebarRoutes = ["/alert-panel", "/Sop"];
-  const shouldHideSidebar = hideSidebarRoutes.includes(location.pathname);
+  const isAuthRoute = location.pathname === "/login";
 
   return (
     <ThemeProvider theme={theme}>
@@ -59,37 +45,16 @@ function App() {
                 darkMode={darkMode}
                 toggleDarkMode={() => setDarkMode((prev) => !prev)}
               />
-
-              {/* {userGroup === "1" && (
-                <Sidebar
-                  darkMode={darkMode}
-                  toggleDarkMode={() => setDarkMode((prev) => !prev)}
-                />
-              )} */}
-
-              {/* {userGroup === "2" && ( */}
-                <Departmentsidebar
-                  darkMode={darkMode}
-                  toggleDarkMode={() => setDarkMode((prev) => !prev)}
-                />
-              {/* )} */}
+              {userGroup === "2" ? (
+                <Sidebar darkMode={darkMode} />
+              ) : (
+                <Departmentsidebar darkMode={darkMode} />
+              )}
             </>
           )}
 
           <div style={{ marginLeft: "70px" }}>
-            <Routes>
-              <Route path="/" element={<Navigate to="/login" replace />} />
-              <Route
-                path="/login"
-                element={<Login setIsLoggedIn={setIsLoggedIn} />}
-              />
-              <Route path="/Sop" element={<Sop darkMode={darkMode} />} />
-              <Route path="/alert-panel" element={<AlertPanel darkMode={darkMode} />} />
-              <Route path="/add-department" element={<Add_department darkMode={darkMode} />} />
-              <Route path="/add-group" element={<Add_group darkMode={darkMode} />} />
-              <Route path="/add-employee" element={<Add_employee darkMode={darkMode} />} />
-
-            </Routes>
+            <AppRoutes darkMode={darkMode} setIsLoggedIn={setIsLoggedIn} />
           </div>
 
           {!isAuthRoute && <Footer darkMode={darkMode} />}
