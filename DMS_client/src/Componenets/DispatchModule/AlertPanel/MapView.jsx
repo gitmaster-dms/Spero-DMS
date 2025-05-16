@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, GeoJSON } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -39,7 +39,7 @@ const MapView = () => {
 />
     {stateData && <GeoJSON data={stateData} style={geoJsonStyle} />}
       <Marker position={position} icon={customIcon}>
-        <Popup>You're here!</Popup>
+        {/* <Popup>You're here!</Popup> */}
       </Marker>
     </MapContainer>
   );
