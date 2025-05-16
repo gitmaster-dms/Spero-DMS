@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import {
   Drawer,
@@ -22,7 +20,7 @@ const screenConfig = {
   "System User": {
     icon: <AccountCircleIcon />,
     screens: [
-      { id: 1, text: "Add Department", path: "/department" },
+      { id: 1, text: "Add Department", path: "/add-department" },
       { id: 2, text: "Add Group", path: "/add-group" },
       { id: 3, text: "Add Employee", path: "/add-employee" },
     ],
@@ -61,11 +59,14 @@ const Departmentsidebar = ({ darkMode }) => {
           sx={{
             width: open ? 200 : 60,
             "& .MuiDrawer-paper": {
-              width: open ? 200 : 60,
+              width: open ? 200 : 50,
               position: "absolute",
               top: "50%",
               transform: "translateY(-50%)",
-              background: "linear-gradient(to bottom, #5FECC8, #5FECC80D)",
+              // background: "linear-gradient(to bottom, #5FECC8, #5FECC80D)",
+              background: darkMode
+                ? "linear-gradient(to bottom, #5FECC8, rgba(95, 236, 200, 0.05))"
+                : "radial-gradient(6035.71% 72.44% at 0% 50%, #00BFA6 0%, #292D45 100%)",
               borderRadius: "30px",
               transition: "width 0.5s ease-in-out",
               display: "flex",
@@ -74,7 +75,6 @@ const Departmentsidebar = ({ darkMode }) => {
               overflow: "hidden", // ✅ Prevent scrollbars
               height: "50vh", // ✅ Height will grow with content
               maxHeight: "90vh", // ✅ Prevent overflow from screen
-              
             },
           }}
         >

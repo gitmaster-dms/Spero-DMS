@@ -10,6 +10,7 @@ import AddGroup from "../Componenets/SuperAdmin/System/Groups/Add_group";
 import AddEmployee from "../Componenets/SuperAdmin/System/Employee_reg/Add_employee";
 
 const AppRoutes = ({ darkMode, setIsLoggedIn }) => {
+  // ...
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/login" />} />

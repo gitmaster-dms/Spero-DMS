@@ -26,7 +26,8 @@ import asyncio
 from sqlalchemy import text
 from typing import List
 from websocket_router import router as websocket_router
-
+import httpx
+import pandas as pd
 
 
 #==================================Send Data to Kafka===(Mayank)========================================#
@@ -153,6 +154,74 @@ uvicorn main:app --host 0.0.0.0 --port 8000 --reload """
 
 
 # ------------------------------------------------------------------------------------------------------------#
+
+EXCEL_PATH = "goa_latlong_points.xlsx"  # Update this with your file path
+
+
+# Excel file se lat-long read karo
+def extract_lat_lon_from_excel(file_path):
+    df = pd.read_excel(file_path)
+    latitudes = df['lat'].dropna().astype(str).tolist()
+    longitudes = df['long'].dropna().astype(str).tolist()
+    return ','.join(latitudes), ','.join(longitudes)
+
+
+# Open-Meteo API ko call karo
+async def call_open_meteo_api():
+    latitudes, longitudes = extract_lat_lon_from_excel(EXCEL_PATH)
+
+    url = (
+        f"https://api.open-meteo.com/v1/forecast?"
+        f"latitude={latitudes}&longitude={longitudes}"
+        f"&hourly=temperature_2m,rain,precipitation,weather_code"
+        f"&models=ecmwf_ifs025"
+    )
+
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+
+    if response.status_code == 200:
+        data = response.json()
+        print("✅ Weather data fetched")
+        # print(f"[✔] Temp is {temp}°C > 20°C — sending to Kafka")
+        producer.send('weather_alerts_rain', data)
+        return data
+    else:
+        print("❌ Error fetching data")
+        return {"error": response.text}
+
+
+# Manual trigger route
+@app.get("/fetch-weather")
+async def fetch_weather():
+    data = await call_open_meteo_api()
+    return JSONResponse(content=data)
+
+
+# Background scheduler
+async def scheduled_weather_fetch():
+    while True:
+        await call_open_meteo_api()
+        await asyncio.sleep(120)  # 2 minutes
+
+
+# Start scheduler on app startup
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(scheduled_weather_fetch())
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 app.include_router(websocket_router)
