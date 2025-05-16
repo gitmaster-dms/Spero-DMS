@@ -67,6 +67,17 @@ pipeline {
             steps {
                 dir("${TARGET_DIR}") {
                     sh '''
+                        chmod +x Deployment/react_vite.sh
+                        Deployment/react_vite.sh
+                    '''
+                }
+            }
+        }
+
+        stage('Creating React Production Build') {
+            steps {
+                dir("${TARGET_DIR}") {
+                    sh '''
                         chmod +x Deployment/envsetup.sh
                         Deployment/envsetup.sh
                     '''
