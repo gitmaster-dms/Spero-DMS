@@ -152,3 +152,8 @@ class SopSerializer(serializers.ModelSerializer):
     class Meta:
         model = DMS_SOP
         fields = '__all__'
+
+class WeatherAlertSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Weather_alerts
+        fields = '__all__'
