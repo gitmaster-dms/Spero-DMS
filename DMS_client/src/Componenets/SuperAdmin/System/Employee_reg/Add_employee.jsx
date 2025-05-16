@@ -1,12 +1,12 @@
 import { useState, useEffect ,useMemo } from "react";
-import { Box, Typography, TextField, Button, Paper, InputAdornment, Grid, } from "@mui/material";
+import { Box, Typography, TextField, Button, Paper, InputAdornment, Grid,Popover  } from "@mui/material";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Search, ArrowBack } from "@mui/icons-material";
+import { Search, ArrowBack ,DeleteOutline,EditOutlined,} from "@mui/icons-material";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { styled } from "@mui/material/styles";
 // import { alerts } from "./../../../DispatchModule/SOP/dummydata";
@@ -15,10 +15,12 @@ import { Select, MenuItem, IconButton, Popper } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useAuth } from './../../../../Context/ContextAPI';
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 function Add_employee({ darkMode }) {
   const { states, districts, selectedStateId, setSelectedStateId, loading, error, } = useAuth();
 
+    const [anchorEl, setAnchorEl] = useState(null);
   const handleStateChange = (e) => {
     const id = e.target.value;
     setSelectedStateId(id);
@@ -244,6 +246,15 @@ function Add_employee({ darkMode }) {
      const end = start + rowsPerPage;
      return alertData.slice(start, end);
    }, [page, rowsPerPage, alertData]);
+
+   const open = Boolean(anchorEl);
+  const handleOpen = (event, item) => {
+    setAnchorEl(event.currentTarget);
+    // Optionally store item in state if needed
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
 
   return (
@@ -610,12 +621,71 @@ function Add_employee({ darkMode }) {
                 </Box>
               </Box>
             </Box>
-
-
-
-
           </Paper>
         </Grid>
+
+           <Popover
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "center",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "center",
+            horizontal: "left",
+          }}
+          PaperProps={{
+            sx: {
+              p: 2,
+              display: "flex",
+              flexDirection: "column",
+              gap: 1.5,
+              borderRadius: 2,
+              minWidth: 120,
+            },
+          }}
+        >
+          <Button
+            fullWidth
+            variant="outlined"
+            color="primary"
+            startIcon={<VisibilityIcon />}
+            onClick={() => {
+              alert("View clicked");
+              handleClose();
+            }}
+          >
+            View
+          </Button>
+
+          <Button
+            fullWidth
+            variant="outlined"
+            color="warning"
+            startIcon={<EditOutlined />}
+            onClick={() => {
+              alert("Edit clicked");
+              handleClose();
+            }}
+          >
+            Edit
+          </Button>
+
+          <Button
+            fullWidth
+            variant="outlined"
+            color="error"
+            startIcon={<DeleteOutline />}
+            onClick={() => {
+              alert("Delete clicked");
+              handleClose();
+            }}
+          >
+            Delete
+          </Button>
+        </Popover>
 
         <Grid item xs={12} md={5}>
           <Paper elevation={3} sx={{ padding: 2, borderRadius: 3, backgroundColor: bgColor, mt: 1, mb: 5 }}>
@@ -894,23 +964,21 @@ function Add_employee({ darkMode }) {
             </Box>
 
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 1 }}>
-              <Button
-                variant="contained"
-                sx={{
-
-                  width: '40%',
-                  backgroundColor: '#00f0c0', // Set background color
-                  color: "black",// Set text color to black
-
-                  fontWeight: 'bold',
-                  borderRadius: '12px',
-                  '&:hover': {
-                    backgroundColor: bgColor, // Change background color on hover
-                    color: "black",
-                  },
-                }}
-              >
-                Submit
+             <Button
+                                variant="contained"
+                                sx={{
+                                  mt: 2,
+                                  width: "40%",
+                                  backgroundColor: "#00f0c0",
+                                  color: "black",
+                                  fontWeight: "bold",
+                                  borderRadius: "12px",
+                                  "&:hover": {
+                                    backgroundColor: bgColor,
+                                    color: "white !important",
+                                  },
+                                }}
+                              >Submit
               </Button>
             </Box>
 
