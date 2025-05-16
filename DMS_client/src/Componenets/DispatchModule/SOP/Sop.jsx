@@ -2,9 +2,13 @@ import { Grid, Box } from "@mui/material";
 import SopTask from "../SOP/SopTask";
 import IncidentDetails from "../SOP/IncidentDetails";
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Sop({ darkMode, setDarkMode }) {
+
+    useEffect(() => {
+    document.title = "DMS|Sop";
+  }, []);
   const location = useLocation();
   const flagFromState = location?.state?.flag ?? 0;
   const [flag, setFlag] = useState(flagFromState);
