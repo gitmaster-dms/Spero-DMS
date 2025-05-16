@@ -10,7 +10,7 @@ const AlertPanel = lazy(() => import("../Componenets/DispatchModule/AlertPanel/A
 const AddDepartment = lazy(() => import("../Componenets/SuperAdmin/System/Department/AddDepartment"));
 const AddGroup = lazy(() => import("../Componenets/SuperAdmin/System/Groups/Add_group"));
 const AddEmployee = lazy(() => import("../Componenets/SuperAdmin/System/Employee_reg/Add_employee"));
-const Map = lazy(() => import("../Componenets/DispatchModule/Map/map"));
+const Map = lazy(() => import("../Componenets/DispatchModule/Map/Map"));
 const MultiScreen = lazy(() => import("../Page/multiscreen"));
 
 // Spinner Loader component

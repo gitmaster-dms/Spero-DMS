@@ -66,5 +66,6 @@ urlpatterns = [
     path('login/', UserLoginView.as_view(), name='login'),
     path('login/refresh/', TokenRefreshView.as_view(), name='login_refresh'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('alert/', DMS_Alert_idwise_get_api.as_view(), name='DMS_Alert_idwise'),
     #=============================== Nikita =========================================================
 ]
