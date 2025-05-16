@@ -289,7 +289,7 @@ class DMS_SOP(models.Model):
 class Weather_alerts(models.Model):
     pk_id = models.AutoField(primary_key=True)
     latitude = models.FloatField(null=True,blank=True)
-    latitude = models.FloatField(null=True,blank=True)
+    # latitude = models.FloatField(null=True,blank=True)
     longitude = models.FloatField(null=True,blank=True)
     elevation = models.FloatField(null=True,blank=True)
     timezone = models.TextField(null=True,blank=True)
