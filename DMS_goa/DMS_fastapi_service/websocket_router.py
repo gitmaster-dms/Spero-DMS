@@ -1,7 +1,7 @@
 from fastapi import APIRouter, WebSocket
 import asyncio
-# from websocket_views import kafka_message_stream
-from .websocket_views import kafka_message_stream
+from websocket_views import kafka_message_stream
+# from .websocket_views import kafka_message_stream
 
 
 router = APIRouter()
