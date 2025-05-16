@@ -8,6 +8,10 @@ import AlertPanel from "../Componenets/DispatchModule/AlertPanel/AlertPanel";
 import AddDepartment from "../Componenets/SuperAdmin/System/Department/AddDepartment";
 import AddGroup from "../Componenets/SuperAdmin/System/Groups/Add_group";
 import AddEmployee from "../Componenets/SuperAdmin/System/Employee_reg/Add_employee";
+import Map from "../Componenets/DispatchModule/Map/map";
+import MultiScreen from "../Page/multiscreen";
+
+
 
 const AppRoutes = ({ darkMode, setIsLoggedIn }) => {
   // ...
@@ -18,11 +22,22 @@ const AppRoutes = ({ darkMode, setIsLoggedIn }) => {
 
       {/* Protected Routes */}
       <Route
-        path="/sop"
+        path="/multiscreen"
         element={
-          <PrivateRoute>
-            <Sop darkMode={darkMode} />
+          <PrivateRoute >
+            <MultiScreen darkMode={darkMode} />
           </PrivateRoute>
+         
+        }
+      />
+
+      <Route
+        path="/Map"
+        element={
+          <PrivateRoute >
+            <Map darkMode={darkMode} />
+          </PrivateRoute>
+         
         }
       />
       <Route
@@ -33,6 +48,15 @@ const AppRoutes = ({ darkMode, setIsLoggedIn }) => {
           </PrivateRoute>
         }
       />
+      <Route
+        path="/sop"
+        element={
+          <PrivateRoute>
+            <Sop darkMode={darkMode} />
+          </PrivateRoute>
+        }
+      />
+      
       <Route
         path="/add-department"
         element={

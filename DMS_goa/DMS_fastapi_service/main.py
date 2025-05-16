@@ -25,7 +25,8 @@ import uiautomation as auto
 import asyncio
 from sqlalchemy import text
 from typing import List
-from websocket_router import router as websocket_router
+# from websocket_router import router as websocket_router
+from .websocket_router import router as websocket_router
 import httpx
 import pandas as pd
 
@@ -151,6 +152,26 @@ cd Spero-DMS\DMS_goa\DMS_fastapi_service
 2. Run the FastAPI server:
 uvicorn main:app --host 0.0.0.0 --port 8000 --reload """
 
+connected_clients: List[WebSocket] = []
+
+@app.websocket("/send_data")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    connected_clients.append(websocket)
+    print("Client connected")
+    try:
+        while True:
+            data = await websocket.receive_text()
+            print(f"Received from frontend: {data}")
+            if data.strip().lower() == "true":
+                # Broadcast to all connected clients
+                for client in connected_clients:
+                    if client != websocket:
+                        await client.send_text("true")
+    except WebSocketDisconnect:
+        print("Client disconnected")
+        connected_clients.remove(websocket)
+
 
 
 # ------------------------------------------------------------------------------------------------------------#
@@ -212,6 +233,30 @@ async def startup_event():
 
 
 
+# -----------------------------------------NIKITA------------------------------------------------------
+
+from fastapi import FastAPI, WebSocket
+import json
+from .django_setup import *
+from admin_web.models import Weather_alerts  # Django model
+
+app = FastAPI()
+
+@app.websocket("/ws/weather-alerts")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+
+    # Query using Django ORM (sync)
+    alerts = Weather_alerts.objects.all().values("id", "title", "description", "alert_time")
+    data = list(alerts)
+
+    # Convert datetime to string
+    for alert in data:
+        if alert["alert_time"]:
+            alert["alert_time"] = alert["alert_time"].isoformat()
+
+    await websocket.send_text(json.dumps({"type": "all_alerts", "data": data}))
+    await websocket.close()
 
 
 
