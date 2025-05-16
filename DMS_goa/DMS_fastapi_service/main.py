@@ -151,6 +151,26 @@ cd Spero-DMS\DMS_goa\DMS_fastapi_service
 2. Run the FastAPI server:
 uvicorn main:app --host 0.0.0.0 --port 8000 --reload """
 
+connected_clients: List[WebSocket] = []
+
+@app.websocket("/send_data")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    connected_clients.append(websocket)
+    print("Client connected")
+    try:
+        while True:
+            data = await websocket.receive_text()
+            print(f"Received from frontend: {data}")
+            if data.strip().lower() == "true":
+                # Broadcast to all connected clients
+                for client in connected_clients:
+                    if client != websocket:
+                        await client.send_text("true")
+    except WebSocketDisconnect:
+        print("Client disconnected")
+        connected_clients.remove(websocket)
+
 
 
 # ------------------------------------------------------------------------------------------------------------#
