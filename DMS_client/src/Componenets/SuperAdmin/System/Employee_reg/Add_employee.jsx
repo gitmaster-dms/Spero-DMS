@@ -769,7 +769,6 @@ function Add_employee({ darkMode }) {
                   '&:hover': {
                     boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)', // Increase shadow on hover
                   },
-                  backgroundColor: inputBgColor,
                   '& input::placeholder': {
                     fontSize: '0.85rem',
                     color: textColor,
@@ -819,7 +818,6 @@ function Add_employee({ darkMode }) {
                   '&:hover': {
                     boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)', // Increase shadow on hover
                   },
-                  backgroundColor:inputBgColor,
                   '& input::placeholder': {
                     fontSize: '0.85rem',
                     color: textColor,
