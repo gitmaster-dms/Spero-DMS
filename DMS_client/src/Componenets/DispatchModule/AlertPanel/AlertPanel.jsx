@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     Box, CardContent, Typography, Table, TableBody, TableContainer,
     TableHead, TableRow, Grid, Checkbox, CircularProgress
@@ -83,6 +83,10 @@ const alertData = [
 ];
 
 const AlertPanel = ({ darkMode }) => {
+
+      useEffect(() => {
+    document.title = "DMS-AlertPanel";
+  }, []);
     const [selected, setSelected] = useState([]);
     const navigate = useNavigate();
 
