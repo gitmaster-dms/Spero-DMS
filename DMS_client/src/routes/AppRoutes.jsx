@@ -8,7 +8,7 @@ import AlertPanel from "../Componenets/DispatchModule/AlertPanel/AlertPanel";
 import AddDepartment from "../Componenets/SuperAdmin/System/Department/AddDepartment";
 import AddGroup from "../Componenets/SuperAdmin/System/Groups/Add_group";
 import AddEmployee from "../Componenets/SuperAdmin/System/Employee_reg/Add_employee";
-import Map from "../Componenets/DispatchModule/Map/map";
+import Map from "../Componenets/DispatchModule/Map/Map";
 import MultiScreen from "../Page/multiscreen";
 
 
