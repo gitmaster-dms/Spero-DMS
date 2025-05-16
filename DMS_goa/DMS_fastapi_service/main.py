@@ -25,7 +25,8 @@ import uiautomation as auto
 import asyncio
 from sqlalchemy import text
 from typing import List
-from websocket_router import router as websocket_router
+# from websocket_router import router as websocket_router
+from .websocket_router import router as websocket_router
 import httpx
 import pandas as pd
 
@@ -212,6 +213,30 @@ async def startup_event():
 
 
 
+# -----------------------------------------NIKITA------------------------------------------------------
+
+from fastapi import FastAPI, WebSocket
+import json
+from .django_setup import *
+from admin_web.models import Weather_alerts  # Django model
+
+app = FastAPI()
+
+@app.websocket("/ws/weather-alerts")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+
+    # Query using Django ORM (sync)
+    alerts = Weather_alerts.objects.all().values("id", "title", "description", "alert_time")
+    data = list(alerts)
+
+    # Convert datetime to string
+    for alert in data:
+        if alert["alert_time"]:
+            alert["alert_time"] = alert["alert_time"].isoformat()
+
+    await websocket.send_text(json.dumps({"type": "all_alerts", "data": data}))
+    await websocket.close()
 
 
 
