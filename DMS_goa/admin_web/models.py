@@ -284,3 +284,24 @@ class DMS_SOP(models.Model):
     sop_added_date = models.DateTimeField(auto_now=True)
     sop_modified_by = models.CharField(max_length=255, null=True, blank=True)
     sop_modified_date = models.DateTimeField(null=True, blank=True)
+    
+    
+class Weather_alerts(models.Model):
+    pk_id = models.AutoField(primary_key=True)
+    latitude = models.FloatField(null=True,blank=True)
+    latitude = models.FloatField(null=True,blank=True)
+    longitude = models.FloatField(null=True,blank=True)
+    elevation = models.FloatField(null=True,blank=True)
+    timezone = models.TextField(null=True,blank=True)
+    timezone_abbreviation = models.TextField(null=True,blank=True)
+    utc_offset_seconds = models.IntegerField(null=True,blank=True)
+    time = models.DateTimeField(null=True,blank=True)
+    temperature_2m = models.FloatField(null=True,blank=True)
+    rain = models.FloatField(null=True,blank=True)
+    precipitation = models.FloatField(null=True,blank=True)
+    weather_code = models.IntegerField(null=True,blank=True)
+    added_by=models.CharField(max_length=255,null=True,blank=True)
+    added_date = models.DateTimeField(auto_now=True)
+    modified_by = models.CharField(max_length=255, null=True, blank=True)
+    modified_date = models.DateTimeField(null=True, blank=True)
+

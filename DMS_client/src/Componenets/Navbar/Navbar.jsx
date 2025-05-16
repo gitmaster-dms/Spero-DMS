@@ -28,6 +28,8 @@ const settings = ["Profile", "Logout"];
 
 
 const Navbar = ({ darkMode, toggleDarkMode }) => {
+
+  const port = import.meta.env.VITE_APP_API_KEY;
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
@@ -48,8 +50,6 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
   // console.log("User from localStorage:", user);
 
 
-
-
   const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
   const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
   const handleCloseMenu = () => {
@@ -58,42 +58,47 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
   };
 
 
-  const logout = async () => {
-    const token = localStorage.getItem('token');  // Get token from localStorage as used in Login.jsx
+ const logout = async () => {
+  const accessToken = localStorage.getItem('access_token');  // Use correct key
 
-    if (!token) {
-      console.error('No token found');
-      window.location.href = '/login';
-      return;
-    }
+  if (!accessToken) {
+    console.error('No access token found');
+    window.location.href = '/login';
+    return;
+  }
 
-    try {
-      const response = await fetch('http://127.0.0.1:8000/admin_web/logout/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`  // Add token as Bearer in Authorization header
-        },
-        // No need to send refresh token in body as we're using the token in header
-      });
-
-      if (response.ok) {
-        // Clear token and redirect to login
-        localStorage.removeItem('token');
-        window.location.href = '/login';
-      } else {
-        console.error('Logout failed:', await response.text());
-        // Still redirect to login even if server logout fails
-        localStorage.removeItem('token');
-        window.location.href = '/login';
+  try {
+    const response = await fetch(`${port}/admin_web/logout/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
       }
-    } catch (error) {
-      console.error('Error during logout:', error);
-      // Still clear token and redirect on error
-      localStorage.removeItem('token');
-      window.location.href = '/login';
+    });
+
+    // Clear tokens regardless of logout success or failure
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('user_group');
+
+
+    if (response.ok) {
+      console.log('Logged out successfully');
+    } else {
+      console.warn('Logout request failed:', await response.text());
     }
-  };
+
+    window.location.href = '/login';
+  } catch (error) {
+    console.error('Error during logout:', error);
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('token');
+    window.location.href = '/login';
+  }
+};
+
 
 
   return (
