@@ -152,6 +152,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         states,
         districts,
+        selectedDistrictId,
         selectedStateId,
         Tehsils,
         setSelectedStateId,
