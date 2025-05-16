@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { use, useEffect, useMemo } from "react";
 import {
   Paper,
   Grid,
@@ -23,6 +23,8 @@ import {
   Popover,
   Tooltip,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+
 import {
   Search,
   Visibility,
@@ -40,78 +42,48 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-
-const EnquiryCard = styled("div")(() => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-  background: "#5FECC8",
-  borderRadius: "8px 10px 0 0",
-  padding: "6px 12px",
-  color: "black",
-  height: "40px",
-}));
-
-const fontsTableBody = {
-  fontFamily: "Roboto",
-  fontWeight: 400,
-  fontSize: 13,
-  letterSpacing: 0,
-  textAlign: "center",
-};
-
-const fontsTableHeading = {
-  fontFamily: "Roboto",
-  fontWeight: 500,
-  fontSize: 14,
-  letterSpacing: 0,
-  textAlign: "center",
-};
-const EnquiryCardBody = styled("tr")(({ theme, status }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-  background: theme.palette.mode === "dark" ? "#1E243E" : "#FFFFFF",
-  color: theme.palette.mode === "dark" ? "red" : "#FFFFFF",
-  marginTop: "0.5em",
-  borderRadius: "8px",
-  padding: "10px 12px",
-  transition: "all 0.3s ease",
-  cursor: "pointer",
-  "&:hover": {
-    boxShadow: `0 0 8px ${
-      status === "Completed"
-        ? "#00e67699"
-        : status === "Pending"
-        ? "#f4433699"
-        : "#88888855"
-    }`,
-  },
-  height: "45px",
-}));
-
-const StyledCardContent = styled("td")({
-  padding: "0 8px",
-  display: "flex",
-  alignItems: "center",
-});
-
-const modalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  backgroundColor: "white",
-  color: "black",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: 2,
-};
+import {
+  TableDataCardBody,
+  TableHeadingCard,
+  CustomTextField,
+  getThemeBgColors,
+  textfieldInputFonts,
+  fontsTableBody,
+  getCustomSelectStyles,
+  fontsTableHeading,
+  StyledCardContent,
+  inputStyle,
+} from "../../../../CommonStyle/Style";
+import { useAuth } from "../../../../Context/ContextAPI";
 
 const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const {
+    states,
+    districts,
+    Tehsils,
+    selectedStateId,
+    setSelectedStateId,
+    setSelectedDistrictId,
+    selectedTehsilId,
+    loading,
+    error,
+  } = useAuth();
 
+  const handleStateChange = (e) => {
+    const id = e.target.value;
+    setSelectedStateId(id);
+  };
+
+  const handleDistrictChange = (e) => {
+    const id = e.target.value;
+    setSelectedDistrictId(id);
+  };
+
+  const theme = useTheme();
+  const isDarkMode = theme.palette.mode === "dark";
+  const selectStyles = getCustomSelectStyles(isDarkMode);
   const open = Boolean(anchorEl);
   const handleOpen = (event, item) => {
     setAnchorEl(event.currentTarget);
@@ -125,48 +97,6 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
   const [disasterName, setSelectedDisasterId] = useState("");
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  const alertData2 = [
-    {
-      id: 1,
-      incidentId: "2023052400004",
-      eventDateTime: "4-04-2025 13:44:07",
-      location: "North Goa",
-      alertType: "Unknown",
-      trigger: "Triggered",
-      status: "65%",
-    },
-    {
-      id: 2,
-      incidentId: "2023052400005",
-      eventDateTime: "4-04-2025 13:44:07",
-      location: "North Goa",
-      alertType: "Unknown",
-      trigger: "Trigger",
-      status: "10%",
-    },
-    {
-      id: 3,
-      incidentId: "2023052400005",
-      eventDateTime: "4-04-2025 13:44:07",
-      location: "North Goa",
-      alertType: "Unknown",
-      trigger: "Trigger",
-      status: "30%",
-    },
-    {
-      id: 4,
-      incidentId: "2023052400005",
-      eventDateTime: "4-04-2025 13:44:07",
-      location: "North Goa",
-      alertType: "Unknown",
-      trigger: "Trigger",
-      status: "80%",
-    },
-  ];
-
-  // Sliced data for current page
-
   const [alertData, setAlertData] = useState([
     {
       departmentName: "000095643228282",
@@ -226,6 +156,7 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
     },
     // Add more dummy objects...
   ]);
+
   const paginatedData = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
@@ -250,60 +181,6 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
     { id: 2, name: "Earthquake" },
     { id: 3, name: "Fire" },
   ];
-
-  const inputStyle = {
-    height: "3rem",
-    "& .MuiInputBase-input": {
-      color: `${textColor} !important`,
-    },
-    "& .MuiInputBase-root": {
-      height: "100%",
-      padding: "0 12px",
-      display: "flex",
-      alignItems: "center",
-    },
-    borderRadius: "12px",
-    "& fieldset": {
-      border: "none",
-    },
-    backgroundColor: inputBgColor,
-    "& input::placeholder": {
-      fontSize: "0.85rem",
-      color: `${textColor} !important`,
-    },
-    boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
-    "&:hover": {
-      boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)",
-    },
-  };
-
-  const textfieldInputfonts = {
-    fontFamily: "Roboto",
-    fontWeight: 400,
-    fontSize: "14px",
-    lineHeight: "25.2px",
-    letterSpacing: 0,
-    verticalAlign: "middle",
-    backgroundColor: inputStyle, // Optional: Add background for better visibility
-    color: "#000", // Optional: Set text color
-    "& .MuiSelect-select": {
-      paddingY: "8px", // Optional: adjusts vertical padding
-    },
-    "& fieldset": {
-      borderColor: "#ccc", // Optional: custom border
-    },
-  };
-
-  const selectStyle = {
-    ...inputStyle,
-    "& .MuiSelect-select": {
-      fontSize: "0.85rem",
-      color: textColor,
-    },
-    "& .MuiSelect-icon": {
-      color: textColor,
-    },
-  };
 
   return (
     <Box sx={{ p: 2 }}>
@@ -395,7 +272,7 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <EnquiryCard
+                    <TableHeadingCard
                       sx={{
                         backgroundColor: "#5FECC8",
                         color: "#000",
@@ -477,7 +354,7 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                       >
                         <Typography variant="subtitle2">Actions</Typography>
                       </StyledCardContent>
-                    </EnquiryCard>
+                    </TableHeadingCard>
                   </TableRow>
                 </TableHead>
 
@@ -492,7 +369,7 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                     paginatedData
                       .slice((page - 1) * rowsPerPage, page * rowsPerPage)
                       .map((item, index) => (
-                        <EnquiryCardBody
+                        <TableDataCardBody
                           key={index}
                           sx={{
                             backgroundColor: inputBgColor,
@@ -577,18 +454,15 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                               sx={{
                                 color: "#00f0c0",
                                 cursor: "pointer",
-                                fontSize: 28,
+                                // fontSize: 35,
                                 justifyContent: "center",
                                 ...fontsTableBody,
                               }}
                             />
                           </StyledCardContent>
-                        </EnquiryCardBody>
+                        </TableDataCardBody>
                       ))
                   )}
-                  {/* {paginatedData.map((item, index) => ( */}
-
-                  {/* // ))} */}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -760,7 +634,7 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                 fontSize: 16,
                 fontFamily: "Roboto",
                 mb: 2,
-                fontFamily,
+                // fontFamily,
               }}
             >
               Add User
@@ -774,7 +648,7 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                   size="small"
                   placeholder="Department Name"
                   InputLabelProps={{ shrink: false }}
-                  sx={inputStyle}
+                  sx={selectStyles}
                 />
               </Grid>
 
@@ -785,16 +659,16 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                   displayEmpty
                   defaultValue=""
                   inputProps={{ "aria-label": "Select State" }}
-                  sx={{
-                    ...textfieldInputfonts,
-                    ...inputStyle, // If you have other global input styles
-                  }}
+                  sx={selectStyles}
                 >
                   <MenuItem value="" disabled>
                     Select State
                   </MenuItem>
-                  <MenuItem value="State 1">State 1</MenuItem>
-                  <MenuItem value="State 2">State 2</MenuItem>
+                  {states.map((state) => (
+                    <MenuItem key={state.state_id} value={state.state_id}>
+                      {state.state_name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </Grid>
 
@@ -805,16 +679,16 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                   displayEmpty
                   defaultValue=""
                   inputProps={{ "aria-label": "Select District" }}
-                  sx={{
-                    ...textfieldInputfonts,
-                    ...inputStyle, // If you have other global input styles
-                  }}
+                  sx={selectStyles}
                 >
                   <MenuItem value="" disabled>
                     Select District
                   </MenuItem>
-                  <MenuItem value="District 1">District 1</MenuItem>
-                  <MenuItem value="District 2">District 2</MenuItem>
+                  {districts.map((districts) => (
+                    <MenuItem key={districts.dis_id} value={districts.dis_id}>
+                      {districts.dis_name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </Grid>
 
@@ -825,16 +699,16 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                   displayEmpty
                   defaultValue=""
                   inputProps={{ "aria-label": "Select Tehsil" }}
-                  sx={{
-                    ...textfieldInputfonts,
-                    ...inputStyle, // If you have other global input styles
-                  }}
+                  sx={selectStyles}
                 >
                   <MenuItem value="" disabled>
                     Select Tehsil
                   </MenuItem>
-                  <MenuItem value="Tehsil 1">Tehsil 1</MenuItem>
-                  <MenuItem value="Tehsil 2">Tehsil 2</MenuItem>
+                  {Tehsils.map((Tehsils) => (
+                    <MenuItem key={Tehsils.tah_id} value={Tehsils.tah_id}>
+                      {Tehsils.tah_name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </Grid>
 
@@ -845,10 +719,7 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                   displayEmpty
                   defaultValue=""
                   inputProps={{ "aria-label": "Select City" }}
-                  sx={{
-                    ...textfieldInputfonts,
-                    ...inputStyle, // If you have other global input styles
-                  }}
+                  sx={selectStyles}
                 >
                   <MenuItem value="" disabled>
                     Select City
@@ -865,10 +736,7 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                   displayEmpty
                   defaultValue=""
                   inputProps={{ "aria-label": "Select Disaster" }}
-                  sx={{
-                    ...textfieldInputfonts,
-                    ...inputStyle, // If you have other global input styles
-                  }}
+                  sx={selectStyles}
                 >
                   <MenuItem
                     value=""
