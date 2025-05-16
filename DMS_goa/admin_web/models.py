@@ -297,6 +297,7 @@ class Weather_alerts(models.Model):
     utc_offset_seconds = models.IntegerField(null=True,blank=True)
     time = models.DateTimeField(null=True,blank=True)
     temperature_2m = models.FloatField(null=True,blank=True)
+    triger_status = models.IntegerField(null=True,blank=True)
     rain = models.FloatField(null=True,blank=True)
     precipitation = models.FloatField(null=True,blank=True)
     weather_code = models.IntegerField(null=True,blank=True)
