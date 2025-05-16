@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   const token = localStorage.getItem('access_token');
+  
 
   // 🔹 1. Fetch all states on load
   const fetchStates = async () => {
