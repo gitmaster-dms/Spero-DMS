@@ -14,16 +14,33 @@ import Pagination from '@mui/material/Pagination';
 import { Select, MenuItem, IconButton, Popper } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { useAuth } from './../../../../Context/ContextAPI';
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useAuth } from './../../../../Context/ContextAPI';
 
 function Add_employee({ darkMode }) {
-  const { states, districts, selectedStateId, setSelectedStateId, loading, error, } = useAuth();
+   const {
+     states,
+     districts,
+     Tehsils,
+     selectedStateId,
+     selectedDistrictId,
+     setSelectedStateId,
+     setSelectedDistrictId,
+     selectedTehsilId,
+     loading,
+     error,
+   } = useAuth();
+ 
 
     const [anchorEl, setAnchorEl] = useState(null);
   const handleStateChange = (e) => {
     const id = e.target.value;
     setSelectedStateId(id);
+  };
+
+  const handleDistrictChange = (e) => {
+    const id = e.target.value;
+    setSelectedDistrictId(id);
   };
   const textColor = darkMode ? "#ffffff" : "#000000";
   const bgColor = darkMode ? "#0a1929" : "#ffffff";
@@ -799,6 +816,7 @@ function Add_employee({ darkMode }) {
                 displayEmpty
                 placeholder="Select District"
                 defaultValue=""
+                 value={selectedDistrictId || ''} onChange={handleDistrictChange}
                 inputProps={{
                   "aria-label": "Select Name",
                 }}
@@ -833,9 +851,11 @@ function Add_employee({ darkMode }) {
                 <MenuItem value="" disabled>
                   Select District
                 </MenuItem>
-                {districts.map(districts => (
-                  <MenuItem key={districts.dis_id} value={districts.dis_id}>{districts.dis_name}</MenuItem>
-                ))}
+               {districts.map((districts) => (
+                                  <MenuItem key={districts.dis_id} value={districts.dis_id}>
+                                    {districts.dis_name}
+                                  </MenuItem>
+                                ))}
                 {/* Add more options as needed */}
               </Select>
 
@@ -875,7 +895,11 @@ function Add_employee({ darkMode }) {
                   Select Tehsil
                 </MenuItem>
 
-                <MenuItem value="">option2</MenuItem>
+              {Tehsils.map((Tehsils) => (
+                                 <MenuItem key={Tehsils.tah_id} value={Tehsils.tah_id}>
+                                   {Tehsils.tah_name}
+                                 </MenuItem>
+                               ))}
 
 
                 {/* Add more options as needed */}
