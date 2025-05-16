@@ -289,7 +289,7 @@ class DMS_SOP(models.Model):
 class Weather_alerts(models.Model):
     pk_id = models.AutoField(primary_key=True)
     latitude = models.FloatField(null=True,blank=True)
-    latitude = models.FloatField(null=True,blank=True)
+    # latitude = models.FloatField(null=True,blank=True)
     longitude = models.FloatField(null=True,blank=True)
     elevation = models.FloatField(null=True,blank=True)
     timezone = models.TextField(null=True,blank=True)
@@ -297,6 +297,7 @@ class Weather_alerts(models.Model):
     utc_offset_seconds = models.IntegerField(null=True,blank=True)
     time = models.DateTimeField(null=True,blank=True)
     temperature_2m = models.FloatField(null=True,blank=True)
+    triger_status = models.IntegerField(null=True,blank=True)
     rain = models.FloatField(null=True,blank=True)
     precipitation = models.FloatField(null=True,blank=True)
     weather_code = models.IntegerField(null=True,blank=True)
