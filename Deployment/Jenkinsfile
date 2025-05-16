@@ -67,8 +67,8 @@ pipeline {
             steps {
                 dir("${TARGET_DIR}") {
                     sh '''
-                        chmod +x Deployment/react_vite.sh
-                        Deployment/react_vite.sh
+                        chmod +x Deployment/envsetup.sh
+                        Deployment/envsetup.sh
                     '''
                 }
             }
@@ -78,8 +78,8 @@ pipeline {
             steps {
                 dir("${TARGET_DIR}") {
                     sh '''
-                        chmod +x Deployment/envsetup.sh
-                        Deployment/envsetup.sh
+                        chmod +x Deployment/react_vite.sh
+                        Deployment/react_vite.sh
                     '''
                 }
             }
