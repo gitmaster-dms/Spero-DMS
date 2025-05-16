@@ -236,27 +236,49 @@ async def startup_event():
 # -----------------------------------------NIKITA------------------------------------------------------
 
 from fastapi import FastAPI, WebSocket
+import asyncio
 import json
 from .django_setup import *
+from asgiref.sync import sync_to_async
 from admin_web.models import Weather_alerts  # Django model
+from .weather_alerts_utils import get_old_weather_alerts
 
 app = FastAPI()
 
-@app.websocket("/ws/weather-alerts")
+@app.websocket("/ws/weather_alerts")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
 
-    # Query using Django ORM (sync)
-    alerts = Weather_alerts.objects.all().values("id", "title", "description", "alert_time")
-    data = list(alerts)
+    try:
+        # Send old messages
+        old_messages = await get_old_weather_alerts()
+        for msg in old_messages:
+            await websocket.send_text(json.dumps(msg))
+            await asyncio.sleep(0.05)
 
-    # Convert datetime to string
-    for alert in data:
-        if alert["alert_time"]:
-            alert["alert_time"] = alert["alert_time"].isoformat()
+        # Send current data
+        alerts = await sync_to_async(list)(Weather_alerts.objects.all().values(
+            "pk_id", "latitude", "longitude", "elevation", "time", "temperature_2m", 
+            "rain", "precipitation", "weather_code", "triger_status"
+        ))
 
-    await websocket.send_text(json.dumps({"type": "all_alerts", "data": data}))
-    await websocket.close()
+        for alert in alerts:
+            if alert["time"]:
+                alert["time"] = alert["time"].isoformat()
+
+        await websocket.send_text(json.dumps({"type": "all_alerts", "data": alerts}))
+
+        # Keep-alive loop
+        while True:
+            await asyncio.sleep(10)  # You can also check for updates and push here
+            await websocket.send_text(json.dumps({"type": "heartbeat"}))  # Optional
+
+    except WebSocketDisconnect:
+        print("WebSocket disconnected by client.")
+
+    except Exception as e:
+        print(f"WebSocket error: {e}")
+
 
 
 
