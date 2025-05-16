@@ -16,7 +16,7 @@ else
     echo "node_modules does not exist, installing dependencies..."
 fi
 
-npm install
-npm run build
+npm install || { echo "React npm installation failed"; exit 1; }
+npm run build || { echo "React build failed"; exit 1; }
 
 echo "React Build Created"
