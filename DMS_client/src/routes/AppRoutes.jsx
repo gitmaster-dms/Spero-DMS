@@ -12,6 +12,7 @@ const AddGroup = lazy(() => import("../Componenets/SuperAdmin/System/Groups/Add_
 const AddEmployee = lazy(() => import("../Componenets/SuperAdmin/System/Employee_reg/Add_employee"));
 
 const AppRoutes = ({ darkMode, setIsLoggedIn }) => {
+  // ...
   return (
     <Suspense
       fallback={

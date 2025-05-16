@@ -85,10 +85,10 @@ DATABASES = {
        'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'DMS_GOA_DB_2025',
-        'USER': 'hhc123@sperohealthcare.in',
-        'PASSWORD': 'Spero@123', 
-        'HOST': '192.168.1.116',
-        'PORT': '5432', 
+        'USER': 'postgres',
+        'PASSWORD': 'spero@123#2025$', 
+        'HOST': '122.176.232.35',
+        'PORT': '5433', 
         'OPTIONS': {
             'options': '-c timezone=Asia/Kolkata',
         },
