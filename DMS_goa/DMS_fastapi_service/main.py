@@ -243,7 +243,7 @@ from asgiref.sync import sync_to_async
 from admin_web.models import Weather_alerts  # Django model
 from weather_alerts_utils import get_old_weather_alerts
 
-app = FastAPI()
+# app = FastAPI()
 
 @app.websocket("/ws/weather_alerts")
 async def websocket_endpoint(websocket: WebSocket):
