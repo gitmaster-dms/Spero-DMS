@@ -21,12 +21,12 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from fastapi.encoders import jsonable_encoder  # Import jsonable_encoder
 import logging
-import uiautomation as auto
+# import uiautomation as auto
 import asyncio
 from sqlalchemy import text
 from typing import List
-# from websocket_router import router as websocket_router
-from .websocket_router import router as websocket_router
+from websocket_router import router as websocket_router
+# from .websocket_router import router as websocket_router
 import httpx
 import pandas as pd
 
@@ -238,12 +238,12 @@ async def startup_event():
 from fastapi import FastAPI, WebSocket
 import asyncio
 import json
-from .django_setup import *
+from django_setup import *
 from asgiref.sync import sync_to_async
 from admin_web.models import Weather_alerts  # Django model
-from .weather_alerts_utils import get_old_weather_alerts
+from weather_alerts_utils import get_old_weather_alerts
 
-app = FastAPI()
+# app = FastAPI()
 
 @app.websocket("/ws/weather_alerts")
 async def websocket_endpoint(websocket: WebSocket):
