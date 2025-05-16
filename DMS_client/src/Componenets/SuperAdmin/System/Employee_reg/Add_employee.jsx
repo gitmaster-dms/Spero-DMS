@@ -1,12 +1,12 @@
 import { useState, useEffect ,useMemo } from "react";
-import { Box, Typography, TextField, Button, Paper, InputAdornment, Grid, } from "@mui/material";
+import { Box, Typography, TextField, Button, Paper, InputAdornment, Grid,Popover  } from "@mui/material";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Search, ArrowBack } from "@mui/icons-material";
+import { Search, ArrowBack ,DeleteOutline,EditOutlined,} from "@mui/icons-material";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { styled } from "@mui/material/styles";
 // import { alerts } from "./../../../DispatchModule/SOP/dummydata";
@@ -14,14 +14,33 @@ import Pagination from '@mui/material/Pagination';
 import { Select, MenuItem, IconButton, Popper } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useAuth } from './../../../../Context/ContextAPI';
 
 function Add_employee({ darkMode }) {
-  const { states, districts, selectedStateId, setSelectedStateId, loading, error, } = useAuth();
+   const {
+     states,
+     districts,
+     Tehsils,
+     selectedStateId,
+     selectedDistrictId,
+     setSelectedStateId,
+     setSelectedDistrictId,
+     selectedTehsilId,
+     loading,
+     error,
+   } = useAuth();
+ 
 
+    const [anchorEl, setAnchorEl] = useState(null);
   const handleStateChange = (e) => {
     const id = e.target.value;
     setSelectedStateId(id);
+  };
+
+  const handleDistrictChange = (e) => {
+    const id = e.target.value;
+    setSelectedDistrictId(id);
   };
   const textColor = darkMode ? "#ffffff" : "#000000";
   const bgColor = darkMode ? "#0a1929" : "#ffffff";
@@ -244,6 +263,15 @@ function Add_employee({ darkMode }) {
      const end = start + rowsPerPage;
      return alertData.slice(start, end);
    }, [page, rowsPerPage, alertData]);
+
+   const open = Boolean(anchorEl);
+  const handleOpen = (event, item) => {
+    setAnchorEl(event.currentTarget);
+    // Optionally store item in state if needed
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
 
   return (
@@ -610,12 +638,71 @@ function Add_employee({ darkMode }) {
                 </Box>
               </Box>
             </Box>
-
-
-
-
           </Paper>
         </Grid>
+
+           <Popover
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "center",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "center",
+            horizontal: "left",
+          }}
+          PaperProps={{
+            sx: {
+              p: 2,
+              display: "flex",
+              flexDirection: "column",
+              gap: 1.5,
+              borderRadius: 2,
+              minWidth: 120,
+            },
+          }}
+        >
+          <Button
+            fullWidth
+            variant="outlined"
+            color="primary"
+            startIcon={<VisibilityIcon />}
+            onClick={() => {
+              alert("View clicked");
+              handleClose();
+            }}
+          >
+            View
+          </Button>
+
+          <Button
+            fullWidth
+            variant="outlined"
+            color="warning"
+            startIcon={<EditOutlined />}
+            onClick={() => {
+              alert("Edit clicked");
+              handleClose();
+            }}
+          >
+            Edit
+          </Button>
+
+          <Button
+            fullWidth
+            variant="outlined"
+            color="error"
+            startIcon={<DeleteOutline />}
+            onClick={() => {
+              alert("Delete clicked");
+              handleClose();
+            }}
+          >
+            Delete
+          </Button>
+        </Popover>
 
         <Grid item xs={12} md={5}>
           <Paper elevation={3} sx={{ padding: 2, borderRadius: 3, backgroundColor: bgColor, mt: 1, mb: 5 }}>
@@ -699,7 +786,6 @@ function Add_employee({ darkMode }) {
                   '&:hover': {
                     boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)', // Increase shadow on hover
                   },
-                  backgroundColor: inputBgColor,
                   '& input::placeholder': {
                     fontSize: '0.85rem',
                     color: textColor,
@@ -729,6 +815,7 @@ function Add_employee({ darkMode }) {
                 displayEmpty
                 placeholder="Select District"
                 defaultValue=""
+                 value={selectedDistrictId || ''} onChange={handleDistrictChange}
                 inputProps={{
                   "aria-label": "Select Name",
                 }}
@@ -749,7 +836,6 @@ function Add_employee({ darkMode }) {
                   '&:hover': {
                     boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)', // Increase shadow on hover
                   },
-                  backgroundColor:inputBgColor,
                   '& input::placeholder': {
                     fontSize: '0.85rem',
                     color: textColor,
@@ -763,9 +849,11 @@ function Add_employee({ darkMode }) {
                 <MenuItem value="" disabled>
                   Select District
                 </MenuItem>
-                {districts.map(districts => (
-                  <MenuItem key={districts.dis_id} value={districts.dis_id}>{districts.dis_name}</MenuItem>
-                ))}
+               {districts.map((districts) => (
+                                  <MenuItem key={districts.dis_id} value={districts.dis_id}>
+                                    {districts.dis_name}
+                                  </MenuItem>
+                                ))}
                 {/* Add more options as needed */}
               </Select>
 
@@ -805,7 +893,11 @@ function Add_employee({ darkMode }) {
                   Select Tehsil
                 </MenuItem>
 
-                <MenuItem value="">option2</MenuItem>
+              {Tehsils.map((Tehsils) => (
+                                 <MenuItem key={Tehsils.tah_id} value={Tehsils.tah_id}>
+                                   {Tehsils.tah_name}
+                                 </MenuItem>
+                               ))}
 
 
                 {/* Add more options as needed */}
@@ -896,23 +988,21 @@ function Add_employee({ darkMode }) {
             </Box>
 
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 1 }}>
-              <Button
-                variant="contained"
-                sx={{
-
-                  width: '40%',
-                  backgroundColor: '#00f0c0', // Set background color
-                  color: "black",// Set text color to black
-
-                  fontWeight: 'bold',
-                  borderRadius: '12px',
-                  '&:hover': {
-                    backgroundColor: bgColor, // Change background color on hover
-                    color: "black",
-                  },
-                }}
-              >
-                Submit
+             <Button
+                                variant="contained"
+                                sx={{
+                                  mt: 2,
+                                  width: "40%",
+                                  backgroundColor: "#00f0c0",
+                                  color: "black",
+                                  fontWeight: "bold",
+                                  borderRadius: "12px",
+                                  "&:hover": {
+                                    backgroundColor: bgColor,
+                                    color: "white !important",
+                                  },
+                                }}
+                              >Submit
               </Button>
             </Box>
 

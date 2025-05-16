@@ -25,7 +25,8 @@ import uiautomation as auto
 import asyncio
 from sqlalchemy import text
 from typing import List
-from websocket_router import router as websocket_router
+# from websocket_router import router as websocket_router
+from .websocket_router import router as websocket_router
 import httpx
 import pandas as pd
 
@@ -231,6 +232,52 @@ async def startup_event():
     asyncio.create_task(scheduled_weather_fetch())
 
 
+
+# -----------------------------------------NIKITA------------------------------------------------------
+
+from fastapi import FastAPI, WebSocket
+import asyncio
+import json
+from .django_setup import *
+from asgiref.sync import sync_to_async
+from admin_web.models import Weather_alerts  # Django model
+from .weather_alerts_utils import get_old_weather_alerts
+
+app = FastAPI()
+
+@app.websocket("/ws/weather_alerts")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+
+    try:
+        # Send old messages
+        old_messages = await get_old_weather_alerts()
+        for msg in old_messages:
+            await websocket.send_text(json.dumps(msg))
+            await asyncio.sleep(0.05)
+
+        # Send current data
+        alerts = await sync_to_async(list)(Weather_alerts.objects.all().values(
+            "pk_id", "latitude", "longitude", "elevation", "time", "temperature_2m", 
+            "rain", "precipitation", "weather_code", "triger_status"
+        ))
+
+        for alert in alerts:
+            if alert["time"]:
+                alert["time"] = alert["time"].isoformat()
+
+        await websocket.send_text(json.dumps({"type": "all_alerts", "data": alerts}))
+
+        # Keep-alive loop
+        while True:
+            await asyncio.sleep(10)  # You can also check for updates and push here
+            await websocket.send_text(json.dumps({"type": "heartbeat"}))  # Optional
+
+    except WebSocketDisconnect:
+        print("WebSocket disconnected by client.")
+
+    except Exception as e:
+        print(f"WebSocket error: {e}")
 
 
 
