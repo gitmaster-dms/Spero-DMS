@@ -176,13 +176,22 @@ function Login() {
                 console.log('Refresh Token:', data.token.refresh);
                 console.log('User Group:', data.token.user_group);
                 console.log('User Info:', data.token.colleague);
-                navigate('/multiscreen');
-                // if (userGroup === '1') {
-                //     navigate('/add-group');
-                // }
-                // else if (userGroup === '2') {
-                //     navigate('/alert-panel');
-                // }
+                const group = data.token.user_group;
+
+
+
+                if (group === '1') {
+                    navigate('/add-group');
+                } else if (group === '2') {
+                    navigate('/alert-panel');
+                } else if (group === '3') {
+                    navigate('/multiscreen');
+                } else {
+                    console.warn('Unhandled user group:', group);
+                    // Optionally redirect to a fallback route
+                    navigate('/not-authorized');
+                }
+
             }
 
 
