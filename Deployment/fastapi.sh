@@ -50,7 +50,7 @@ echo "Current Directory: $PWD"
 # Reload systemd and restart Gunicorn
 sudo systemctl daemon-reload
 sudo systemctl enable dms_uvicorn_fastapi
-sudo systemctl restart dms_uvicorn_fastapi
+sudo systemctl start dms_uvicorn_fastapi
  
 # Check Gunicorn status
 sudo systemctl status dms_uvicorn_fastapi

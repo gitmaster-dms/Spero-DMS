@@ -60,13 +60,18 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
 
  const logout = async () => {
   const accessToken = localStorage.getItem('access_token');  // Use correct key
-
+   const userGroup   = localStorage.getItem('user_group');
   if (!accessToken) {
     console.error('No access token found');
-    window.location.href = '/login';
+    
+    // only refresh if group 3; otherwise go to login
+    if (userGroup === "3") {
+      location.reload();
+    } else {
+      window.location.href = '/login';
+    }
     return;
   }
-
   try {
     const response = await fetch(`${port}/admin_web/logout/`, {
       method: 'POST',
@@ -75,6 +80,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
         'Authorization': `Bearer ${accessToken}`,
       }
     });
+     localStorage.setItem('logout', Date.now()); 
 
     // Clear tokens regardless of logout success or failure
     localStorage.removeItem('access_token');
@@ -95,6 +101,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('token');
+    
     window.location.href = '/login';
   }
 };

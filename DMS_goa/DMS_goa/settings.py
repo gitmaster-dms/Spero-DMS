@@ -184,6 +184,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:5174",
     "http://localhost:5175",
+    "http://192.168.1.116:7000",
+    "http://192.168.1.116:6003",
+    "http://192.168.1.116:7777"
 ]
 
 

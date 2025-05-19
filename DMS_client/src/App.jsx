@@ -6,13 +6,13 @@ import Navbar from "./Componenets/Navbar/Navbar";
 import Footer from "./Componenets/Footer/Footer";
 import Sidebar from "./Componenets/DispatchModule/Sidebar/Sidebar";
 import AppRoutes from "./routes/AppRoutes";
-import Departmentsidebar from "./Componenets/SuperAdmin/Sidebar/Departmentsidebar";
-
-
+import Departmentsidebar from "./Componenets/SuperAdmin/Sidebar/DepartmentSidebar";
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
-  const [userGroup, setUserGroup] = useState(null);
+  const [userGroup, setUserGroup] = useState("");
+  console.log(userGroup,'userGroup');
+  
   const location = useLocation();
 
 
