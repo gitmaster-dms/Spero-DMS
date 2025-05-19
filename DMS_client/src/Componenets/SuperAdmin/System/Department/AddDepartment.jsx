@@ -66,10 +66,13 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
     selectedStateId,
     setSelectedStateId,
     setSelectedDistrictId,
+    selectedDistrictId,
     selectedTehsilId,
+    setSelectedTehsilId,
     loading,
     error,
   } = useAuth();
+  console.log(selectedTehsilId, "selectedTehsilId");
 
   const handleStateChange = (e) => {
     const id = e.target.value;
@@ -657,13 +660,14 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
               <Grid item xs={12} sm={6}>
                 <Select
                   fullWidth
+                  value={selectedStateId}
+                  onChange={(e) => setSelectedStateId(e.target.value)}
                   displayEmpty
-                  defaultValue=""
                   inputProps={{ "aria-label": "Select State" }}
                   sx={selectStyles}
                 >
                   <MenuItem value="" disabled>
-                    Select State
+                    <em>Select State</em>
                   </MenuItem>
                   {states.map((state) => (
                     <MenuItem key={state.state_id} value={state.state_id}>
@@ -677,9 +681,12 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
               <Grid item xs={12} sm={6}>
                 <Select
                   fullWidth
+                  value={selectedDistrictId}
+                  onChange={(e) => setSelectedDistrictId(e.target.value)}
                   displayEmpty
                   defaultValue=""
                   inputProps={{ "aria-label": "Select District" }}
+                  disabled={!selectedStateId}
                   sx={selectStyles}
                 >
                   <MenuItem value="" disabled>
@@ -698,9 +705,12 @@ const AddDepartment = ({ darkMode, flag, setFlag, setSelectedIncident }) => {
                 <Select
                   fullWidth
                   displayEmpty
+                  value={selectedTehsilId}
+                  onChange={(e) => setSelectedTehsilId(e.target.value)}
                   defaultValue=""
                   inputProps={{ "aria-label": "Select Tehsil" }}
                   sx={selectStyles}
+                  disabled={!selectedDistrictId} // 🔒 Disable when no district selected
                 >
                   <MenuItem value="" disabled>
                     Select Tehsil

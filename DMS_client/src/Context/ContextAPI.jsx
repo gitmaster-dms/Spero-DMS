@@ -46,20 +46,6 @@ export const AuthProvider = ({ children }) => {
       setError(err);
     }
   };
-  const fetchDistricts = async () => {
-    try {
-      const res = await axios.get(`${port}/admin_web/district_get/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log("All districts response:", res.data);
-      setDistricts(res.data || []);
-    } catch (err) {
-      console.error("Error fetching all districts:", err);
-      setError(err);
-    }
-  };
 
   const fetchDistrictIDWise = async (stateId) => {
     if (!stateId) return;
@@ -73,7 +59,7 @@ export const AuthProvider = ({ children }) => {
         }
       );
       console.log(`Districts by state ${stateId}:`, res.data);
-      setDistricts(res.data.districts || []);
+      setDistricts(res.data || []); // ✅ Make sure this matches your response format
     } catch (err) {
       console.error("Error fetching district by ID:", err);
       setError(err);
@@ -81,37 +67,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchDistricts();
-  }, []);
-
-  // ✅ useEffect for state selection
-  useEffect(() => {
-    if (selectedDistrictId) {
-      fetchDistrictIDWise(selectedDistrictId);
+    if (selectedStateId) {
+      fetchDistrictIDWise(selectedStateId);
     } else {
       setDistricts([]);
-      console.log("No state selected — clearing districts");
     }
-  }, [selectedDistrictId]);
-
-  const fetchTehsils = async () => {
-    try {
-      const res = await axios.get(`${port}/admin_web/Tahsil_get/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log("All Tehsils response:", res.data);
-      setTehsils(res.data || []);
-    } catch (err) {
-      console.error("Error fetching all districts:", err);
-      setError(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchTehsils();
-  }, []);
+  }, [selectedStateId]);
 
   const fetchTehsilsByDistrict = async (DistID) => {
     if (!DistID) return;
@@ -121,19 +82,21 @@ export const AuthProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setDistricts(res.data.Tehsils || []);
+      console.log(`tehsile by state ${DistID}:`, res.data);
+      setTehsils(res.data || []);
+      console.log(res.data, "resdata");
     } catch (err) {
       setError(err);
     }
   };
 
   useEffect(() => {
-    if (selectedTehsilId) {
-      fetchTehsilsByDistrict(selectedTehsilId);
+    if (selectedDistrictId) {
+      fetchTehsilsByDistrict(selectedDistrictId);
     } else {
       setTehsils([]); // clear if no state selected
     }
-  }, [selectedTehsilId]);
+  }, [selectedDistrictId]);
 
   useEffect(() => {
     fetchStates();
@@ -159,6 +122,7 @@ export const AuthProvider = ({ children }) => {
         error,
         setSelectedDistrictId,
         setSelectedTehsilId,
+        selectedDistrictId,
       }}
     >
       {children}
