@@ -278,7 +278,7 @@ function Login() {
             console.log('Refresh Token:', data.token.refresh);
             console.log('User Group:', data.token.user_group);
             console.log('User Info:', data.token.colleague);
-  const group = data.token.user_group;
+               const group = data.token.user_group;
 
             
                 if (group === '1') {
@@ -345,6 +345,8 @@ function Login() {
     };
 
 
+
+    
 
     return (
         <Box sx={{ height: '100vh', width: '100%', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: isSmallScreen ? 'column' : 'row' }}>
