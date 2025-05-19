@@ -2,12 +2,12 @@
 import { useState, useMemo, useEffect } from "react";
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 import { useLocation } from "react-router-dom";
-
 import Navbar from "./Componenets/Navbar/Navbar";
 import Footer from "./Componenets/Footer/Footer";
 import Sidebar from "./Componenets/DispatchModule/Sidebar/Sidebar";
 import AppRoutes from "./routes/AppRoutes";
 import Departmentsidebar from "./Componenets/SuperAdmin/Sidebar/Departmentsidebar";
+
 
 
 function App() {

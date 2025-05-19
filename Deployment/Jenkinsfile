@@ -4,7 +4,15 @@ pipeline {
     options {
         skipDefaultCheckout(true)
     }
- 
+    // Add permissions to project
+    // sudo groupadd dmsgroup
+    // sudo usermod -aG dmsgroup spero_cad25
+    // sudo usermod -aG dmsgroup jenkins
+    // sudo chown -R :dmsgroup /var/www/html/DMS_goa
+    // sudo chmod -R 775 /var/www/html/DMS_goa/
+    // restart server
+
+
     environment {
         GIT_REPO_URL = 'https://github.com/gitmaster-dms/Spero-DMS.git'
         GIT_BRANCH = 'main'

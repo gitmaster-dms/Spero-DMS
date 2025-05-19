@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, GeoJSON } from 'react-leaflet';
+import {useState,useEffect} from 'react';
+import { MapContainer, TileLayer, Marker, Popup,GeoJSON } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -32,14 +32,14 @@ const MapView = () => {
   };
 
   return (
-    <MapContainer center={position} zoom={9} style={{ height: "100vh", width: "100%" }}>
+    <MapContainer center={position} zoom={9} style={{ height: "80vh", width: "100%" }}>
     <TileLayer
   url="https://tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey=e2c62012ab834665b043fe5b2a6c67a4"
   attribution='&copy; <a href="https://www.thunderforest.com/">Thunderforest</a>'
 />
     {stateData && <GeoJSON data={stateData} style={geoJsonStyle} />}
       <Marker position={position} icon={customIcon}>
-        {/* <Popup>You're here!</Popup> */}
+        <Popup>You're here!</Popup>
       </Marker>
     </MapContainer>
   );

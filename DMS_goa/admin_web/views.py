@@ -478,3 +478,13 @@ class DMS_Disaster_Type_Idwise_Get_API(APIView):
         snippet = DMS_Disaster_Type.objects.filter(disaster_is_deleted=False,disaster_id=disaster_id)
         serializers = DMS_Disaster_Type_Serializer(snippet,many=True)
         return Response(serializers.data,status=status.HTTP_200_OK)
+    
+
+class DMS_Alert_idwise_get_api(APIView):
+    def get(self,request):
+        alert_id = request.GET.get('id')
+        alert_obj = Weather_alerts.objects.get(pk_id=alert_id)
+        alert_obj.triger_status = 2
+        alert_obj.save()
+        serializers = WeatherAlertSerializer(alert_obj,many=False)
+        return Response(serializers.data,status=status.HTTP_200_OK)

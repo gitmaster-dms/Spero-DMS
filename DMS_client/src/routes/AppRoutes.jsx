@@ -1,87 +1,97 @@
-// src/routes/AppRoutes.js
 import { Routes, Route, Navigate } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import { CircularProgress, Box } from "@mui/material";
 import PrivateRoute from "./PrivateRoute";
 
-import Login from "../Componenets/Login/Login";
-import Sop from "../Componenets/DispatchModule/SOP/Sop";
-import AlertPanel from "../Componenets/DispatchModule/AlertPanel/AlertPanel";
-import AddDepartment from "../Componenets/SuperAdmin/System/Department/AddDepartment";
-import AddGroup from "../Componenets/SuperAdmin/System/Groups/Add_group";
-import AddEmployee from "../Componenets/SuperAdmin/System/Employee_reg/Add_employee";
-import Map from "../Componenets/DispatchModule/Map/Map";
-import MultiScreen from "../Page/multiscreen";
+// Lazy-loaded components
+const Login = lazy(() => import("../Componenets/Login/Login"));
+const Sop = lazy(() => import("../Componenets/DispatchModule/SOP/Sop"));
+const AlertPanel = lazy(() => import("../Componenets/DispatchModule/AlertPanel/AlertPanel"));
+const AddDepartment = lazy(() => import("../Componenets/SuperAdmin/System/Department/AddDepartment"));
+const AddGroup = lazy(() => import("../Componenets/SuperAdmin/System/Groups/Add_group"));
+const AddEmployee = lazy(() => import("../Componenets/SuperAdmin/System/Employee_reg/Add_employee"));
+const Map = lazy(() => import("../Componenets/DispatchModule/Map/Map"));
+const MultiScreen = lazy(() => import("../Page/multiscreen"));
 
-
+// Spinner Loader component
+const Loader = () => (
+  <Box
+    sx={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "100vh",
+    }}
+  >
+    <CircularProgress size={60} />
+  </Box>
+);
 
 const AppRoutes = ({ darkMode, setIsLoggedIn }) => {
-  // ...
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/login" />} />
-      <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+    <Suspense fallback={<Loader />}>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
 
-      {/* Protected Routes */}
-      <Route
-        path="/multiscreen"
-        element={
-          <PrivateRoute >
-            <MultiScreen darkMode={darkMode} />
-          </PrivateRoute>
-         
-        }
-      />
-
-      <Route
-        path="/Map"
-        element={
-          <PrivateRoute >
-            <Map darkMode={darkMode} />
-          </PrivateRoute>
-         
-        }
-      />
-      <Route
-        path="/alert-panel"
-        element={
-          <PrivateRoute>
-            <AlertPanel darkMode={darkMode} />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/sop"
-        element={
-          <PrivateRoute>
-            <Sop darkMode={darkMode} />
-          </PrivateRoute>
-        }
-      />
-      
-      <Route
-        path="/add-department"
-        element={
-          <PrivateRoute>
-            <AddDepartment darkMode={darkMode} />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/add-group"
-        element={
-          <PrivateRoute>
-            <AddGroup darkMode={darkMode} />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/add-employee"
-        element={
-          <PrivateRoute>
-            <AddEmployee darkMode={darkMode} />
-          </PrivateRoute>
-        }
-      />
-    </Routes>
+        <Route
+          path="/multiscreen"
+          element={
+            <PrivateRoute>
+              <MultiScreen darkMode={darkMode} />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/Map"
+          element={
+            <PrivateRoute>
+              <Map darkMode={darkMode} />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/alert-panel"
+          element={
+            <PrivateRoute>
+              <AlertPanel darkMode={darkMode} />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/sop"
+          element={
+            <PrivateRoute>
+              <Sop darkMode={darkMode} />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/add-department"
+          element={
+            <PrivateRoute>
+              <AddDepartment darkMode={darkMode} />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/add-group"
+          element={
+            <PrivateRoute>
+              <AddGroup darkMode={darkMode} />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/add-employee"
+          element={
+            <PrivateRoute>
+              <AddEmployee darkMode={darkMode} />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+    </Suspense>
   );
 };
 
