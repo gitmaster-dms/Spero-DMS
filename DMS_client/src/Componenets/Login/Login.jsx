@@ -167,9 +167,11 @@ function Login() {
                 localStorage.setItem('access_token', data.token.access);
                 localStorage.setItem('refresh_token', data.token.refresh);
                 localStorage.setItem('user', JSON.stringify(data.token.colleague));
-                localStorage.setItem('user_group', data.token.user_group);
+                localStorage.setItem('user_group', String(data.token.user_group));
+                // localStorage.setItem('user_group', data.token.user_group);
 
                 // setUserGroup(data.token.user_group)
+
 
                 // 🔍 Console logs
                 console.log('Access Token:', data.token.access);
@@ -181,7 +183,7 @@ function Login() {
 
 
                 if (group === '1') {
-                    navigate('/add-group');
+                    navigate('/add-department');
                 } else if (group === '2') {
                     navigate('/alert-panel');
                 } else if (group === '3') {
