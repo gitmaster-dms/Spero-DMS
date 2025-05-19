@@ -26,13 +26,15 @@ function Add_employee({ darkMode }) {
      selectedDistrictId,
      setSelectedStateId,
      setSelectedDistrictId,
-     selectedTehsilId,
+    selectedTehsilId,
+    setSelectedTehsilId,
      loading,
      error,
    } = useAuth();
  
 
     const [anchorEl, setAnchorEl] = useState(null);
+
   const handleStateChange = (e) => {
     const id = e.target.value;
     setSelectedStateId(id);
@@ -42,6 +44,8 @@ function Add_employee({ darkMode }) {
     const id = e.target.value;
     setSelectedDistrictId(id);
   };
+
+
   const textColor = darkMode ? "#ffffff" : "#000000";
   const bgColor = darkMode ? "#0a1929" : "#ffffff";
   const labelColor = darkMode ? "#5FECC8" : "#1976d2";
@@ -815,7 +819,8 @@ function Add_employee({ darkMode }) {
                 displayEmpty
                 placeholder="Select District"
                 defaultValue=""
-                 value={selectedDistrictId || ''} onChange={handleDistrictChange}
+                  value={selectedDistrictId}
+                  onChange={(e) => setSelectedDistrictId(e.target.value)}
                 inputProps={{
                   "aria-label": "Select Name",
                 }}
@@ -893,11 +898,11 @@ function Add_employee({ darkMode }) {
                   Select Tehsil
                 </MenuItem>
 
-              {Tehsils.map((Tehsils) => (
-                                 <MenuItem key={Tehsils.tah_id} value={Tehsils.tah_id}>
-                                   {Tehsils.tah_name}
-                                 </MenuItem>
-                               ))}
+              {Tehsils.map((tehsil) => (
+          <option key={tehsil.tah_id} value={tehsil.tah_id}>
+            {tehsil.tah_name}
+          </option>
+        ))}
 
 
                 {/* Add more options as needed */}

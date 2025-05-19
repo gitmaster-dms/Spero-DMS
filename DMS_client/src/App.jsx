@@ -15,6 +15,16 @@ function App() {
   const [userGroup, setUserGroup] = useState(null);
   const location = useLocation();
 
+
+  useEffect(() => {
+  const storedGroup = localStorage.getItem("user_group");
+  console.log("Stored group from localStorage:", storedGroup);
+  setUserGroup(storedGroup);
+}, [location]); // re-run on route change
+
+  // console.log('Loaded user group from localStorage:', userGroup);
+
+
   const isAuthRoute = location.pathname === "/login";
 
   // Load dark mode & user group from localStorage
@@ -62,6 +72,8 @@ function App() {
               {/* 👇 Correct Sidebar logic */}
               {userGroup === "2" && <Sidebar darkMode={darkMode} />}
               {userGroup === "1" && <Departmentsidebar darkMode={darkMode} />}
+             
+
             </>
           )}
 

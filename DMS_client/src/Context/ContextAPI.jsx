@@ -66,13 +66,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    if (selectedStateId) {
-      fetchDistrictIDWise(selectedStateId);
-    } else {
-      setDistricts([]);
-    }
-  }, [selectedStateId]);
+  // useEffect(() => {
+  //   if (selectedStateId) {
+  //     fetchDistrictIDWise(selectedStateId);
+  //   } else {
+  //     setDistricts([]);
+  //   }
+  // }, [selectedStateId]);
 
   const fetchTehsilsByDistrict = async (DistID) => {
     if (!DistID) return;
@@ -95,6 +95,7 @@ export const AuthProvider = ({ children }) => {
       fetchTehsilsByDistrict(selectedDistrictId);
     } else {
       setTehsils([]); // clear if no state selected
+      
     }
   }, [selectedDistrictId]);
 
