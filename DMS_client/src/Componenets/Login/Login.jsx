@@ -28,7 +28,7 @@ function Login() {
     const [captchaLoading, setCaptchaLoading] = useState(true);
     const [captchaError, setCaptchaError] = useState(false);
     const [captchaTextError, setCaptchaTextError] = useState('');
-    const [userGroup, setUserGroup] = ("")
+    // const [userGroup, setUserGroup] = ("")
 
     // Function to fetch new captcha
     const fetchCaptcha = async () => {
@@ -169,20 +169,20 @@ function Login() {
                 localStorage.setItem('user', JSON.stringify(data.token.colleague));
                 localStorage.setItem('user_group', data.token.user_group);
 
-                setUserGroup(data.token.user_group)
+                // setUserGroup(data.token.user_group)
 
                 // 🔍 Console logs
                 console.log('Access Token:', data.token.access);
                 console.log('Refresh Token:', data.token.refresh);
                 console.log('User Group:', data.token.user_group);
                 console.log('User Info:', data.token.colleague);
-
-                if (userGroup === '1') {
-                    navigate('/add-group');
-                }
-                else if (userGroup === '2') {
-                    navigate('/alert-panel');
-                }
+                navigate('/multiscreen');
+                // if (userGroup === '1') {
+                //     navigate('/add-group');
+                // }
+                // else if (userGroup === '2') {
+                //     navigate('/alert-panel');
+                // }
             }
 
 
