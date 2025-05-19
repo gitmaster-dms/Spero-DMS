@@ -35,3 +35,5 @@ fi
 
 sudo systemctl status nginx
 sudo systemctl restart nginx
+sudo systemctl restart dms_uvicorn_fastapi
+sudo systemctl status dms_gunicorn_django
