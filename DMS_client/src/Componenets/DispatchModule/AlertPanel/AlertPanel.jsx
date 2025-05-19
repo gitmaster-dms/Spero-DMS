@@ -82,10 +82,12 @@ const alertData = [
 ];
 
 const AlertPanel = ({ darkMode }) => {
+    const port = import.meta.env.VITE_APP_API_KEY;
 
-      useEffect(() => {
-    document.title = "DMS-AlertPanel";
-  }, []);
+    useEffect(() => {
+        document.title = "DMS-AlertPanel";
+    }, []);
+
     const [selected, setSelected] = useState([]);
     const navigate = useNavigate();
 
@@ -106,7 +108,6 @@ const AlertPanel = ({ darkMode }) => {
                             <TableHead>
                                 <TableRow>
                                     <EnquiryCard>
-                                        {/* <StyledCardContent style={{ flex: 0.2 }} /> */}
                                         <StyledCardContent style={{ flex: 0.3, borderRight: "1px solid black" }}>
                                             <Typography variant="subtitle2">Sr. No</Typography>
                                         </StyledCardContent>
@@ -229,18 +230,6 @@ const AlertPanel = ({ darkMode }) => {
                             </TableBody>
                         </Table>
                     </TableContainer>
-
-                    {/* <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center',height:'30px' }}>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={() => {
-                                console.log('View All clicked');
-                            }}
-                        >
-                            View All
-                        </Button>
-                    </Box> */}
                 </Grid>
 
                 <Grid item xs={12} md={4}>
@@ -254,7 +243,7 @@ const AlertPanel = ({ darkMode }) => {
                            
                         </Typography>
                     </Box> */}
-                    <MapView/>
+                    <MapView />
                 </Grid>
             </Grid>
         </Box >
