@@ -10,7 +10,7 @@ ExecStart=/var/www/html/DMS_goa/vvenv/bin/gunicorn \
     -k uvicorn.workers.UvicornWorker \
     -b unix:/tmp/uvicorn_dms.sock \
     main:app
-Environment=PYTHONPATH=/var/www/html/DMS_goa
+Environment=PYTHONPATH=/var/www/html/DMS_goa/DMS_goa
 
 Restart=always
 
