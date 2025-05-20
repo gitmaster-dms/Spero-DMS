@@ -194,8 +194,7 @@ async def call_open_meteo_api():
     url = (
         f"https://api.open-meteo.com/v1/forecast?"
         f"latitude={latitudes}&longitude={longitudes}"
-        f"&hourly=temperature_2m,rain,precipitation,weather_code"
-        f"&models=ecmwf_ifs025"
+        f"&current=temperature_2m,rain,precipitation,weather_code"
     )
 
     async with httpx.AsyncClient() as client:
