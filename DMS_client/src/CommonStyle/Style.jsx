@@ -1,14 +1,14 @@
 // src/styles/themeStyles.js
- 
+
 import { colors } from "@mui/material";
 import { styled } from "@mui/material/styles";
- 
+
 export const getThemeBgColors = (darkMode) => {
   const textColor = darkMode ? "#ffffff" : "#000000";
   const bgColor = darkMode ? "#0a1929" : "#ffffff";
   const borderColor = darkMode ? "#7F7F7F" : "#ccc";
   const labelColor = darkMode ? "#5FECC8" : "#1976d2";
- 
+
   const inputBgColor = darkMode
     ? "rgba(255, 255, 255, 0.16)"
     : "rgba(0, 0, 0, 0.04)";

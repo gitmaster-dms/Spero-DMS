@@ -18,30 +18,35 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useAuth } from './../../../../Context/ContextAPI';
 
 function Add_employee({ darkMode }) {
-   const {
-     states,
-     districts,
-     Tehsils,
-     selectedStateId,
-     selectedDistrictId,
-     setSelectedStateId,
-     setSelectedDistrictId,
-     selectedTehsilId,
-     loading,
-     error,
-   } = useAuth();
+  const {
+    states,
+    districts,
+    Tehsils,
+    selectedStateId,
+    selectedDistrictId,
+    selectedTehsilId,
+    setSelectedStateId,
+    setSelectedDistrictId,
+    setSelectedTehsilId,
+    loading,
+    error,
+  } = useAuth();
  
 
     const [anchorEl, setAnchorEl] = useState(null);
+
   const handleStateChange = (e) => {
-    const id = e.target.value;
-    setSelectedStateId(id);
+    setSelectedStateId(e.target.value);
   };
 
   const handleDistrictChange = (e) => {
-    const id = e.target.value;
-    setSelectedDistrictId(id);
+    setSelectedDistrictId(e.target.value);
   };
+
+  const handleTehsilChange = (e) => {
+    setSelectedTehsilId(e.target.value);
+  };
+
   const textColor = darkMode ? "#ffffff" : "#000000";
   const bgColor = darkMode ? "#0a1929" : "#ffffff";
   const labelColor = darkMode ? "#5FECC8" : "#1976d2";
@@ -112,8 +117,38 @@ function Add_employee({ darkMode }) {
     textAlign: "center",
   };
 
-  const [alertData, setAlertData] = useState([
-    {
+
+  const inputStyle = {
+   // Set desired width
+                  height: "3rem",
+                  '& .MuiInputBase-input': {
+                    color: textColor,
+                  },
+                  '& .MuiInputBase-root': {
+                    height: "100%",             // Ensure input wrapper matches height
+                    padding: "0 12px",          // Horizontal padding
+                    display: 'flex',
+                    alignItems: 'center',       // Center content vertically
+                  },
+                  borderRadius: '12px',
+                  '& fieldset': {
+                    border: 'none', // Remove border
+                  },
+                  backgroundColor: inputBgColor,
+                  '& input::placeholder': {
+                    fontSize: '0.85rem',
+                    color: textColor,
+                  },
+                  boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
+                  '&:hover': {
+                    boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)', // Increase shadow on hover
+                  }
+                }
+
+
+
+  const alerts = [
+       {
       empName: "Akshata",
       empContact: "9876543212",
       empDOJ:"22-02-25",
@@ -162,107 +197,15 @@ function Add_employee({ darkMode }) {
       groupID:"G-2323",
       state:"maharashtra"
     },
-    // Add more dummy objects...
-  ]);
-
-  const inputStyle = {
-   // Set desired width
-                  height: "3rem",
-                  '& .MuiInputBase-input': {
-                    color: textColor,
-                  },
-                  '& .MuiInputBase-root': {
-                    height: "100%",             // Ensure input wrapper matches height
-                    padding: "0 12px",          // Horizontal padding
-                    display: 'flex',
-                    alignItems: 'center',       // Center content vertically
-                  },
-                  borderRadius: '12px',
-                  '& fieldset': {
-                    border: 'none', // Remove border
-                  },
-                  backgroundColor: inputBgColor,
-                  '& input::placeholder': {
-                    fontSize: '0.85rem',
-                    color: textColor,
-                  },
-                  boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
-                  '&:hover': {
-                    boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)', // Increase shadow on hover
-                  }
-                }
-
-
-
-  const alerts = [
-    {
-      id: 1,
-      alertId: "Flood",
-      disasterId: "Unknown",
-      date: "",
-      time: "Unknown",
-      priority: "Unknown",
-      initiatedBy: "Unknown",
-
-    },
-    {
-      id: 2,
-      alertId: "Flood",
-      disasterId: "Unknown",
-      date: "",
-      time: "Unknown",
-      priority: "Unknown",
-      initiatedBy: "Unknown",
-      status: "Unknown",
-    },
-    {
-      id: 3,
-      alertId: "Flood",
-      disasterId: "Unknown",
-      date: "",
-      time: "Unknown",
-      priority: "Unknown",
-      initiatedBy: "Unknown",
-      status: "Unknown",
-    },
-    {
-      id: 4,
-      alertId: "Flood",
-      disasterId: "Unknown",
-      date: "",
-      time: "Unknown",
-      priority: "Unknown",
-      initiatedBy: "Unknown",
-      status: "Unknown",
-    },
-    {
-      id: 5,
-      alertId: "Flood",
-      disasterId: "Unknown",
-      date: "",
-      time: "Unknown",
-      priority: "Unknown",
-      initiatedBy: "Unknown",
-      status: "Unknown",
-    },
-    {
-      id: 6,
-      alertId: "Flood",
-      disasterId: "Unknown",
-      date: "",
-      time: "Unknown",
-      priority: "Unknown",
-      initiatedBy: "Unknown",
-      status: "Unknown",
-    },
 
   ];
 
    const paginatedData = useMemo(() => {
-     const start = (page - 1) * rowsPerPage;
-     const end = start + rowsPerPage;
-     return alertData.slice(start, end);
-   }, [page, rowsPerPage, alertData]);
+  const start = (page - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  return alerts.slice(start, end);
+}, [page, rowsPerPage, alerts]);
+
 
    const open = Boolean(anchorEl);
   const handleOpen = (event, item) => {
@@ -623,12 +566,13 @@ function Add_employee({ darkMode }) {
                 <Box>{page}</Box>
                 <Box
                   onClick={() =>
-                    page < Math.ceil(alertData.length / rowsPerPage) &&
+                  page < Math.ceil(alerts.length / rowsPerPage) &&
                     setPage(page + 1)
                   }
                   sx={{
                     cursor:
-                      page < Math.ceil(alertData.length / rowsPerPage)
+                     page < Math.ceil(alerts.length / rowsPerPage)
+
                         ? "pointer"
                         : "not-allowed",
                     userSelect: "none",
@@ -761,7 +705,8 @@ function Add_employee({ darkMode }) {
               />
               {/* Second Select  */}
               <Select
-                value={selectedStateId || ''} onChange={handleStateChange}
+                value={selectedStateId}
+               onChange={handleStateChange}
                 fullWidth
                 displayEmpty
                 placeholder="Select State"
@@ -815,7 +760,8 @@ function Add_employee({ darkMode }) {
                 displayEmpty
                 placeholder="Select District"
                 defaultValue=""
-                 value={selectedDistrictId || ''} onChange={handleDistrictChange}
+                  value={selectedDistrictId}
+          onChange={handleDistrictChange}
                 inputProps={{
                   "aria-label": "Select Name",
                 }}
@@ -849,17 +795,19 @@ function Add_employee({ darkMode }) {
                 <MenuItem value="" disabled>
                   Select District
                 </MenuItem>
-               {districts.map((districts) => (
-                                  <MenuItem key={districts.dis_id} value={districts.dis_id}>
-                                    {districts.dis_name}
-                                  </MenuItem>
-                                ))}
+               {districts.map((district) => (
+            <MenuItem key={district.dis_id} value={district.dis_id}>
+              {district.dis_name}
+            </MenuItem>
+          ))}
                 {/* Add more options as needed */}
               </Select>
 
               {/* Second Dropdown */}
               <Select
                 fullWidth
+                   value={selectedTehsilId}
+          onChange={handleTehsilChange}
                 displayEmpty
                 placeholder="Select Tehsil"
                 defaultValue=""
@@ -892,12 +840,11 @@ function Add_employee({ darkMode }) {
                 <MenuItem value="" disabled>
                   Select Tehsil
                 </MenuItem>
-
-              {Tehsils.map((Tehsils) => (
-                                 <MenuItem key={Tehsils.tah_id} value={Tehsils.tah_id}>
-                                   {Tehsils.tah_name}
-                                 </MenuItem>
-                               ))}
+ {Tehsils.map((tehsil) => (
+            <MenuItem key={tehsil.tah_id} value={tehsil.tah_id}>
+              {tehsil.tah_name}
+            </MenuItem>
+          ))}
 
 
                 {/* Add more options as needed */}
