@@ -1,9 +1,11 @@
 annotated-types
 anyio
 asgiref
+asyncpg 
 bidict
 certifi
 charset-normalizer
+channels
 click
 colorama
 confluent-kafka
@@ -57,6 +59,7 @@ gunicorn
 django-cors-headers
 pygetwindow
 pyautogui
+python-socketio[asgi]
 django-simple-captcha
 django-cors-headers
 screeninfo
