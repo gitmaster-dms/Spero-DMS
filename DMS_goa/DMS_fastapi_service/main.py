@@ -217,11 +217,16 @@ def extract_lat_lon_from_excel(file_path):
 async def call_open_meteo_api():
     latitudes, longitudes = extract_lat_lon_from_excel(EXCEL_PATH)
 
+    # url = (
+    #     f"https://api.open-meteo.com/v1/forecast?"
+    #     f"latitude={latitudes}&longitude={longitudes}"
+    #     f"&current=temperature_2m,rain,precipitation,weather_code"
+    # )
+
     url = (
-        f"https://api.open-meteo.com/v1/forecast?"
-        f"latitude={latitudes}&longitude={longitudes}"
-        f"&current=temperature_2m,rain,precipitation,weather_code"
+        "https://api.open-meteo.com/v1/forecast?latitude=15.5367,15.1261&longitude=73.9458,74.1848&current=temperature_2m,rain,precipitation,weather_code"
     )
+
 
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
