@@ -435,15 +435,14 @@ async def push_updated_weather_alerts():
                     if alert["time"]:
                         alert["time"] = alert["time"].isoformat()
 
-                message = json.dumps({
-                    "type": "updated_alerts",
-                    "data": changed_alerts
-                })
+                # message = json.dumps({
+                #     changed_alerts
+                # })
 
                 # Send to all connected clients
                 for ws in connected_clients_weather_alerts.copy():
                     try:
-                        await ws.send_text(message)
+                        await ws.send_text(changed_alerts)
                     except Exception as e:
                         print(f"[❌] Send error: {e}")
                         connected_clients_weather_alerts.discard(ws)
