@@ -5,20 +5,14 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function Sop({ darkMode, setDarkMode }) {
-  // initStorageLogoutSync.js
-window.addEventListener('storage', (e) => {
-  if (e.key === 'logout') {
-    // token to already delete ho chuka hoga, ab page hatao
-    location.href = '/login';     // ya location.reload()
-  }
-});
 
-
-    useEffect(() => {
+  useEffect(() => {
     document.title = "DMS|Sop";
   }, []);
   const location = useLocation();
-  const flagFromState = location?.state?.flag ?? 0;
+  const flagFromState = location?.state?.triggerStatus ?? 0;
+  console.log(flagFromState, 'flagFromState');
+
   const [flag, setFlag] = useState(flagFromState);
   const [selectedIncident, setSelectedIncident] = useState(null);
 
