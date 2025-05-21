@@ -28,7 +28,31 @@ from websocket_router import router as websocket_router
 # from .websocket_router import router as websocket_router
 import httpx
 import pandas as pd
+import json
+from django_setup import *
+from asgiref.sync import sync_to_async
+from admin_web.models import Weather_alerts  # Django model
+from weather_alerts_utils import get_old_weather_alerts, listen_to_postgres, connected_clients, connected_clients_trigger2
+from contextlib import asynccontextmanager
+from starlette.applications import Starlette
+from starlette.routing import WebSocketRoute
+from starlette.websockets import WebSocket
+import asyncio
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Called on startup
+    task = asyncio.create_task(listen_to_postgres())
+
+    yield  # Application runs here
+
+    # Called on shutdown
+    task.cancel()
+    try:
+        await task
+    except asyncio.CancelledError:
+        pass
 
 
 
@@ -42,8 +66,8 @@ sio = socketio.AsyncServer(
 )
 
 # Create FastAPI app
-app = FastAPI()
-
+# app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 # Create the ASGI application by mounting the Socket.IO app and the FastAPI app
 socket_app = socketio.ASGIApp(
     socketio_server=sio,
@@ -210,41 +234,16 @@ async def startup_event():
 # -----------------------------------------NIKITA------------------------------------------------------
 # -----------------------------------------Nikita----------------------------------------------
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-import json
-from django_setup import *
-from asgiref.sync import sync_to_async
-from admin_web.models import Weather_alerts  # Django model
-from weather_alerts_utils import get_old_weather_alerts, listen_to_postgres, connected_clients, connected_clients_trigger2
-from contextlib import asynccontextmanager
-from starlette.applications import Starlette
-from starlette.routing import WebSocketRoute
-from starlette.websockets import WebSocket
-import asyncio
+
 # ------------------------------------###Nikita###--------------------------------------
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Called on startup
-    task = asyncio.create_task(listen_to_postgres())
 
-    yield  # Application runs here
-
-    # Called on shutdown
-    task.cancel()
-    try:
-        await task
-    except asyncio.CancelledError:
-        pass
-
-
-app = FastAPI(lifespan=lifespan)
-
+connected_clients_weather_alerts = set()
 
 @app.websocket("/ws/weather_alerts")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
-    connected_clients.add(websocket)  # Add client to global set
+    connected_clients_weather_alerts.add(websocket)  # Add client to global set
     print(f"WebSocket connected: {websocket.client}")
 
     try:
@@ -282,7 +281,7 @@ async def websocket_endpoint(websocket: WebSocket):
         print(f"WebSocket error: {e}")
 
     finally:
-        connected_clients.remove(websocket)
+        connected_clients_weather_alerts.remove(websocket)
         print(f"WebSocket removed: {websocket.client}")
 
 
@@ -334,7 +333,7 @@ async def websocket_endpoint(websocket: WebSocket):
         connected_clients.remove(websocket)
         print(f"Trigger2 WebSocket removed: {websocket.client}")
 
-        
+
 
 ''' Note:- *This command should always remain at the end. Any new code must be added above it.* '''
 
