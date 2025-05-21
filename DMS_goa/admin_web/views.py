@@ -121,6 +121,10 @@ class DMS_Employee_post_api(APIView):
     def post(self,request):
         serializers=DMS_Employee_serializer(data=request.data)
         if serializers.is_valid():
+            emp_username = request.data.get('emp_username')
+            
+            if DMS_Employee.objects.filter(emp_username=emp_username).exists():
+                return Response({'error': 'Username already exists.'}, status=status.HTTP_409_CONFLICT)
             serializers.save()
             return Response(serializers.data,status=status.HTTP_201_CREATED)
         return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST) 
