@@ -340,7 +340,7 @@ async def websocket_endpoint(websocket: WebSocket):
         for alert in alerts:
             if alert["time"]:
                 alert["time"] = alert["time"].isoformat()
-        await websocket.send_text(json.dumps({"type": "all_alerts", "data": alerts}))
+        # await websocket.send_text(json.dumps({"type": "all_alerts", "data": alerts}))
 
         # Keep the connection alive to receive messages (if any)
         while True:
