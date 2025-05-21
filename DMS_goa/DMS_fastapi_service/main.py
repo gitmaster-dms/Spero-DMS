@@ -52,7 +52,7 @@ sio = socketio.AsyncServer(
 )
 
 # Create FastAPI app
-app = FastAPI()
+# app = FastAPI()
 # @asynccontextmanager
 # async def lifespan(app: FastAPI):
 #     # Called on startup
@@ -67,7 +67,28 @@ app = FastAPI()
 #     except asyncio.CancelledError:
 #         pass
 
-# app = FastAPI(lifespan=lifespan)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Start both background tasks
+    weather_task = asyncio.create_task(scheduled_weather_fetch())
+    postgres_task = asyncio.create_task(listen_to_postgres())
+
+    yield  # App runs while both tasks are active
+
+    # On shutdown
+    for task in [weather_task, postgres_task]:
+        task.cancel()
+    try:
+        await weather_task
+    except asyncio.CancelledError:
+        pass
+    try:
+        await postgres_task
+    except asyncio.CancelledError:
+        pass
+
+app = FastAPI(lifespan=lifespan)
 
 # Create the ASGI application by mounting the Socket.IO app and the FastAPI app
 socket_app = socketio.ASGIApp(
