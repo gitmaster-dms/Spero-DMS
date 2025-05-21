@@ -40,6 +40,9 @@ from starlette.applications import Starlette
 from starlette.routing import WebSocketRoute
 # from starlette.websockets import WebSocket
 import asyncio
+from datetime import timedelta
+from django.utils import timezone
+
 
 
 #==================================Send Data to Kafka===(Mayank)========================================#
@@ -73,11 +76,12 @@ async def lifespan(app: FastAPI):
     # Start both background tasks
     weather_task = asyncio.create_task(scheduled_weather_fetch())
     postgres_task = asyncio.create_task(listen_to_postgres())
+    updates_task = asyncio.create_task(push_updated_weather_alerts())
 
     yield  # App runs while both tasks are active
 
     # On shutdown
-    for task in [weather_task, postgres_task]:
+    for task in [weather_task, postgres_task, updates_task]:
         task.cancel()
     try:
         await weather_task
@@ -85,6 +89,10 @@ async def lifespan(app: FastAPI):
         pass
     try:
         await postgres_task
+    except asyncio.CancelledError:
+        pass
+    try:
+        await updates_task
     except asyncio.CancelledError:
         pass
 
@@ -388,6 +396,41 @@ async def websocket_trigger2(websocket: WebSocket):
         print(f"Trigger2 WebSocket removed: {websocket.client}")
 
 
+
+@sync_to_async
+def get_updated_weather_alerts():
+    recent_time = timezone.now() - timedelta(minutes=2)
+    return list(
+        Weather_alerts.objects.filter(updated_at__gte=recent_time)
+        .values("pk_id", "latitude", "longitude", "time", "temperature_2m", "rain", "weather_code", "triger_status")
+    )
 # app.include_router(websocket_router)
+async def push_updated_weather_alerts():
+    while True:
+        try:
+            updated_records = await get_updated_weather_alerts()  # ✅ Your custom query
+            if updated_records:
+                for record in updated_records:
+                    # Make sure time is ISO formatted for JSON
+                    if record.get("time"):
+                        record["time"] = record["time"].isoformat()
+
+                message = json.dumps({
+                    "type": "updated_alerts",
+                    "data": updated_records
+                })
+
+                for ws in connected_clients_weather_alerts.copy():
+                    try:
+                        await ws.send_text(message)
+                    except Exception as e:
+                        print(f"[❌] Send error: {e}")
+                        connected_clients_weather_alerts.discard(ws)
+
+        except Exception as e:
+            print(f"[❌] Error in update task: {e}")
+
+        await asyncio.sleep(10)  # Frequency of check (adjust as needed)
+
 
 # --------------------------------------####NIKITA###-------------------------------------
