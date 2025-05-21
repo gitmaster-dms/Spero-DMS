@@ -26,6 +26,7 @@ export const getThemeBgColors = (darkMode) => {
 };
 
 
+<<<<<<< HEAD
 const darkMode = true; // Replace this later with actual dynamic value
 
 // STEP 3: Destructure theme values
@@ -33,6 +34,13 @@ const { textColor, bgColor, borderColor, inputBgColor } =
   getThemeBgColors(darkMode);
 
 
+=======
+const darkMode = true;
+
+const { textColor, bgColor, borderColor, inputBgColor } =
+  getThemeBgColors(darkMode);
+
+>>>>>>> 05a6f1c165ac328def2335be02d7d75d2e788e3d
 export const TableHeadingCard = styled("div")(() => ({
   display: "flex",
   alignItems: "center",
@@ -58,10 +66,17 @@ export const TableDataCardBody = styled("tr")(({ theme, status }) => ({
   height: "45px",
   "&:hover": {
     boxShadow: `0 0 8px ${status === "Completed"
+<<<<<<< HEAD
         ? "#00e67699"
         : status === "Pending"
           ? "#f4433699"
           : "#88888855"
+=======
+      ? "#00e67699"
+      : status === "Pending"
+        ? "#f4433699"
+        : "#88888855"
+>>>>>>> 05a6f1c165ac328def2335be02d7d75d2e788e3d
       }`,
   },
 }));
