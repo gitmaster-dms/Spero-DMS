@@ -406,20 +406,39 @@ def get_updated_weather_alerts():
     )
 # app.include_router(websocket_router)
 async def push_updated_weather_alerts():
+    global last_known_alert_statuses
+
     while True:
         try:
-            updated_records = await get_updated_weather_alerts()  # ✅ Your custom query
-            if updated_records:
-                for record in updated_records:
-                    # Make sure time is ISO formatted for JSON
-                    if record.get("time"):
-                        record["time"] = record["time"].isoformat()
+            alerts = await sync_to_async(list)(Weather_alerts.objects.all().values(
+                "pk_id", "latitude", "longitude", "elevation", "time", "temperature_2m",
+                "rain", "precipitation", "weather_code", "triger_status"
+            ))
+
+            changed_alerts = []
+
+            for alert in alerts:
+                pk_id = alert["pk_id"]
+                current_status = alert["triger_status"]
+
+                # Compare with cache
+                if pk_id not in last_known_alert_statuses or last_known_alert_statuses[pk_id] != current_status:
+                    # Detected change
+                    changed_alerts.append(alert)
+                    last_known_alert_statuses[pk_id] = current_status  # Update the cache
+
+            if changed_alerts:
+                # Format the time field
+                for alert in changed_alerts:
+                    if alert["time"]:
+                        alert["time"] = alert["time"].isoformat()
 
                 message = json.dumps({
                     "type": "updated_alerts",
-                    "data": updated_records
+                    "data": changed_alerts
                 })
 
+                # Send to all connected clients
                 for ws in connected_clients_weather_alerts.copy():
                     try:
                         await ws.send_text(message)
@@ -430,7 +449,5 @@ async def push_updated_weather_alerts():
         except Exception as e:
             print(f"[❌] Error in update task: {e}")
 
-        await asyncio.sleep(10)  # Frequency of check (adjust as needed)
-
-
+        await asyncio.sleep(10)  # check interval
 # --------------------------------------####NIKITA###-------------------------------------
