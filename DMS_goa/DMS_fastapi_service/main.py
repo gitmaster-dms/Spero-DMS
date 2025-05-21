@@ -28,31 +28,7 @@ from websocket_router import router as websocket_router
 # from .websocket_router import router as websocket_router
 import httpx
 import pandas as pd
-import json
-from django_setup import *
-from asgiref.sync import sync_to_async
-from admin_web.models import Weather_alerts  # Django model
-from weather_alerts_utils import get_old_weather_alerts, listen_to_postgres, connected_clients, connected_clients_trigger2
-from contextlib import asynccontextmanager
-from starlette.applications import Starlette
-from starlette.routing import WebSocketRoute
-from starlette.websockets import WebSocket
-import asyncio
 
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Called on startup
-    task = asyncio.create_task(listen_to_postgres())
-
-    yield  # Application runs here
-
-    # Called on shutdown
-    task.cancel()
-    try:
-        await task
-    except asyncio.CancelledError:
-        pass
 
 
 
@@ -66,8 +42,8 @@ sio = socketio.AsyncServer(
 )
 
 # Create FastAPI app
-# app = FastAPI()
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
+
 # Create the ASGI application by mounting the Socket.IO app and the FastAPI app
 socket_app = socketio.ASGIApp(
     socketio_server=sio,
@@ -168,8 +144,34 @@ async def start_background_task():
 #     except Exception as e:
 #         return JSONResponse(content={"error": str(e)}, status_code=500)
 
+''' Note:- *This command should always remain at the end. Any new code must be added above it.* '''
 
+''' Run the FastAPI Project
+1. Navigate to the project directory:
+cd Spero-DMS\DMS_goa\DMS_fastapi_service
 
+2. Run the FastAPI server:
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload '''
+
+connected_clients: List[WebSocket] = []
+
+@app.websocket("/send_data")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    connected_clients.append(websocket)
+    print("Client connected")
+    try:
+        while True:
+            data = await websocket.receive_text()
+            print(f"Received from frontend: {data}")
+            if data.strip().lower() == "true":
+                # Broadcast to all connected clients
+                for client in connected_clients:
+                    if client != websocket:
+                        await client.send_text("true")
+    except WebSocketDisconnect:
+        print("Client disconnected")
+        connected_clients.remove(websocket)
 
 
 
@@ -234,16 +236,41 @@ async def startup_event():
 # -----------------------------------------NIKITA------------------------------------------------------
 # -----------------------------------------Nikita----------------------------------------------
 
-
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+import json
+from django_setup import *
+from asgiref.sync import sync_to_async
+from admin_web.models import Weather_alerts  # Django model
+from weather_alerts_utils import get_old_weather_alerts, listen_to_postgres, connected_clients, connected_clients_trigger2
+from contextlib import asynccontextmanager
+from starlette.applications import Starlette
+from starlette.routing import WebSocketRoute
+from starlette.websockets import WebSocket
+import asyncio
 # ------------------------------------###Nikita###--------------------------------------
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Called on startup
+    task = asyncio.create_task(listen_to_postgres())
 
-connected_clients_weather_alerts = set()
+    yield  # Application runs here
+
+    # Called on shutdown
+    task.cancel()
+    try:
+        await task
+    except asyncio.CancelledError:
+        pass
+
+
+app = FastAPI(lifespan=lifespan)
+
 
 @app.websocket("/ws/weather_alerts")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
-    connected_clients_weather_alerts.add(websocket)  # Add client to global set
+    connected_clients.add(websocket)  # Add client to global set
     print(f"WebSocket connected: {websocket.client}")
 
     try:
@@ -281,7 +308,7 @@ async def websocket_endpoint(websocket: WebSocket):
         print(f"WebSocket error: {e}")
 
     finally:
-        connected_clients_weather_alerts.remove(websocket)
+        connected_clients.remove(websocket)
         print(f"WebSocket removed: {websocket.client}")
 
 
@@ -309,37 +336,3 @@ async def websocket_trigger2(websocket: WebSocket):
 # app.include_router(websocket_router)
 
 # --------------------------------------####NIKITA###-------------------------------------
-connected_clients: List[WebSocket] = []
-
-@app.websocket("/send_data")
-async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    connected_clients.append(websocket)
-    print("Client connected")
-    try:
-        while True:
-            data = await websocket.receive_text()
-            print(f"Received from frontend: {data}")
-            if data.strip().lower() == "true":
-                # Broadcast to all connected clients
-                for client in connected_clients:
-                    if client != websocket:
-                        await client.send_text("true")
-    except WebSocketDisconnect:
-        print("Trigger2 WebSocket disconnected.")
-    except Exception as e:
-        print(f"Trigger2 WebSocket error: {e}")
-    finally:
-        connected_clients.remove(websocket)
-        print(f"Trigger2 WebSocket removed: {websocket.client}")
-
-
-
-''' Note:- *This command should always remain at the end. Any new code must be added above it.* '''
-
-''' Run the FastAPI Project
-1. Navigate to the project directory:
-cd Spero-DMS\DMS_goa\DMS_fastapi_service
-
-2. Run the FastAPI server:
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload '''
