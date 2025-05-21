@@ -155,7 +155,7 @@ uvicorn main:app --host 0.0.0.0 --port 8000 --reload '''
 
 connected_clients: List[WebSocket] = []
 
-@app.websocket("/send_data")
+@app.websocket("/ws/send_data_test")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     connected_clients.append(websocket)
