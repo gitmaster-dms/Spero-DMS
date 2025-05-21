@@ -42,7 +42,8 @@ sio = socketio.AsyncServer(
 )
 
 # Create FastAPI app
-app = FastAPI()
+# app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 # Create the ASGI application by mounting the Socket.IO app and the FastAPI app
 socket_app = socketio.ASGIApp(
@@ -264,7 +265,7 @@ async def lifespan(app: FastAPI):
         pass
 
 
-app = FastAPI(lifespan=lifespan)
+# app = FastAPI(lifespan=lifespan)
 
 
 @app.websocket("/ws/weather_alerts")
