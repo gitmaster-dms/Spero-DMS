@@ -29,7 +29,17 @@ from websocket_router import router as websocket_router
 import httpx
 import pandas as pd
 
-
+# from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+import json
+from django_setup import *
+from asgiref.sync import sync_to_async
+from admin_web.models import Weather_alerts  # Django model
+from weather_alerts_utils import get_old_weather_alerts, listen_to_postgres, connected_clients, connected_clients_trigger2
+from contextlib import asynccontextmanager
+from starlette.applications import Starlette
+from starlette.routing import WebSocketRoute
+# from starlette.websockets import WebSocket
+import asyncio
 
 
 #==================================Send Data to Kafka===(Mayank)========================================#
@@ -43,6 +53,20 @@ sio = socketio.AsyncServer(
 
 # Create FastAPI app
 # app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Called on startup
+    task = asyncio.create_task(listen_to_postgres())
+
+    yield  # Application runs here
+
+    # Called on shutdown
+    task.cancel()
+    try:
+        await task
+    except asyncio.CancelledError:
+        pass
+
 app = FastAPI(lifespan=lifespan)
 
 # Create the ASGI application by mounting the Socket.IO app and the FastAPI app
@@ -237,32 +261,32 @@ async def startup_event():
 # -----------------------------------------NIKITA------------------------------------------------------
 # -----------------------------------------Nikita----------------------------------------------
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-import json
-from django_setup import *
-from asgiref.sync import sync_to_async
-from admin_web.models import Weather_alerts  # Django model
-from weather_alerts_utils import get_old_weather_alerts, listen_to_postgres, connected_clients, connected_clients_trigger2
-from contextlib import asynccontextmanager
-from starlette.applications import Starlette
-from starlette.routing import WebSocketRoute
-from starlette.websockets import WebSocket
-import asyncio
+# from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+# import json
+# from django_setup import *
+# from asgiref.sync import sync_to_async
+# from admin_web.models import Weather_alerts  # Django model
+# from weather_alerts_utils import get_old_weather_alerts, listen_to_postgres, connected_clients, connected_clients_trigger2
+# from contextlib import asynccontextmanager
+# from starlette.applications import Starlette
+# from starlette.routing import WebSocketRoute
+# from starlette.websockets import WebSocket
+# import asyncio
 # ------------------------------------###Nikita###--------------------------------------
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Called on startup
-    task = asyncio.create_task(listen_to_postgres())
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     # Called on startup
+#     task = asyncio.create_task(listen_to_postgres())
 
-    yield  # Application runs here
+#     yield  # Application runs here
 
-    # Called on shutdown
-    task.cancel()
-    try:
-        await task
-    except asyncio.CancelledError:
-        pass
+#     # Called on shutdown
+#     task.cancel()
+#     try:
+#         await task
+#     except asyncio.CancelledError:
+#         pass
 
 
 # app = FastAPI(lifespan=lifespan)
