@@ -67,6 +67,20 @@ sio = socketio.AsyncServer(
 #     except asyncio.CancelledError:
 #         pass
 
+async def broadcast_weather_update(data: dict):
+    disconnected = []
+    for client in connected_clients_weather_alerts:
+        try:
+            await client.send_text(json.dumps({
+                "type": "update_alert",
+                "data": data
+            }))
+        except Exception as e:
+            print(f"⚠️ Error sending update to client: {e}")
+            disconnected.append(client)
+
+    for client in disconnected:
+        connected_clients_weather_alerts.discard(client)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -260,6 +274,8 @@ async def call_open_meteo_api():
         print("✅ Weather data fetched")
         # print(f"[✔] Temp is {temp}°C > 20°C — sending to Kafka")
         producer.send('weather_alerts_rain', data)
+        # ✅ Send to WebSocket clients
+        await broadcast_weather_update(data)
         return data
     else:
         print("❌ Error fetching data")
