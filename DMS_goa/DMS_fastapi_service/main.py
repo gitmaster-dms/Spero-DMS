@@ -404,6 +404,8 @@ def get_updated_weather_alerts():
         Weather_alerts.objects.filter(updated_at__gte=recent_time)
         .values("pk_id", "latitude", "longitude", "time", "temperature_2m", "rain", "weather_code", "triger_status")
     )
+
+last_known_alert_statuses = {}
 # app.include_router(websocket_router)
 async def push_updated_weather_alerts():
     global last_known_alert_statuses
