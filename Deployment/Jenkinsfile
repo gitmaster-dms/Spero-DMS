@@ -66,11 +66,12 @@ pipeline {
                     sh '''
                         sudo chown -R jenkins:dmsgroup .
                         sudo chmod -R 775 .
-                        sudo find . -type d -exec chmod g+s {} \;
+                        sudo find . -type d -exec chmod g+s {} \\;
                     '''
                 }
             }
         }
+
 
         stage('Check Files') {
             steps {
