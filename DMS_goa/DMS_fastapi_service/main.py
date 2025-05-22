@@ -361,7 +361,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     for alert in new_alerts:
                         if alert["time"]:
                             alert["time"] = alert["time"].isoformat()
-                        await websocket.send_text(json.dumps({"type": "new_alert", "data": alert}))
+                        await websocket.send_text(json.dumps(alert))
                         last_sent_pk = max(last_sent_pk, alert["pk_id"])
                         await asyncio.sleep(0.05)
 
