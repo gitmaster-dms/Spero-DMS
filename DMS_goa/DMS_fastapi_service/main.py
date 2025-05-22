@@ -76,12 +76,12 @@ async def lifespan(app: FastAPI):
     # Start both background tasks
     weather_task = asyncio.create_task(scheduled_weather_fetch())
     postgres_task = asyncio.create_task(listen_to_postgres())
-    updates_task = asyncio.create_task(push_updated_weather_alerts())
+    # updates_task = asyncio.create_task(push_updated_weather_alerts())
 
     yield  # App runs while both tasks are active
 
     # On shutdown
-    for task in [weather_task, postgres_task, updates_task]:
+    for task in [weather_task, postgres_task]:
         task.cancel()
     try:
         await weather_task
@@ -91,10 +91,7 @@ async def lifespan(app: FastAPI):
         await postgres_task
     except asyncio.CancelledError:
         pass
-    try:
-        await updates_task
-    except asyncio.CancelledError:
-        pass
+
 
 app = FastAPI(lifespan=lifespan)
 
@@ -333,7 +330,7 @@ connected_clients_weather_alerts= set()
 @app.websocket("/ws/weather_alerts")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
-    connected_clients_weather_alerts.add(websocket)  # Add client to global set
+    connected_clients_trigger2.add(websocket)  # Add client to global set
     print(f"WebSocket connected: {websocket.client}")
 
     try:
@@ -371,7 +368,7 @@ async def websocket_endpoint(websocket: WebSocket):
         print(f"WebSocket error: {e}")
 
     finally:
-        connected_clients_weather_alerts.remove(websocket)
+        connected_clients_trigger2.remove(websocket)
         print(f"WebSocket removed: {websocket.client}")
 
 
@@ -405,48 +402,48 @@ def get_updated_weather_alerts():
         .values("pk_id", "latitude", "longitude", "time", "temperature_2m", "rain", "weather_code", "triger_status")
     )
 
-last_known_alert_statuses = {}
-# app.include_router(websocket_router)
-async def push_updated_weather_alerts():
-    global last_known_alert_statuses
+# last_known_alert_statuses = {}
+# # app.include_router(websocket_router)
+# async def push_updated_weather_alerts():
+#     global last_known_alert_statuses
 
-    while True:
-        try:
-            alerts = await sync_to_async(list)(Weather_alerts.objects.all().values(
-                "pk_id", "latitude", "longitude", "elevation", "time", "temperature_2m",
-                "rain", "precipitation", "weather_code", "triger_status"
-            ))
+#     while True:
+#         try:
+#             alerts = await sync_to_async(list)(Weather_alerts.objects.all().values(
+#                 "pk_id", "latitude", "longitude", "elevation", "time", "temperature_2m",
+#                 "rain", "precipitation", "weather_code", "triger_status"
+#             ))
 
-            changed_alerts = []
+#             changed_alerts = []
 
-            for alert in alerts:
-                pk_id = alert["pk_id"]
-                current_status = alert["triger_status"]
+#             for alert in alerts:
+#                 pk_id = alert["pk_id"]
+#                 current_status = alert["triger_status"]
 
-                # Compare with cache
-                if pk_id not in last_known_alert_statuses or last_known_alert_statuses[pk_id] != current_status:
-                    # Detected change
-                    changed_alerts.append(alert)
-                    last_known_alert_statuses[pk_id] = current_status  # Update the cache
+#                 # Compare with cache
+#                 if pk_id not in last_known_alert_statuses or last_known_alert_statuses[pk_id] != current_status:
+#                     # Detected change
+#                     changed_alerts.append(alert)
+#                     last_known_alert_statuses[pk_id] = current_status  # Update the cache
 
-            if changed_alerts:
-                # Format the time field
-                for alert in changed_alerts:
-                    if alert["time"]:
-                        alert["time"] = alert["time"].isoformat()
+#             if changed_alerts:
+#                 # Format the time field
+#                 for alert in changed_alerts:
+#                     if alert["time"]:
+#                         alert["time"] = alert["time"].isoformat()
 
-                message = json.dumps(changed_alerts)
+#                 message = json.dumps(changed_alerts)
 
-                # Send to all connected clients
-                for ws in connected_clients_weather_alerts.copy():
-                    try:
-                        await ws.send_text(message)
-                    except Exception as e:
-                        print(f"[❌] Send error: {e}")
-                        connected_clients_weather_alerts.discard(ws)
+#                 # Send to all connected clients
+#                 for ws in connected_clients_weather_alerts.copy():
+#                     try:
+#                         await ws.send_text(message)
+#                     except Exception as e:
+#                         print(f"[❌] Send error: {e}")
+#                         connected_clients_weather_alerts.discard(ws)
 
-        except Exception as e:
-            print(f"[❌] Error in update task: {e}")
+#         except Exception as e:
+#             print(f"[❌] Error in update task: {e}")
 
-        await asyncio.sleep(0.5)  # check interval
-# --------------------------------------####NIKITA###-------------------------------------
+#         await asyncio.sleep(0.5)  # check interval
+# # --------------------------------------####NIKITA###-------------------------------------
