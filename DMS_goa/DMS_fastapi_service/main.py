@@ -448,5 +448,5 @@ async def push_updated_weather_alerts():
         except Exception as e:
             print(f"[❌] Error in update task: {e}")
 
-        await asyncio.sleep(5)  # check interval
+        await asyncio.sleep(0.5)  # check interval
 # --------------------------------------####NIKITA###-------------------------------------
