@@ -344,7 +344,7 @@ async def websocket_endpoint(websocket: WebSocket):
         alerts = await sync_to_async(list)(Weather_alerts.objects.all().values(
             "pk_id", "latitude", "longitude", "elevation", "time", "temperature_2m",
             "rain", "precipitation", "weather_code", "triger_status"
-        ))
+        ).order_by('pk_id'))
         for alert in alerts:
             if alert["time"]:
                 alert["time"] = alert["time"].isoformat()
