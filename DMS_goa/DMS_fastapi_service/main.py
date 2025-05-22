@@ -326,50 +326,124 @@ async def startup_event():
 # app = FastAPI(lifespan=lifespan)
 
 
-connected_clients_weather_alerts= set()
 @app.websocket("/ws/weather_alerts")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
-    connected_clients_trigger2.add(websocket)  # Add client to global set
+    connected_clients_trigger2.add(websocket)
     print(f"WebSocket connected: {websocket.client}")
 
+    last_sent_pk = 0  # Keep track of the last pk_id sent to this client
+
     try:
-        # Send old messages once on connect
+        # Send old messages on connect
         old_messages = await get_old_weather_alerts()
         for msg in old_messages:
             await websocket.send_text(json.dumps(msg))
             await asyncio.sleep(0.05)
 
-        # Send current data once on connect
-        alerts = await sync_to_async(list)(Weather_alerts.objects.all().values(
-            "pk_id", "latitude", "longitude", "elevation", "time", "temperature_2m",
-            "rain", "precipitation", "weather_code", "triger_status"
-        ).order_by('pk_id'))
-        for alert in alerts:
-            if alert["time"]:
-                alert["time"] = alert["time"].isoformat()
-        # await websocket.send_text(json.dumps({"type": "all_alerts", "data": alerts}))
+        # Get latest pk_id after old messages
+        if old_messages:
+            last_sent_pk = max(msg["pk_id"] for msg in old_messages if "pk_id" in msg)
 
-        # Keep the connection alive to receive messages (if any)
+        # Background task to check for new entries
+        async def send_new_alerts():
+            nonlocal last_sent_pk
+            while True:
+                try:
+                    new_alerts = await sync_to_async(list)(
+                        Weather_alerts.objects.filter(pk_id__gt=last_sent_pk)
+                        .order_by("pk_id")
+                        .values("pk_id", "latitude", "longitude", "elevation", "time", 
+                                "temperature_2m", "rain", "precipitation", 
+                                "weather_code", "triger_status")
+                    )
+
+                    for alert in new_alerts:
+                        if alert["time"]:
+                            alert["time"] = alert["time"].isoformat()
+                        await websocket.send_text(json.dumps({"type": "new_alert", "data": alert}))
+                        last_sent_pk = max(last_sent_pk, alert["pk_id"])
+                        await asyncio.sleep(0.05)
+
+                    await asyncio.sleep(5)  # Check for new data every 5 seconds
+                except Exception as e:
+                    print(f"Error in background task: {e}")
+                    break
+
+        # Start the background task
+        background_task = asyncio.create_task(send_new_alerts())
+
+        # Keep the connection alive (optional: handle incoming messages)
         while True:
-            # Wait for any message from client or just keep alive
             try:
                 msg = await asyncio.wait_for(websocket.receive_text(), timeout=30.0)
                 print(f"Received message from client: {msg}")
             except asyncio.TimeoutError:
-                # No message received in 30 seconds, send heartbeat to keep connection alive
-                # await websocket.send_text(json.dumps({"type": "heartbeat"}))
-                pass
+                pass  # Just keep alive
 
     except WebSocketDisconnect:
         print(f"WebSocket disconnected by client: {websocket.client}")
-
     except Exception as e:
         print(f"WebSocket error: {e}")
-
     finally:
         connected_clients_trigger2.remove(websocket)
         print(f"WebSocket removed: {websocket.client}")
+        background_task.cancel()  # Stop the background polling
+
+
+
+
+
+
+
+
+
+
+
+# connected_clients_weather_alerts= set()
+# @app.websocket("/ws/weather_alerts")
+# async def websocket_endpoint(websocket: WebSocket):
+#     await websocket.accept()
+#     connected_clients_trigger2.add(websocket)  # Add client to global set
+#     print(f"WebSocket connected: {websocket.client}")
+
+#     try:
+#         # Send old messages once on connect
+#         old_messages = await get_old_weather_alerts()
+#         for msg in old_messages:
+#             await websocket.send_text(json.dumps(msg))
+#             await asyncio.sleep(0.05)
+
+#         # Send current data once on connect
+#         alerts = await sync_to_async(list)(Weather_alerts.objects.all().values(
+#             "pk_id", "latitude", "longitude", "elevation", "time", "temperature_2m",
+#             "rain", "precipitation", "weather_code", "triger_status"
+#         ).order_by('pk_id'))
+#         for alert in alerts:
+#             if alert["time"]:
+#                 alert["time"] = alert["time"].isoformat()
+#         # await websocket.send_text(json.dumps({"type": "all_alerts", "data": alerts}))
+
+#         # Keep the connection alive to receive messages (if any)
+#         while True:
+#             # Wait for any message from client or just keep alive
+#             try:
+#                 msg = await asyncio.wait_for(websocket.receive_text(), timeout=30.0)
+#                 print(f"Received message from client: {msg}")
+#             except asyncio.TimeoutError:
+#                 # No message received in 30 seconds, send heartbeat to keep connection alive
+#                 # await websocket.send_text(json.dumps({"type": "heartbeat"}))
+#                 pass
+
+#     except WebSocketDisconnect:
+#         print(f"WebSocket disconnected by client: {websocket.client}")
+
+#     except Exception as e:
+#         print(f"WebSocket error: {e}")
+
+#     finally:
+#         connected_clients_trigger2.remove(websocket)
+#         print(f"WebSocket removed: {websocket.client}")
 
 
 
