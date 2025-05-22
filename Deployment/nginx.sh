@@ -37,3 +37,10 @@ sudo systemctl status nginx
 sudo systemctl restart nginx
 sudo systemctl restart dms_uvicorn_fastapi
 sudo systemctl status dms_gunicorn_django
+
+
+
+sudo chown -R :dmsgroup /var/www/html/DMS_goa/logs
+sudo chmod -R 775 /var/www/html/DMS_goa/logs
+sudo chown :dmsgroup /var/www/html/DMS_goa/logs/django_logentry.log
+sudo chmod 664 /var/www/html/DMS_goa/logs/django_logentry.log 
