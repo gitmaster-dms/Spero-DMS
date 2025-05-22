@@ -19,7 +19,7 @@ fi
 
 # Activate venv and install dependencies
 source "$VENV_PATH/bin/activate"
-pip install -r "$PJ_BASE_PATH/fastapi_app/requirnment.txt"
+pip install -r "/var/www/html/DMS_goa/requirnment.txt"
 
 # Remove stale socket if it exists
 if [ -S "$SOCKET_FILE" ]; then
