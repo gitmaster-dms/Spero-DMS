@@ -249,12 +249,12 @@ async def call_open_meteo_api():
     #     f"&current=temperature_2m,rain,precipitation,weather_code"
     # )
 
-    # url = (
-    #     "https://api.open-meteo.com/v1/forecast?latitude=15.5367,15.1261&longitude=73.9458,74.1848&current=temperature_2m,rain,precipitation,weather_code"
-    # )
     url = (
-        "https://api.open-meteo.com/v1/forecast?latitude=15.5367,15.1261&longitude=73.9458,74.1848&hourly=temperature_2m,rain,precipitation,weather_code&models=ecmwf_ifs025"
+        "https://api.open-meteo.com/v1/forecast?latitude=15.5367,15.1261&longitude=73.9458,74.1848&current=temperature_2m,rain,precipitation,weather_code"
     )
+    # url = (
+    #     "https://api.open-meteo.com/v1/forecast?latitude=15.5367,15.1261&longitude=73.9458,74.1848&hourly=temperature_2m,rain,precipitation,weather_code&models=ecmwf_ifs025"
+    # )
 
 
     async with httpx.AsyncClient() as client:
@@ -543,13 +543,13 @@ async def websocket_trigger2(websocket: WebSocket):
 
 
 
-@sync_to_async
-def get_updated_weather_alerts():
-    recent_time = timezone.now() - timedelta(minutes=2)
-    return list(
-        Weather_alerts.objects.filter(updated_at__gte=recent_time)
-        .values("pk_id", "latitude", "longitude", "time", "temperature_2m", "rain", "weather_code", "triger_status")
-    )
+# @sync_to_async
+# def get_updated_weather_alerts():
+#     recent_time = timezone.now() - timedelta(minutes=2)
+#     return list(
+#         Weather_alerts.objects.filter(updated_at__gte=recent_time)
+#         .values("pk_id", "latitude", "longitude", "time", "temperature_2m", "rain", "weather_code", "triger_status")
+#     )
 
 # last_known_alert_statuses = {}
 # # app.include_router(websocket_router)
